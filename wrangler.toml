@@ -1,0 +1,5 @@
+name = "pbuilder"
+compatibility_date = "2024-08-08"
+
+# Pages 配置
+pages_build_output_dir = "."

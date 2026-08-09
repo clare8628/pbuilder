@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(wrangler login *)",
+      "Bash(wrangler pages *)",
+      "Bash(git commit -m 'Add Cloudflare Pages configuration *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git push *)",
+      "Bash(git commit -m 'Update wrangler configuration for Cloudflare Pages *)"
+    ]
+  }
+}

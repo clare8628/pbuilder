@@ -1,0 +1,17 @@
+修正任務：PBuilder 部署問題
+
+問題：
+1. 本地網址 http://localhost:8787 無法看到正確結果
+2. 雲端網址應為 https://pbuilder.pages.dev（非 promptbuilder）
+
+需要執行的修正：
+1. 更新 wrangler.toml：name = "pbuilder"（而非 promptbuilder）
+2. 驗證 worker.js 正確服務 index.html
+3. 執行本地測試：npx wrangler dev，確認 localhost:8787 可正常顯示 PromptBuilder 介面
+4. 部署至 Cloudflare Pages：npx wrangler deploy
+5. 驗證 https://pbuilder.pages.dev 可正常訪問
+
+完成後：
+- 提供本地與雲端網址的驗證結果
+- 更新 PROGRESS.md
+- 回報給 Iris（Clare 的秘書）

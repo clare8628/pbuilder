@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptBuilder — AI 開發 Prompt 建構器</title>
+  <meta name="description" content="視覺化建構 AI 開發 Prompt，透過點選與填寫快速產生結構化指令。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-main: #F5F0EB;
+      --bg-card: #EDE8E3;
+      --bg-card-hover: #E5DFD9;
+      --bg-selected: #3C3A37;
+      --bg-output: #2D2B28;
+      --bg-input: #FDFCFB;
+
+      --text-primary: #2D2B28;
+      --text-secondary: #8A8580;
+      --text-muted: #A09B95;
+      --text-on-dark: #E8E4DF;
+      --text-on-selected: #FDFCFB;
+      --text-output-heading: #C8C3BD;
+      --text-output-body: #A8A29E;
+      --text-output-accent: #7CB688;
+
+      --border-light: #DDD8D2;
+      --border-input: #D5CFC8;
+
+      --radius-card: 12px;
+      --radius-input: 8px;
+      --radius-panel: 16px;
+
+      --spacing-section: 40px;
+      --spacing-inner: 16px;
+
+      --font-zh: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      --font-en: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+      --transition-fast: 0.18s ease;
+      --transition-normal: 0.25s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-zh);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== Layout ===== */
+    .app-header {
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-light);
+      background: rgba(245, 240, 235, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .app-logo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--text-output-accent);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .app-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: var(--font-en);
+      font-weight: 400;
+    }
+
+    .app-container {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 0;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: calc(100vh - 73px);
+    }
+
+    .form-panel {
+      padding: 40px 48px 80px;
+      overflow-y: auto;
+    }
+
+    .output-panel {
+      position: sticky;
+      top: 73px;
+      height: calc(100vh - 73px);
+      background: var(--bg-output);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      border-left: 1px solid rgba(60, 58, 55, 0.3);
+    }
+
+    /* ===== Section ===== */
+    .form-section {
+      margin-bottom: var(--spacing-section);
+      animation: fadeInUp 0.4s ease both;
+    }
+
+    .form-section:nth-child(1) { animation-delay: 0.05s; }
+    .form-section:nth-child(2) { animation-delay: 0.1s; }
+    .form-section:nth-child(3) { animation-delay: 0.15s; }
+    .form-section:nth-child(4) { animation-delay: 0.2s; }
+    .form-section:nth-child(5) { animation-delay: 0.25s; }
+    .form-section:nth-child(6) { animation-delay: 0.3s; }
+    .form-section:nth-child(7) { animation-delay: 0.35s; }
+    .form-section:nth-child(8) { animation-delay: 0.4s; }
+    .form-section:nth-child(9) { animation-delay: 0.45s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+      color: var(--text-muted);
+      font-size: 16px;
+      font-family: var(--font-en);
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all var(--transition-normal);
+      border: 2px solid var(--border-light);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .form-section.has-value .section-number {
+      background: linear-gradient(135deg, var(--bg-selected) 0%, #2a2925 100%);
+      color: var(--text-on-selected);
+      border-color: var(--text-on-selected);
+      box-shadow: 0 4px 12px rgba(60,58,55,0.15);
+      transform: scale(1.05);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .section-hint {
+      margin-left: 44px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    /* ===== Cards Grid ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-left: 44px;
+    }
+
+    .cards-grid--two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      position: relative;
+      padding: 16px 18px;
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      user-select: none;
+      border: 1.5px solid transparent;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .card:active {
+      transform: translateY(0);
+    }
+
+    .card.selected {
+      background: var(--bg-selected);
+      color: var(--text-on-selected);
+      border-color: var(--bg-selected);
+      box-shadow: 0 2px 12px rgba(60, 58, 55, 0.2);
+    }
+
+    .card-label {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .card-sublabel {
+      font-size: 12px;
+      font-family: var(--font-en);
+      color: var(--text-secondary);
+      margin-top: 4px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    .card.selected .card-sublabel {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .card-check {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 20px;
+      height: 20px;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card.selected .card-check {
+      opacity: 1;
+    }
+
+    .card-check svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ===== Text Input ===== */
+    .text-input-wrapper {
+      margin-left: 44px;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: var(--font-zh);
+      font-size: 15px;
+      color: var(--text-primary);
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-input);
+      border-radius: var(--radius-input);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      line-height: 1.6;
+    }
+
+    .text-input:focus {
+      border-color: var(--bg-selected);
+      box-shadow: 0 0 0 3px rgba(60, 58, 55, 0.08);
+    }
+
+    .text-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    textarea.text-input {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    textarea.text-input.tall {
+      min-height: 100px;
+    }
+
+    /* ===== Output Panel ===== */
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .output-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .output-status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--text-output-accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .output-title {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-output-heading);
+    }
+
+    .output-char-count {
+      font-family: var(--font-en);
+      font-size: 13px;
+      color: var(--text-output-body);
+      font-weight: 400;
+    }
+
+    .output-content {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: var(--text-output-heading);
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: var(--font-zh);
+      padding-right: 8px;
+    }
+
+    .output-content::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .output-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .output-content::-webkit-scrollbar-thumb {
+      background: rgba(200, 195, 189, 0.25);
+      border-radius: 4px;
+    }
+
+    .output-empty {
+      color: var(--text-output-body);
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    .output-footer {
+      flex-shrink: 0;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(200, 195, 189, 0.15);
+    }
+
+    .btn-copy {
+      width: 100%;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.08);
+      color: var(--text-output-heading);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-input);
+      font-family: var(--font-zh);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-copy:hover {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .btn-copy:active {
+      transform: scale(0.98);
+    }
+
+    .btn-copy.copied {
+      background: rgba(124, 182, 136, 0.2);
+      border-color: rgba(124, 182, 136, 0.4);
+      color: var(--text-output-accent);
+    }
+
+    .btn-copy svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1200px) {
+      .app-container {
+        grid-template-columns: 1fr 360px;
+      }
+      .form-panel {
+        padding: 32px 36px 60px;
+      }
+    }
+
+    @media (max-width: 1023px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+
+      .output-panel {
+        position: relative;
+        top: 0;
+        height: auto;
+        min-height: 400px;
+        border-left: none;
+        border-top: 1px solid rgba(60, 58, 55, 0.3);
+      }
+
+      .form-panel {
+        padding: 32px 32px 40px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-header {
+        padding: 16px 20px;
+      }
+
+      .app-logo {
+        font-size: 18px;
+      }
+
+      .app-subtitle {
+        display: none;
+      }
+
+      .form-panel {
+        padding: 24px 20px 40px;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-left: 0;
+      }
+
+      .cards-grid--two {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .text-input-wrapper {
+        margin-left: 0;
+      }
+
+      .section-hint {
+        margin-left: 0;
+      }
+
+      .section-title {
+        font-size: 16px;
+      }
+
+      .output-panel {
+        padding: 24px 20px;
+        min-height: 300px;
+      }
+
+      .form-section {
+        margin-bottom: 32px;
+      }
+    }
+
+    /* ===== Scrollbar (Form) ===== */
+    .form-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .form-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .form-panel::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 6px;
+    }
+
+    /* ===== Conditional AI Key Input ===== */
+    .ai-key-wrapper {
+      margin-top: 12px;
+      margin-left: 44px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.25s ease;
+    }
+
+    .ai-key-wrapper.visible {
+      max-height: 120px;
+      opacity: 1;
+      margin-top: 12px;
+    }
+
+    .ai-key-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .ai-key-input {
+      width: 100%;
+      padding: 12px 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-input);
+      border-radius: var(--radius-input);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .ai-key-input:focus {
+      border-color: var(--bg-selected);
+      box-shadow: 0 0 0 3px rgba(60, 58, 55, 0.08);
+    }
+
+    .ai-key-input::placeholder {
+      color: var(--text-muted);
+      font-family: var(--font-en);
+    }
+
+    @media (max-width: 640px) {
+      .ai-key-wrapper {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
+    <span class="app-subtitle">AI Development Prompt Generator</span>
+  </header>
+
+  <main class="app-container">
+    <!-- ===== Left: Form Panel ===== -->
+    <div class="form-panel" id="formPanel">
+
+      <!-- 01 專案名稱 -->
+      <section class="form-section" data-field="projectName">
+        <div class="section-header">
+          <span class="section-number">01</span>
+          <h2 class="section-title">專案名稱</h2>
+        </div>
+        <p class="section-hint">給專案一個短名字，方便後續對話引用</p>
+        <div class="text-input-wrapper">
+          <input type="text" class="text-input" id="inputProjectName" placeholder="例如：全球ETF年化報酬試算" maxlength="60" autocomplete="off">
+        </div>
+      </section>
+
+      <!-- 02 專案類型 -->
+      <section class="form-section" data-field="projectType">
+        <div class="section-header">
+          <span class="section-number">02</span>
+          <h2 class="section-title">專案類型</h2>
+        </div>
+        <p class="section-hint">選一個最接近的，會影響 AI 對複雜度的判斷</p>
+        <div class="cards-grid" data-select="single" data-group="projectType">
+          <div class="card" data-value="單頁網站">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">單頁網站</div>
+            <div class="card-sublabel">Landing page</div>
+          </div>
+          <div class="card" data-value="多頁網站">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">多頁網站</div>
+            <div class="card-sublabel">Multi-page site</div>
+          </div>
+          <div class="card" data-value="互動工具">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">互動工具</div>
+            <div class="card-sublabel">Interactive tool</div>
+          </div>
+          <div class="card" data-value="教學系統">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">教學系統</div>
+            <div class="card-sublabel">Learning system</div>
+          </div>
+          <div class="card" data-value="資料儀表板">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">資料儀表板</div>
+            <div class="card-sublabel">Dashboard</div>
+          </div>
+          <div class="card" data-value="內容平台">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">內容平台</div>
+            <div class="card-sublabel">Content platform</div>
+          </div>
+        </div>
+        <div class="text-input-wrapper" style="margin-top: 12px;">
+          <input type="text" class="text-input" id="inputProjectTypeCustom" placeholder="或輸入自訂類型…" maxlength="60" autocomplete="off">
+        </div>
+      </section>
+
+      <!-- 03 目標使用者與描述 -->
+      <section class="form-section" data-field="targetUser">
+        <div class="section-header">
+          <span class="section-number">03</span>
+          <h2 class="section-title">目標使用者與描述</h2>
+        </div>
+        <p class="section-hint">誰會用？他們用這個能解決什麼問題？</p>
+        <div class="text-input-wrapper">
+          <textarea class="text-input" id="inputTargetUser" placeholder="例如：讓投資者可以評估值得投資哪一隻ETF" rows="3"></textarea>
+        </div>
+      </section>
+
+      <!-- 04 核心功能（MVP） -->
+      <section class="form-section" data-field="coreMvp">
+        <div class="section-header">
+          <span class="section-number">04</span>
+          <h2 class="section-title">核心功能（MVP）</h2>
+        </div>
+        <p class="section-hint">列出最重要的 2-4 個功能，避免一開始就求大求全</p>
+        <div class="text-input-wrapper">
+          <textarea class="text-input tall" id="inputCoreMvp" placeholder="1.&#10;2.&#10;3." rows="4"></textarea>
+        </div>
+      </section>
+
+      <!-- 05 視覺風格（可多選） -->
+      <section class="form-section" data-field="visualStyle">
+        <div class="section-header">
+          <span class="section-number">05</span>
+          <h2 class="section-title">視覺風格（可多選）</h2>
+        </div>
+        <p class="section-hint">會引導 AI 的設計方向，混搭也可以</p>
+        <div class="cards-grid" data-select="multi" data-group="visualStyle">
+          <div class="card" data-value="極簡編輯式">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">極簡編輯式</div>
+            <div class="card-sublabel">Minimal editorial</div>
+          </div>
+          <div class="card" data-value="日系溫潤">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">日系溫潤</div>
+            <div class="card-sublabel">Warm Japanese</div>
+          </div>
+          <div class="card" data-value="學術專業">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">學術專業</div>
+            <div class="card-sublabel">Academic pro</div>
+          </div>
+          <div class="card" data-value="現代科技">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">現代科技</div>
+            <div class="card-sublabel">Modern tech</div>
+          </div>
+          <div class="card" data-value="文化質感">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">文化質感</div>
+            <div class="card-sublabel">Cultural craft</div>
+          </div>
+          <div class="card" data-value="活潑友善">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">活潑友善</div>
+            <div class="card-sublabel">Bright friendly</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 語言 -->
+      <section class="form-section" data-field="language">
+        <div class="section-header">
+          <span class="section-number">06</span>
+          <h2 class="section-title">語言</h2>
+        </div>
+        <div class="cards-grid" data-select="single" data-group="language">
+          <div class="card" data-value="繁體中文">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">繁體中文</div>
+            <div class="card-sublabel">zh-Hant</div>
+          </div>
+          <div class="card" data-value="中英雙語">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">中英雙語</div>
+            <div class="card-sublabel">zh + en</div>
+          </div>
+          <div class="card" data-value="僅英文">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">僅英文</div>
+            <div class="card-sublabel">en</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 雲端部署與進度 -->
+      <section class="form-section" data-field="deploymentStage">
+        <div class="section-header">
+          <span class="section-number">07</span>
+          <h2 class="section-title">雲端部署進度</h2>
+        </div>
+        <p class="section-hint">部署至 Cloudflare</p>
+        <div class="cards-grid cards-grid--two" data-select="single" data-group="deploymentStage">
+          <div class="card" data-value="preview">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">Preview</div>
+            <div class="card-sublabel">開發/測試環境</div>
+          </div>
+          <div class="card" data-value="production">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">Production</div>
+            <div class="card-sublabel">正式上線</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 RWD 設計支援 -->
+      <section class="form-section" data-field="rwdSupport">
+        <div class="section-header">
+          <span class="section-number">08</span>
+          <h2 class="section-title">RWD 設計支援</h2>
+        </div>
+        <div class="cards-grid cards-grid--two" data-select="single" data-group="rwdSupport">
+          <div class="card" data-value="支援 RWD">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">支援 RWD</div>
+            <div class="card-sublabel">Responsive design</div>
+          </div>
+          <div class="card" data-value="不需 RWD">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">不需 RWD</div>
+            <div class="card-sublabel">Desktop only</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09 不要做（可選） -->
+      <section class="form-section" data-field="dontDo">
+        <div class="section-header">
+          <span class="section-number">09</span>
+          <h2 class="section-title">不要做（可選）</h2>
+        </div>
+        <p class="section-hint">說「不要什麼」往往比說「要什麼」更有效</p>
+        <div class="text-input-wrapper">
+          <textarea class="text-input" id="inputDontDo" placeholder="例如：不要登入系統、不要使用 emoji、不要彈跳視窗" rows="3"></textarea>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===== Right: Output Panel ===== -->
+    <aside class="output-panel" id="outputPanel">
+      <div class="output-header">
+        <div class="output-header-left">
+          <span class="output-status-dot"></span>
+          <span class="output-title">Prompt Output</span>
+        </div>
+        <span class="output-char-count" id="charCount">0 chars</span>
+      </div>
+      <div class="output-content" id="outputContent">
+        <span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>
+      </div>
+      <div class="output-footer">
+        <button class="btn-copy" id="btnCopy" title="複製到剪貼簿">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M5 11H3.5A1.5 1.5 0 0 1 2 9.5V3.5A1.5 1.5 0 0 1 3.5 2h6A1.5 1.5 0 0 1 11 3.5V5"/></svg>
+          <span id="btnCopyText">複製到剪貼簿</span>
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // ===== State =====
+    const state = {
+      projectName: '',
+      projectType: '',
+      projectTypeCustom: '',
+      targetUser: '',
+      coreMvp: '',
+      visualStyle: [],
+      language: '',
+      deploymentStage: 'preview',
+      rwdSupport: '支援 RWD',
+      dontDo: ''
+    };
+
+    // ===== DOM References =====
+    const outputContent = document.getElementById('outputContent');
+    const charCount = document.getElementById('charCount');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnCopyText = document.getElementById('btnCopyText');
+
+    // ===== Mapping for output display =====
+    const deploymentMap = {
+      'preview': 'Preview（開發/測試環境）',
+      'production': 'Production（正式上線）'
+    };
+
+    const rwdMap = {
+      '支援 RWD': '支援 RWD（Responsive）',
+      '不需 RWD': '桌面版本（Desktop only）'
+    };
+
+    // ===== Card Selection Logic =====
+    document.querySelectorAll('.cards-grid').forEach(grid => {
+      const selectMode = grid.dataset.select; // 'single' or 'multi'
+      const groupName = grid.dataset.group;
+
+      grid.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const value = card.dataset.value;
+
+          if (selectMode === 'single') {
+            // Toggle: if already selected, deselect
+            if (card.classList.contains('selected')) {
+              card.classList.remove('selected');
+              state[groupName] = '';
+            } else {
+              // Deselect siblings
+              grid.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+              card.classList.add('selected');
+              state[groupName] = value;
+            }
+          } else {
+            // Multi-select toggle
+            card.classList.toggle('selected');
+            if (card.classList.contains('selected')) {
+              if (!state[groupName].includes(value)) {
+                state[groupName].push(value);
+              }
+            } else {
+              state[groupName] = state[groupName].filter(v => v !== value);
+            }
+          }
+
+          updateSectionStatus(groupName);
+          renderOutput();
+        });
+      });
+    });
+
+    // ===== Text Input Logic =====
+    const inputMappings = [
+      { id: 'inputProjectName', field: 'projectName', section: 'projectName' },
+      { id: 'inputProjectTypeCustom', field: 'projectTypeCustom', section: 'projectType' },
+      { id: 'inputTargetUser', field: 'targetUser', section: 'targetUser' },
+      { id: 'inputCoreMvp', field: 'coreMvp', section: 'coreMvp' },
+      { id: 'inputDontDo', field: 'dontDo', section: 'dontDo' }
+    ];
+
+    inputMappings.forEach(({ id, field, section }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', () => {
+        state[field] = el.value.trim();
+        if (section) updateSectionStatus(section);
+        renderOutput();
+      });
+    });
+
+    // ===== Section Status (number highlight) =====
+    function updateSectionStatus(fieldName) {
+      const section = document.querySelector(`.form-section[data-field="${fieldName}"]`);
+      if (!section) return;
+
+      let hasValue = false;
+      const val = state[fieldName];
+      if (Array.isArray(val)) {
+        hasValue = val.length > 0;
+      } else {
+        hasValue = !!val;
+      }
+
+      if (hasValue) {
+        section.classList.add('has-value');
+      } else {
+        section.classList.remove('has-value');
+      }
+    }
+
+    // ===== Render Prompt Output =====
+    function renderOutput() {
+      const parts = [];
+      let hasAny = false;
+
+      // Section: 專案定位
+      const projectTypeDisplay = state.projectTypeCustom ? state.projectTypeCustom : state.projectType;
+      const hasPositioning = state.projectName || projectTypeDisplay || state.targetUser;
+      if (hasPositioning) {
+        hasAny = true;
+        let block = '▍專案定位';
+        if (state.projectName) block += `\n・名稱：${state.projectName}`;
+        if (projectTypeDisplay) block += `\n・類型：${projectTypeDisplay}`;
+        if (state.targetUser) {
+          block += `\n・目標使用者與一句話描述：\n  ${state.targetUser}`;
+        }
+        parts.push(block);
+      }
+
+      // Section: 核心功能
+      if (state.coreMvp) {
+        hasAny = true;
+        parts.push(`▍核心功能（MVP）\n${state.coreMvp}`);
+      }
+
+      // Section: 視覺與語言
+      const hasVisLang = state.visualStyle.length > 0 || state.language;
+      if (hasVisLang) {
+        hasAny = true;
+        let block = '▍視覺與語言';
+        if (state.visualStyle.length > 0) {
+          block += `\n・風格：${state.visualStyle.join('、')}`;
+        }
+        if (state.language) {
+          block += `\n・語言：${state.language}`;
+        }
+        parts.push(block);
+      }
+
+      // Section: 技術規格
+      const hasTech = state.deploymentStage || state.rwdSupport;
+      if (hasTech) {
+        hasAny = true;
+        let block = '▍技術規格';
+        if (state.deploymentStage) {
+          block += `\n・雲端部署：${deploymentMap[state.deploymentStage] || state.deploymentStage}`;
+        }
+        if (state.rwdSupport) {
+          block += `\n・RWD 設計：${rwdMap[state.rwdSupport] || state.rwdSupport}`;
+        }
+        parts.push(block);
+      }
+
+      // Section: 不要做
+      if (state.dontDo) {
+        hasAny = true;
+        parts.push(`▍不要做（可選）\n${state.dontDo}`);
+      }
+
+      if (!hasAny) {
+        outputContent.innerHTML = '<span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>';
+        charCount.textContent = '0 chars';
+        return;
+      }
+
+      const text = parts.join('\n\n');
+      outputContent.textContent = text;
+      charCount.textContent = `${text.length} chars`;
+    }
+
+    // ===== Initialize Default Values =====
+    function initializeDefaults() {
+      // Set deployment stage default to preview
+      const previewCard = document.querySelector('[data-group="deploymentStage"][data-value="preview"]');
+      if (previewCard) {
+        previewCard.classList.add('selected');
+      }
+
+      // Set RWD support default to 支援 RWD
+      const rwdCard = document.querySelector('[data-group="rwdSupport"][data-value="支援 RWD"]');
+      if (rwdCard) {
+        rwdCard.classList.add('selected');
+      }
+
+      updateSectionStatus('deploymentStage');
+      updateSectionStatus('rwdSupport');
+      renderOutput();
+    }
+
+    // Initialize on page load
+    initializeDefaults();
+
+    // ===== Copy to Clipboard =====
+    btnCopy.addEventListener('click', async () => {
+      const text = outputContent.textContent;
+      if (!text || text.includes('填寫左側表單')) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        btnCopyText.textContent = '已複製！';
+        btnCopy.classList.add('copied');
+        setTimeout(() => {
+          btnCopyText.textContent = '複製到剪貼簿';
+          btnCopy.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btnCopyText.textContent = '已複製！';
+        btnCopy.classList.add('copied');
+        setTimeout(() => {
+          btnCopyText.textContent = '複製到剪貼簿';
+          btnCopy.classList.remove('copied');
+        }, 2000);
+      }
+    });
+  </script>
+</body>
+</html>
