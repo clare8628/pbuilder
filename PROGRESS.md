@@ -22,3 +22,10 @@
 - Wrangler dry-run: ✓ 通過
 - Pages 配置: ✓ 完成
 - LOCAL_DEV.md: ✓ 已新增本地開發指南
+
+## 實際執行紀錄 (Tom, 誠實回報)
+- Git: 目錄先前無 .git，已 `git init` + commit，hash: 50d6d8e (20 files)
+- Remote: 無設定，未 push（本地 commit only）
+- Wrangler whoami: 未登入 (not authenticated)
+- Wrangler deploy: 失敗，缺少 CLOUDFLARE_API_TOKEN（non-interactive 環境需設定）
+- 待辦: 需 Clare 提供 Cloudflare API Token 才能繼續部署
