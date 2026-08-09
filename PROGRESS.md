@@ -29,3 +29,19 @@
 - Wrangler whoami: 未登入 (not authenticated)
 - Wrangler deploy: 失敗，缺少 CLOUDFLARE_API_TOKEN（non-interactive 環境需設定）
 - 待辦: 需 Clare 提供 Cloudflare API Token 才能繼續部署
+
+## 22:42 再次嘗試 (Tom)
+- `wrangler whoami`: 仍未認證
+- env 檢查: 無 CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID
+- 結果: 無法部署，deadline 23:00 前無法完成
+- 原因: 缺少 Cloudflare 認證憑證，非程式碼/配置問題
+- 需要: Clare 提供 CLOUDFLARE_API_TOKEN 環境變數
+
+## 2026-08-09 日式質感風格改版 (Tom)
+- 配色改為大地色系（米/卡其/墨色），點綴抹茶綠/朱紅/靛藍
+- letter-spacing +0.02~0.05em、line-height 加大，強化留白感
+- padding/margin 全面放大（section 間距 40→64px）
+- 圓角改為極小方正（12px→2px），邊框改細（1px）
+- transition 拉長至 0.3-0.4s，hover 更緩慢細膩
+- body 加入微妙和紙紋理漸層背景
+- 編號 01-09 圓形徽章保留清晰辨識，僅簡化視覺重量
