@@ -45,3 +45,10 @@
 - transition 拉長至 0.3-0.4s，hover 更緩慢細膩
 - body 加入微妙和紙紋理漸層背景
 - 編號 01-09 圓形徽章保留清晰辨識，僅簡化視覺重量
+
+## 2026-08-10 Output Panel 立體感調整 (Tom)
+- .output-panel 加入 inset box-shadow（暖黑色 rgba(20,18,14,.55)），左側呈現微凹入畫框感
+- 加入極淡內側高光 inset 0 1px 0 rgba(255,255,255,.03) 增加厚度層次
+- 加入 1px 米色微光邊 rgba(233,226,214,.06)，呼應和紙質感
+- 同步調整 <1023px 響應式版本（border-top 情境）改為上緣 inset 陰影
+- 未動 header/content/footer 內部樣式，可讀性不受影響
