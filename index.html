@@ -472,9 +472,15 @@
       border-top: 1px solid rgba(245, 240, 250, 0.1);
     }
 
-    .btn-copy {
-      width: 100%;
-      padding: 12px 20px;
+    .output-footer-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-copy,
+    .btn-download {
+      flex: 1 1 0;
+      padding: 12px 16px;
       background: linear-gradient(135deg, rgba(232, 107, 216, 0.16), rgba(139, 91, 214, 0.16));
       color: var(--text-output-heading);
       border: 1px solid rgba(232, 107, 216, 0.3);
@@ -507,7 +513,41 @@
       color: var(--text-output-accent);
     }
 
-    .btn-copy svg {
+    .btn-download {
+      background: rgba(245, 240, 250, 0.04);
+      border: 1px solid rgba(139, 91, 214, 0.3);
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(135deg, rgba(139, 91, 214, 0.22), rgba(232, 107, 216, 0.12));
+      border-color: rgba(139, 91, 214, 0.55);
+      box-shadow: 0 0 20px -4px rgba(139, 91, 214, 0.5);
+    }
+
+    .btn-download:active {
+      transform: scale(0.98);
+    }
+
+    .btn-download.downloaded {
+      background: rgba(139, 91, 214, 0.25);
+      border-color: rgba(139, 91, 214, 0.5);
+      color: var(--text-output-accent);
+    }
+
+    .btn-download:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-download:disabled:hover {
+      background: rgba(245, 240, 250, 0.04);
+      border-color: rgba(139, 91, 214, 0.3);
+      box-shadow: none;
+    }
+
+    .btn-copy svg,
+    .btn-download svg {
       width: 16px;
       height: 16px;
     }
@@ -1023,10 +1063,16 @@
         <span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>
       </div>
       <div class="output-footer">
-        <button class="btn-copy" id="btnCopy" title="複製到剪貼簿">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M5 11H3.5A1.5 1.5 0 0 1 2 9.5V3.5A1.5 1.5 0 0 1 3.5 2h6A1.5 1.5 0 0 1 11 3.5V5"/></svg>
-          <span id="btnCopyText">複製到剪貼簿</span>
-        </button>
+        <div class="output-footer-actions">
+          <button class="btn-copy" id="btnCopy" title="複製到剪貼簿">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M5 11H3.5A1.5 1.5 0 0 1 2 9.5V3.5A1.5 1.5 0 0 1 3.5 2h6A1.5 1.5 0 0 1 11 3.5V5"/></svg>
+            <span id="btnCopyText">複製到剪貼簿</span>
+          </button>
+          <button class="btn-download" id="btnDownload" title="下載為 .md 檔案">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8"/><path d="M4.5 7 8 10.5 11.5 7"/><path d="M2.5 12.5h11"/></svg>
+            <span id="btnDownloadText">下載 .md</span>
+          </button>
+        </div>
       </div>
     </aside>
   </main>
@@ -1051,6 +1097,8 @@
     const charCount = document.getElementById('charCount');
     const btnCopy = document.getElementById('btnCopy');
     const btnCopyText = document.getElementById('btnCopyText');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnDownloadText = document.getElementById('btnDownloadText');
     const filledCountEl = document.getElementById('filledCount');
     const statCharCountEl = document.getElementById('statCharCount');
     const usageCountEl = document.getElementById('usageCount');
@@ -1252,6 +1300,7 @@
         outputContent.innerHTML = '<span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>';
         charCount.textContent = '0 chars';
         if (statCharCountEl) statCharCountEl.textContent = '0 字';
+        if (btnDownload) btnDownload.disabled = true;
         updateFilledCount();
         return;
       }
@@ -1260,6 +1309,7 @@
       outputContent.textContent = text;
       charCount.textContent = `${text.length} chars`;
       if (statCharCountEl) statCharCountEl.textContent = `${text.length} 字`;
+      if (btnDownload) btnDownload.disabled = false;
       updateFilledCount();
     }
 
@@ -1319,6 +1369,31 @@
         }, 2000);
       }
     });
+
+    // ===== Download as .md =====
+    if (btnDownload) {
+      btnDownload.addEventListener('click', () => {
+        const text = outputContent.textContent;
+        if (!text || text.includes('填寫左側表單')) return;
+
+        const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'prompt.md';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        btnDownloadText.textContent = '已下載！';
+        btnDownload.classList.add('downloaded');
+        setTimeout(() => {
+          btnDownloadText.textContent = '下載 .md';
+          btnDownload.classList.remove('downloaded');
+        }, 2000);
+      });
+    }
 
     // ===== Glow Threads Background (vanilla JS + Canvas 2D) =====
     // DESIGN.md 規範：Cyber Pink / Violet Accent 預設色盤，speed=1，count=9。

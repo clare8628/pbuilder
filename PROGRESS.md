@@ -89,3 +89,10 @@
 - 手機（≤640px）與 prefers-reduced-motion 停用動畫，分頁 hidden 時暫停 rAF 省效能
 - 圓角放大（2px→10-14px）、間距略微收緊，卡片/按鈕 hover 加入 glow 陰影
 - 版本號 v1.0.0 → v2.0.0；01-09 編號結構、表單邏輯、JS 互動全數保留未動
+
+## 2026-08-10 Output Panel 加入下載 .md 按鈕 (Tom)
+- output-footer 新增 #btnDownload，與 #btnCopy 並排（output-footer-actions flex row，各佔 50%）
+- 圖示：向下箭頭+底線 SVG，風格與複製按鈕一致，用 violet accent 區隔
+- 點擊：Blob(text/markdown) + createObjectURL + <a download="prompt.md"> 觸發下載，完成後 revokeObjectURL
+- 空狀態：複用 outputContent 含「填寫左側表單」的判斷，renderOutput() 中同步設定 btnDownload.disabled，避免下載空檔
+- node --check 與 CSS 括號配對均通過
