@@ -1057,13 +1057,21 @@
 
     // ===== Stats: 已填寫項目數 =====
     const TRACKED_FIELDS = ['projectName', 'projectType', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
+    const touchedFields = new Set();
+
+    function markTouched(field) {
+      if (TRACKED_FIELDS.includes(field)) touchedFields.add(field);
+    }
+
+    function unmarkTouched(field) {
+      touchedFields.delete(field);
+    }
 
     function updateFilledCount() {
       if (!filledCountEl) return;
       let filled = 0;
       TRACKED_FIELDS.forEach(field => {
-        const val = state[field];
-        if (Array.isArray(val) ? val.length > 0 : !!val) filled++;
+        if (touchedFields.has(field)) filled++;
       });
       filledCountEl.textContent = `${filled} / ${TRACKED_FIELDS.length} 項`;
     }
@@ -1129,6 +1137,8 @@
             }
           }
 
+          // 使用者主動點擊 = 已互動，無論結果值是否為空
+          markTouched(groupName);
           updateSectionStatus(groupName);
           renderOutput();
         });
@@ -1149,6 +1159,11 @@
       if (!el) return;
       el.addEventListener('input', () => {
         state[field] = el.value.trim();
+        if (state[field]) {
+          markTouched(field);
+        } else {
+          unmarkTouched(field);
+        }
         if (section) updateSectionStatus(section);
         renderOutput();
       });
