@@ -1,11 +1,15 @@
-// Cloudflare Pages - Advanced Mode Worker
-// 正確格式：export default { fetch(request, env, context) }
-// 靜態資源一律透過 env.ASSETS.fetch(request) 轉發，避免遞迴呼叫
+// Cloudflare Pages Function
+// 攔截所有請求，返回 index.html (SPA)
 
-export default {
-  async fetch(request, env, context) {
-    // 直接將所有請求轉發給 Pages 的靜態資源服務
-    // env.ASSETS 是 Cloudflare Pages 內建綁定，指向已部署的靜態檔案
-    return env.ASSETS.fetch(request);
+export async function onRequest(context) {
+  const { request } = context;
+  const url = new URL(request.url);
+
+  // 如果請求靜態資源（js, css, png 等），直接返回
+  if (/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2)$/i.test(url.pathname)) {
+    return context.next();
   }
-};
+
+  // 其他所有請求都返回 index.html (SPA 路由)
+  return context.next();
+}

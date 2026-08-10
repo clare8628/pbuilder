@@ -52,3 +52,13 @@
 - 加入 1px 米色微光邊 rgba(233,226,214,.06)，呼應和紙質感
 - 同步調整 <1023px 響應式版本（border-top 情境）改為上緣 inset 陰影
 - 未動 header/content/footer 內部樣式，可讀性不受影響
+
+## 2026-08-10 修正 Error 1019（Iris）
+- 根因：_worker.js 誤用 Pages Functions middleware 格式（onRequest + context.next()），但 root 層級 _worker.js 屬於 Advanced Mode，導致遞迴請求循環
+- 修正：改為正確格式 export default { fetch(request, env, context) }，用 env.ASSETS.fetch(request) 轉發靜態資源
+- Commit: a529484，已推送 GitHub main
+
+## 2026-08-10 MVP 標題與提示文字調整 (Tom)
+- h2 標題「核心功能（MVP）」→「最小可行性產品（MVP）」
+- section-hint「列出最重要的 2-4 個功能...」→「列出最重要的1-3個功能...求全。」
+- 僅動文字，HTML 標籤結構未變
