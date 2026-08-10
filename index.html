@@ -120,6 +120,19 @@
       letter-spacing: 0.05em;
     }
 
+    /* ===== Version Badge =====
+       手動維護版本號：每次重大更新後手動遞增此處數字（HTML 中 .app-version 文字內容）。
+       格式：v<major>.<minor>.<patch>，用於快速肉眼比對是否為最新部署版本。 */
+    .app-version {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-family: var(--font-en);
+      letter-spacing: 0.06em;
+      opacity: 0.6;
+      margin-left: 2px;
+    }
+
     .app-container {
       display: grid;
       grid-template-columns: 1fr 420px;
@@ -501,6 +514,10 @@
         display: none;
       }
 
+      .app-version {
+        display: none;
+      }
+
       .form-panel {
         padding: 24px 20px 40px;
       }
@@ -608,6 +625,8 @@
   <!-- Header -->
   <header class="app-header">
     <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
+    <!-- 版本號：每次重大更新請手動遞增此處文字 -->
+    <span class="app-version">v1.0.0</span>
     <span class="app-subtitle">AI Development Prompt Generator</span>
   </header>
 

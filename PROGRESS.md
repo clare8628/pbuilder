@@ -62,3 +62,9 @@
 - h2 標題「核心功能（MVP）」→「最小可行性產品（MVP）」
 - section-hint「列出最重要的 2-4 個功能...」→「列出最重要的1-3個功能...求全。」
 - 僅動文字，HTML 標籤結構未變
+
+## 2026-08-10 加入版本號標示 (Tom)
+- header 加入 .app-version，目前版本：v1.0.0
+- 樣式低調：11px、text-muted、opacity 0.6，位於 logo 與 subtitle 之間
+- 手動維護：future更新請遞增 index.html 中 .app-version 文字
+- <640px 隱藏（同 subtitle）
