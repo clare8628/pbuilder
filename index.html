@@ -138,6 +138,26 @@
       letter-spacing: 0.05em;
     }
 
+    .app-header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .app-header-titlerow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .app-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      margin-top: 2px;
+    }
+
     /* ===== Version Badge =====
        手動維護版本號：每次重大更新後手動遞增此處數字（HTML 中 .app-version 文字內容）。
        格式：v<major>.<minor>.<patch>，用於快速肉眼比對是否為最新部署版本。 */
@@ -492,6 +512,93 @@
       height: 16px;
     }
 
+    /* ===== Stats Dashboard Bar ===== */
+    .stats-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: stretch;
+      gap: 14px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      flex: 1 1 200px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+      box-shadow: 0 0 16px -10px rgba(232, 107, 216, 0.35);
+      transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .stat-item:hover {
+      border-color: var(--accent-vermilion);
+      box-shadow: 0 0 20px -6px rgba(232, 107, 216, 0.45);
+    }
+
+    .stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px 1px rgba(74, 222, 128, 0.7);
+      flex-shrink: 0;
+      animation: pulse-dot 2.4s ease-in-out infinite;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-en);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .stat-note {
+      font-size: 10px;
+      color: var(--text-muted);
+      opacity: 0.75;
+      margin-left: 2px;
+    }
+
+    .stat-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      font-family: var(--font-en);
+      letter-spacing: 0.02em;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .stats-bar {
+        padding: 12px 20px;
+        gap: 8px;
+      }
+      .stat-item {
+        flex: 1 1 calc(50% - 8px);
+        padding: 10px 12px;
+        gap: 6px;
+      }
+      .stat-label {
+        font-size: 10.5px;
+      }
+      .stat-value {
+        font-size: 12px;
+      }
+      .stat-note {
+        display: none;
+      }
+    }
+
     /* ===== Responsive ===== */
     @media (max-width: 1200px) {
       .app-container {
@@ -539,6 +646,10 @@
 
       .app-version {
         display: none;
+      }
+
+      .app-desc {
+        font-size: 11px;
       }
 
       .form-panel {
@@ -662,11 +773,37 @@
 
   <!-- Header -->
   <header class="app-header">
-    <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
-    <!-- 版本號：每次重大更新請手動遞增此處文字 -->
-    <span class="app-version">v2.0.0</span>
-    <span class="app-subtitle">AI Development Prompt Generator</span>
+    <div class="app-header-text">
+      <div class="app-header-titlerow">
+        <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
+        <!-- 版本號：每次重大更新請手動遞增此處文字 -->
+        <span class="app-version">v2.0.0</span>
+        <span class="app-subtitle">AI Development Prompt Generator</span>
+      </div>
+      <p class="app-desc">視覺化建構 AI 開發用的 Prompt：填寫左側表單各項目，右側即時產生結構化指令，完成後一鍵複製使用。</p>
+    </div>
   </header>
+
+  <!-- Stats Dashboard Bar -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+      <span class="stat-dot" id="statusDot"></span>
+      <span class="stat-label">狀態</span>
+      <span class="stat-value" id="statusValue">運作中</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">已填寫</span>
+      <span class="stat-value" id="filledCount">0 / 9 項</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">本次字數</span>
+      <span class="stat-value" id="statCharCount">0 字</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">本機使用次數<span class="stat-note">（本機統計）</span></span>
+      <span class="stat-value" id="usageCount">0 次</span>
+    </div>
+  </div>
 
   <main class="app-container">
     <!-- ===== Left: Form Panel ===== -->
@@ -914,6 +1051,40 @@
     const charCount = document.getElementById('charCount');
     const btnCopy = document.getElementById('btnCopy');
     const btnCopyText = document.getElementById('btnCopyText');
+    const filledCountEl = document.getElementById('filledCount');
+    const statCharCountEl = document.getElementById('statCharCount');
+    const usageCountEl = document.getElementById('usageCount');
+
+    // ===== Stats: 已填寫項目數 =====
+    const TRACKED_FIELDS = ['projectName', 'projectType', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
+
+    function updateFilledCount() {
+      if (!filledCountEl) return;
+      let filled = 0;
+      TRACKED_FIELDS.forEach(field => {
+        const val = state[field];
+        if (Array.isArray(val) ? val.length > 0 : !!val) filled++;
+      });
+      filledCountEl.textContent = `${filled} / ${TRACKED_FIELDS.length} 項`;
+    }
+
+    // ===== Stats: 本機使用次數（localStorage，僅計此瀏覽器裝置） =====
+    const USAGE_KEY = 'pbuilder_local_usage_count';
+
+    function getUsageCount() {
+      const v = parseInt(localStorage.getItem(USAGE_KEY) || '0', 10);
+      return isNaN(v) ? 0 : v;
+    }
+
+    function renderUsageCount() {
+      if (usageCountEl) usageCountEl.textContent = `${getUsageCount()} 次`;
+    }
+
+    function incrementUsageCount() {
+      const next = getUsageCount() + 1;
+      localStorage.setItem(USAGE_KEY, String(next));
+      renderUsageCount();
+    }
 
     // ===== Mapping for output display =====
     const deploymentMap = {
@@ -1065,12 +1236,16 @@
       if (!hasAny) {
         outputContent.innerHTML = '<span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>';
         charCount.textContent = '0 chars';
+        if (statCharCountEl) statCharCountEl.textContent = '0 字';
+        updateFilledCount();
         return;
       }
 
       const text = parts.join('\n\n');
       outputContent.textContent = text;
       charCount.textContent = `${text.length} chars`;
+      if (statCharCountEl) statCharCountEl.textContent = `${text.length} 字`;
+      updateFilledCount();
     }
 
     // ===== Initialize Default Values =====
@@ -1094,6 +1269,7 @@
 
     // Initialize on page load
     initializeDefaults();
+    renderUsageCount();
 
     // ===== Copy to Clipboard =====
     btnCopy.addEventListener('click', async () => {
@@ -1104,6 +1280,7 @@
         await navigator.clipboard.writeText(text);
         btnCopyText.textContent = '已複製！';
         btnCopy.classList.add('copied');
+        incrementUsageCount();
         setTimeout(() => {
           btnCopyText.textContent = '複製到剪貼簿';
           btnCopy.classList.remove('copied');
@@ -1120,6 +1297,7 @@
         document.body.removeChild(ta);
         btnCopyText.textContent = '已複製！';
         btnCopy.classList.add('copied');
+        incrementUsageCount();
         setTimeout(() => {
           btnCopyText.textContent = '複製到剪貼簿';
           btnCopy.classList.remove('copied');
