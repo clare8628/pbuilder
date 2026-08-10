@@ -68,3 +68,10 @@
 - 樣式低調：11px、text-muted、opacity 0.6，位於 logo 與 subtitle 之間
 - 手動維護：future更新請遞增 index.html 中 .app-version 文字
 - <640px 隱藏（同 subtitle）
+
+## 2026-08-10 改版為 Glow Threads 深色科技風格 (Tom)
+- 配色全面翻新：:root 改為 Cyber Pink/Violet 深色主題（bg #0f1013，accent #e86bd8 / #8b5bd6）
+- 背景動畫：新增 vanilla JS + Canvas 2D 發光線條（9 條，requestAnimationFrame），非 React/WebGL —— 因 PBuilder 是純靜態單檔 HTML，無 build pipeline，Canvas 2D 漸層曲線已達成柔和螢光線束效果，零依賴符合 First Principles
+- 手機（≤640px）與 prefers-reduced-motion 停用動畫，分頁 hidden 時暫停 rAF 省效能
+- 圓角放大（2px→10-14px）、間距略微收緊，卡片/按鈕 hover 加入 glow 陰影
+- 版本號 v1.0.0 → v2.0.0；01-09 編號結構、表單邏輯、JS 互動全數保留未動

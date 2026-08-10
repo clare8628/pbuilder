@@ -17,37 +17,41 @@
     }
 
     :root {
-      /* 和風大地色系 (wabi-sabi earth tones) */
-      --bg-main: #F2EDE4;
-      --bg-card: #E9E2D6;
-      --bg-card-hover: #DFD6C6;
-      --bg-selected: #3A3632;
-      --bg-output: #29271F;
-      --bg-input: #FBF9F4;
+      /* Cyber Pink / Violet Accent — dark tech theme (DESIGN.md Glow Threads) */
+      --bg-main: #0f1013;
+      --bg-card: #17181d;
+      --bg-card-hover: #1f2128;
+      --bg-selected: #e86bd8;
+      --bg-output: #0a0b0e;
+      --bg-input: #14151a;
 
-      --text-primary: #2E2B24;
-      --text-secondary: #8C8272;
-      --text-muted: #A69C8A;
-      --text-on-dark: #E8E1D3;
-      --text-on-selected: #FBF9F4;
-      --text-output-heading: #CFC6B4;
-      --text-output-body: #A79C87;
-      --text-output-accent: #7A9B7E;
+      --text-primary: #f5f0fa;
+      --text-secondary: #a6a3b0;
+      --text-muted: #6f6d7a;
+      --text-on-dark: #f5f0fa;
+      --text-on-selected: #0f1013;
+      --text-output-heading: #f5f0fa;
+      --text-output-body: #a6a3b0;
+      --text-output-accent: #e86bd8;
 
-      --border-light: #DCD2C0;
-      --border-input: #CBBFA8;
+      --border-light: #2a2c34;
+      --border-input: #34363f;
 
-      /* 點綴色：抹茶綠、朱紅、靛藍（極少量使用） */
-      --accent-matcha: #7A9B7E;
-      --accent-vermilion: #B5533C;
-      --accent-indigo: #4C5C68;
+      /* 點綴色：洋紅、柔白高光、深紫（Cyber Pink / Violet Accent） */
+      --accent-matcha: #8b5bd6;
+      --accent-vermilion: #e86bd8;
+      --accent-indigo: #8b5bd6;
 
-      --radius-card: 2px;
-      --radius-input: 2px;
-      --radius-panel: 2px;
+      --glow-1: #e86bd8;
+      --glow-2: #f5f0fa;
+      --glow-3: #8b5bd6;
 
-      --spacing-section: 64px;
-      --spacing-inner: 24px;
+      --radius-card: 12px;
+      --radius-input: 10px;
+      --radius-panel: 14px;
+
+      --spacing-section: 48px;
+      --spacing-inner: 20px;
 
       --font-zh: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
       --font-en: 'Inter', sans-serif;
@@ -64,26 +68,40 @@
     body {
       font-family: var(--font-zh);
       background-color: var(--bg-main);
-      background-image:
-        repeating-linear-gradient(0deg, rgba(0,0,0,0.012) 0px, transparent 1px, transparent 2px, rgba(0,0,0,0.012) 3px),
-        radial-gradient(ellipse at top left, rgba(255,255,255,0.4) 0%, transparent 60%);
       color: var(--text-primary);
-      line-height: 1.85;
-      letter-spacing: 0.03em;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ===== Glow Threads Background Canvas =====
+       DESIGN.md: absolute inset-0, z-index 0, pointer-events none.
+       Vanilla JS + Canvas 2D (no framework/build step — static single-file deploy). */
+    #glowThreadsCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     /* ===== Layout ===== */
     .app-header {
-      padding: 28px 40px;
+      position: relative;
+      z-index: 10;
+      padding: 20px 40px;
       display: flex;
       align-items: center;
       gap: 14px;
       border-bottom: 1px solid var(--border-light);
-      background: rgba(242, 237, 228, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(15, 16, 19, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -134,6 +152,8 @@
     }
 
     .app-container {
+      position: relative;
+      z-index: 10;
       display: grid;
       grid-template-columns: 1fr 420px;
       gap: 0;
@@ -143,7 +163,7 @@
     }
 
     .form-panel {
-      padding: 56px 56px 96px;
+      padding: 44px 48px 80px;
       overflow-y: auto;
     }
 
@@ -152,15 +172,14 @@
       top: 73px;
       height: calc(100vh - 73px);
       background: var(--bg-output);
-      padding: 40px 32px;
+      padding: 36px 28px;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
-      border-left: 1px solid rgba(60, 58, 55, 0.3);
+      border-left: 1px solid var(--border-light);
       box-shadow:
-        inset 6px 0 16px -14px rgba(20, 18, 14, 0.55),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.03),
-        -1px 0 0 0 rgba(233, 226, 214, 0.06);
+        inset 6px 0 24px -18px rgba(232, 107, 216, 0.25),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
     }
 
     /* ===== Section ===== */
@@ -214,7 +233,7 @@
       background: var(--bg-selected);
       color: var(--text-on-selected);
       border-color: var(--bg-selected);
-      box-shadow: none;
+      box-shadow: 0 0 16px 0 rgba(232, 107, 216, 0.5);
       transform: none;
     }
 
@@ -258,18 +277,20 @@
 
     .card:hover {
       background: var(--bg-card-hover);
-      border-color: var(--text-muted);
+      border-color: var(--accent-vermilion);
+      box-shadow: 0 0 20px -6px rgba(232, 107, 216, 0.45);
+      transform: translateY(-1px);
     }
 
     .card:active {
-      transform: none;
+      transform: translateY(0);
     }
 
     .card.selected {
       background: var(--bg-selected);
       color: var(--text-on-selected);
       border-color: var(--bg-selected);
-      box-shadow: none;
+      box-shadow: 0 0 24px -4px rgba(232, 107, 216, 0.55);
     }
 
     .card-label {
@@ -289,7 +310,7 @@
     }
 
     .card.selected .card-sublabel {
-      color: rgba(255,255,255,0.6);
+      color: rgba(15, 16, 19, 0.65);
     }
 
     .card-check {
@@ -335,8 +356,8 @@
     }
 
     .text-input:focus {
-      border-color: var(--accent-indigo);
-      box-shadow: 0 0 0 3px rgba(76, 92, 104, 0.08);
+      border-color: var(--accent-vermilion);
+      box-shadow: 0 0 0 3px rgba(232, 107, 216, 0.18);
     }
 
     .text-input::placeholder {
@@ -373,6 +394,7 @@
       background: var(--text-output-accent);
       border-radius: 50%;
       flex-shrink: 0;
+      box-shadow: 0 0 8px 1px rgba(232, 107, 216, 0.7);
     }
 
     .output-title {
@@ -427,15 +449,15 @@
       flex-shrink: 0;
       margin-top: 20px;
       padding-top: 16px;
-      border-top: 1px solid rgba(200, 195, 189, 0.15);
+      border-top: 1px solid rgba(245, 240, 250, 0.1);
     }
 
     .btn-copy {
       width: 100%;
       padding: 12px 20px;
-      background: rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(232, 107, 216, 0.16), rgba(139, 91, 214, 0.16));
       color: var(--text-output-heading);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(232, 107, 216, 0.3);
       border-radius: var(--radius-input);
       font-family: var(--font-zh);
       font-size: 14px;
@@ -450,8 +472,9 @@
     }
 
     .btn-copy:hover {
-      background: rgba(255,255,255,0.14);
-      border-color: rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, rgba(232, 107, 216, 0.28), rgba(139, 91, 214, 0.28));
+      border-color: rgba(232, 107, 216, 0.55);
+      box-shadow: 0 0 20px -4px rgba(232, 107, 216, 0.5);
     }
 
     .btn-copy:active {
@@ -459,8 +482,8 @@
     }
 
     .btn-copy.copied {
-      background: rgba(122, 155, 126, 0.2);
-      border-color: rgba(122, 155, 126, 0.4);
+      background: rgba(139, 91, 214, 0.25);
+      border-color: rgba(139, 91, 214, 0.5);
       color: var(--text-output-accent);
     }
 
@@ -490,10 +513,10 @@
         height: auto;
         min-height: 400px;
         border-left: none;
-        border-top: 1px solid rgba(60, 58, 55, 0.3);
+        border-top: 1px solid var(--border-light);
         box-shadow:
-          inset 0 6px 16px -14px rgba(20, 18, 14, 0.55),
-          inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+          inset 0 6px 24px -18px rgba(232, 107, 216, 0.25),
+          inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
       }
 
       .form-panel {
@@ -605,7 +628,19 @@
 
     .ai-key-input:focus {
       border-color: var(--bg-selected);
-      box-shadow: 0 0 0 3px rgba(60, 58, 55, 0.08);
+      box-shadow: 0 0 0 3px rgba(232, 107, 216, 0.18);
+    }
+
+    /* Simplify background canvas on mobile for performance */
+    @media (max-width: 640px) {
+      #glowThreadsCanvas {
+        display: none;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #glowThreadsCanvas {
+        display: none;
+      }
     }
 
     .ai-key-input::placeholder {
@@ -622,11 +657,14 @@
 </head>
 <body>
 
+  <!-- Glow Threads background layer (DESIGN.md 第3節: absolute/fixed, z-index 0, pointer-events none) -->
+  <canvas id="glowThreadsCanvas" aria-hidden="true"></canvas>
+
   <!-- Header -->
   <header class="app-header">
     <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
     <!-- 版本號：每次重大更新請手動遞增此處文字 -->
-    <span class="app-version">v1.0.0</span>
+    <span class="app-version">v2.0.0</span>
     <span class="app-subtitle">AI Development Prompt Generator</span>
   </header>
 
@@ -1088,6 +1126,136 @@
         }, 2000);
       }
     });
+
+    // ===== Glow Threads Background (vanilla JS + Canvas 2D) =====
+    // DESIGN.md 規範：Cyber Pink / Violet Accent 預設色盤，speed=1，count=9。
+    // 選用 Canvas 2D 而非 React/WebGL：PBuilder 是純靜態單一 HTML 檔案，
+    // 沒有 build pipeline，Canvas 2D 漸層曲線已足以呈現「柔和螢光線束飄動」視覺效果，
+    // 且完全不依賴任何框架或外部函式庫，符合 First Principles（能刪除的模組就刪除）。
+    (function initGlowThreads() {
+      const canvas = document.getElementById('glowThreadsCanvas');
+      if (!canvas) return;
+
+      // 手機版關閉背景動畫，避免效能問題（對應 CSS media query 的 display:none 保險機制）
+      if (window.innerWidth <= 640 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+      }
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const COLORS = ['#e86bd8', '#f5f0fa', '#8b5bd6']; // Thread Stop 1/2/3
+      const SPEED = 1;
+      const COUNT = 9;
+
+      let width = 0, height = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let threads = [];
+      let rafId = null;
+      let running = true;
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function makeThread(i) {
+        const colorA = COLORS[i % COLORS.length];
+        const colorB = COLORS[(i + 1) % COLORS.length];
+        return {
+          baseY: (height / (COUNT + 1)) * (i + 1),
+          amplitude: 40 + Math.random() * 90,
+          freq: 0.6 + Math.random() * 0.9,
+          phase: Math.random() * Math.PI * 2,
+          speedMult: (0.4 + Math.random() * 0.8) * SPEED,
+          lineWidth: 1 + Math.random() * 1.8,
+          opacity: 0.12 + Math.random() * 0.22,
+          colorA,
+          colorB
+        };
+      }
+
+      function buildThreads() {
+        threads = [];
+        for (let i = 0; i < COUNT; i++) threads.push(makeThread(i));
+      }
+
+      function drawThread(t, time) {
+        const segments = 48;
+        ctx.beginPath();
+        for (let s = 0; s <= segments; s++) {
+          const x = (width / segments) * s;
+          const y =
+            t.baseY +
+            Math.sin(x * 0.004 * t.freq + time * t.speedMult + t.phase) * t.amplitude +
+            Math.sin(x * 0.0015 * t.freq - time * t.speedMult * 0.6) * (t.amplitude * 0.4);
+          if (s === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        const gradient = ctx.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, t.colorA);
+        gradient.addColorStop(0.5, COLORS[1]);
+        gradient.addColorStop(1, t.colorB);
+        ctx.strokeStyle = gradient;
+        ctx.globalAlpha = t.opacity;
+        ctx.lineWidth = t.lineWidth;
+        ctx.lineCap = 'round';
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = t.colorA;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+      }
+
+      function render(timestamp) {
+        if (!running) return;
+        const time = timestamp * 0.00035;
+        ctx.clearRect(0, 0, width, height);
+        for (const t of threads) drawThread(t, time);
+        rafId = requestAnimationFrame(render);
+      }
+
+      function start() {
+        resize();
+        buildThreads();
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(render);
+      }
+
+      // 節流 resize，避免過度重繪
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          // 若使用者把視窗縮到手機寬度，直接停止動畫節省效能
+          if (window.innerWidth <= 640) {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            ctx.clearRect(0, 0, width, height);
+            return;
+          }
+          running = true;
+          start();
+        }, 200);
+      });
+
+      // 分頁不可見時暫停動畫，節省效能
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          running = false;
+          if (rafId) cancelAnimationFrame(rafId);
+        } else if (window.innerWidth > 640) {
+          running = true;
+          start();
+        }
+      });
+
+      start();
+    })();
   </script>
 </body>
 </html>
