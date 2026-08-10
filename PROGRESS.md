@@ -96,3 +96,9 @@
 - 點擊：Blob(text/markdown) + createObjectURL + <a download="prompt.md"> 觸發下載，完成後 revokeObjectURL
 - 空狀態：複用 outputContent 含「填寫左側表單」的判斷，renderOutput() 中同步設定 btnDownload.disabled，避免下載空檔
 - node --check 與 CSS 括號配對均通過
+
+## 2026-08-10 全站服務人次計數改版 (Tom)
+- _worker.js 新增 /api/usage-count GET/POST route，讀寫 KV binding USAGE_COUNTER，其餘請求維持 env.ASSETS.fetch
+- index.html：移除 localStorage 計數邏輯，新增 loadServiceCount()/incrementServiceCount()，於複製/下載成功時呼叫；文案改為「本平台服務人次」
+- node --check 通過（_worker.js、抽取 script），CSS 括號配對通過
+- 限制：沙盒無 Cloudflare 認證，KV 實際讀寫未實測，待 Clare 正式部署後驗證

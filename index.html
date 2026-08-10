@@ -840,7 +840,7 @@
       <span class="stat-value" id="statCharCount">0 字</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">本機使用次數<span class="stat-note">（本機統計）</span></span>
+      <span class="stat-label">本平台服務人次</span>
       <span class="stat-value" id="usageCount">0 次</span>
     </div>
   </div>
@@ -1124,22 +1124,33 @@
       filledCountEl.textContent = `${filled} / ${TRACKED_FIELDS.length} 項`;
     }
 
-    // ===== Stats: 本機使用次數（localStorage，僅計此瀏覽器裝置） =====
-    const USAGE_KEY = 'pbuilder_local_usage_count';
-
-    function getUsageCount() {
-      const v = parseInt(localStorage.getItem(USAGE_KEY) || '0', 10);
-      return isNaN(v) ? 0 : v;
+    // ===== Stats: 本平台服務人次（Cloudflare KV，全站累計） =====
+    function renderServiceCount(count) {
+      if (usageCountEl && typeof count === 'number' && !isNaN(count)) {
+        usageCountEl.textContent = `${count} 次`;
+      }
     }
 
-    function renderUsageCount() {
-      if (usageCountEl) usageCountEl.textContent = `${getUsageCount()} 次`;
+    async function loadServiceCount() {
+      try {
+        const res = await fetch('/api/usage-count');
+        if (!res.ok) return;
+        const data = await res.json();
+        renderServiceCount(data.count);
+      } catch (err) {
+        // 靜默失敗：網路問題不應影響頁面其餘功能
+      }
     }
 
-    function incrementUsageCount() {
-      const next = getUsageCount() + 1;
-      localStorage.setItem(USAGE_KEY, String(next));
-      renderUsageCount();
+    async function incrementServiceCount() {
+      try {
+        const res = await fetch('/api/usage-count', { method: 'POST' });
+        if (!res.ok) return;
+        const data = await res.json();
+        renderServiceCount(data.count);
+      } catch (err) {
+        // 靜默失敗：計數失敗不影響複製/下載主要功能
+      }
     }
 
     // ===== Mapping for output display =====
@@ -1334,7 +1345,7 @@
 
     // Initialize on page load
     initializeDefaults();
-    renderUsageCount();
+    loadServiceCount();
 
     // ===== Copy to Clipboard =====
     btnCopy.addEventListener('click', async () => {
@@ -1345,7 +1356,7 @@
         await navigator.clipboard.writeText(text);
         btnCopyText.textContent = '已複製！';
         btnCopy.classList.add('copied');
-        incrementUsageCount();
+        incrementServiceCount();
         setTimeout(() => {
           btnCopyText.textContent = '複製到剪貼簿';
           btnCopy.classList.remove('copied');
@@ -1362,7 +1373,7 @@
         document.body.removeChild(ta);
         btnCopyText.textContent = '已複製！';
         btnCopy.classList.add('copied');
-        incrementUsageCount();
+        incrementServiceCount();
         setTimeout(() => {
           btnCopyText.textContent = '複製到剪貼簿';
           btnCopy.classList.remove('copied');
@@ -1388,6 +1399,7 @@
 
         btnDownloadText.textContent = '已下載！';
         btnDownload.classList.add('downloaded');
+        incrementServiceCount();
         setTimeout(() => {
           btnDownloadText.textContent = '下載 .md';
           btnDownload.classList.remove('downloaded');
