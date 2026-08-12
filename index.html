@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PromptBuilder — AI 開發 Prompt 建構器</title>
-  <meta name="description" content="視覺化建構 AI 開發 Prompt，透過點選與填寫快速產生結構化指令。">
+  <meta name="description" content="視覺化建構 AI 開發 Prompt，透過三步驟快速產生結構化指令。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,7 +17,6 @@
     }
 
     :root {
-      /* Cyber Pink / Violet Accent — dark tech theme (DESIGN.md Glow Threads) */
       --bg-main: #0f1013;
       --bg-card: #17181d;
       --bg-card-hover: #1f2128;
@@ -37,7 +36,6 @@
       --border-light: #2a2c34;
       --border-input: #34363f;
 
-      /* 點綴色：洋紅、柔白高光、深紫（Cyber Pink / Violet Accent） */
       --accent-matcha: #8b5bd6;
       --accent-vermilion: #e86bd8;
       --accent-indigo: #8b5bd6;
@@ -50,7 +48,7 @@
       --radius-input: 10px;
       --radius-panel: 14px;
 
-      --spacing-section: 48px;
+      --spacing-section: 40px;
       --spacing-inner: 20px;
 
       --font-zh: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
@@ -61,9 +59,7 @@
       --transition-normal: 0.4s ease;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: var(--font-zh);
@@ -77,9 +73,6 @@
       overflow-x: hidden;
     }
 
-    /* ===== Glow Threads Background Canvas =====
-       DESIGN.md: absolute inset-0, z-index 0, pointer-events none.
-       Vanilla JS + Canvas 2D (no framework/build step — static single-file deploy). */
     #glowThreadsCanvas {
       position: fixed;
       inset: 0;
@@ -158,9 +151,6 @@
       margin-top: 2px;
     }
 
-    /* ===== Version Badge =====
-       手動維護版本號：每次重大更新後手動遞增此處數字（HTML 中 .app-version 文字內容）。
-       格式：v<major>.<minor>.<patch>，用於快速肉眼比對是否為最新部署版本。 */
     .app-version {
       font-size: 11px;
       font-weight: 400;
@@ -183,7 +173,7 @@
     }
 
     .form-panel {
-      padding: 44px 48px 80px;
+      padding: 44px 48px 60px;
       overflow-y: auto;
     }
 
@@ -202,25 +192,88 @@
         inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
     }
 
-    /* ===== Section ===== */
-    .form-section {
-      margin-bottom: var(--spacing-section);
+    /* ===== Step Indicator ===== */
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 40px;
+    }
+
+    .step-indicator-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .step-indicator-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-family: var(--font-en);
+      font-weight: 500;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-light);
+      transition: all var(--transition-normal);
+      flex-shrink: 0;
+    }
+
+    .step-indicator-item.active .step-indicator-circle {
+      background: var(--bg-selected);
+      color: var(--text-on-selected);
+      border-color: var(--bg-selected);
+      box-shadow: 0 0 16px 0 rgba(232, 107, 216, 0.5);
+    }
+
+    .step-indicator-item.done .step-indicator-circle {
+      background: rgba(139, 91, 214, 0.25);
+      color: var(--text-output-accent);
+      border-color: rgba(139, 91, 214, 0.5);
+    }
+
+    .step-indicator-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .step-indicator-item.active .step-indicator-label {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .step-indicator-line {
+      flex: 1 1 auto;
+      height: 1px;
+      background: var(--border-light);
+      margin: 0 12px;
+      min-width: 20px;
+    }
+
+    /* ===== Step Panels ===== */
+    .step-panel {
+      display: none;
       animation: fadeInUp 0.4s ease both;
     }
 
-    .form-section:nth-child(1) { animation-delay: 0.05s; }
-    .form-section:nth-child(2) { animation-delay: 0.1s; }
-    .form-section:nth-child(3) { animation-delay: 0.15s; }
-    .form-section:nth-child(4) { animation-delay: 0.2s; }
-    .form-section:nth-child(5) { animation-delay: 0.25s; }
-    .form-section:nth-child(6) { animation-delay: 0.3s; }
-    .form-section:nth-child(7) { animation-delay: 0.35s; }
-    .form-section:nth-child(8) { animation-delay: 0.4s; }
-    .form-section:nth-child(9) { animation-delay: 0.45s; }
+    .step-panel.active {
+      display: block;
+    }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-section {
+      margin-bottom: var(--spacing-section);
     }
 
     .section-header {
@@ -280,9 +333,7 @@
       margin-left: 42px;
     }
 
-    .cards-grid--two {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    .cards-grid--two { grid-template-columns: repeat(2, 1fr); }
 
     .card {
       position: relative;
@@ -302,9 +353,7 @@
       transform: translateY(-1px);
     }
 
-    .card:active {
-      transform: translateY(0);
-    }
+    .card:active { transform: translateY(0); }
 
     .card.selected {
       background: var(--bg-selected);
@@ -329,9 +378,7 @@
       letter-spacing: 0.02em;
     }
 
-    .card.selected .card-sublabel {
-      color: rgba(15, 16, 19, 0.65);
-    }
+    .card.selected .card-sublabel { color: rgba(15, 16, 19, 0.65); }
 
     .card-check {
       position: absolute;
@@ -346,19 +393,11 @@
       justify-content: center;
     }
 
-    .card.selected .card-check {
-      opacity: 1;
-    }
-
-    .card-check svg {
-      width: 18px;
-      height: 18px;
-    }
+    .card.selected .card-check { opacity: 1; }
+    .card-check svg { width: 18px; height: 18px; }
 
     /* ===== Text Input ===== */
-    .text-input-wrapper {
-      margin-left: 42px;
-    }
+    .text-input-wrapper { margin-left: 42px; }
 
     .text-input {
       width: 100%;
@@ -380,17 +419,139 @@
       box-shadow: 0 0 0 3px rgba(232, 107, 216, 0.18);
     }
 
-    .text-input::placeholder {
+    .text-input::placeholder { color: var(--text-muted); }
+
+    textarea.text-input { resize: vertical; min-height: 80px; }
+    textarea.text-input.tall { min-height: 100px; }
+
+    /* ===== Select (dropdown) ===== */
+    select.text-input {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a6a3b0' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      cursor: pointer;
+      padding-right: 40px;
+    }
+
+    /* ===== Sub scenario cards (conditional) ===== */
+    .sub-scenario-wrapper {
+      margin-left: 42px;
+      margin-top: 14px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.35s ease;
+    }
+
+    .sub-scenario-wrapper.visible {
+      max-height: 600px;
+      opacity: 1;
+    }
+
+    .sub-scenario-hint {
+      font-size: 12.5px;
       color: var(--text-muted);
+      margin-bottom: 10px;
     }
 
-    textarea.text-input {
-      resize: vertical;
-      min-height: 80px;
+    /* ===== Example suggestion cards ===== */
+    .example-list {
+      margin-left: 42px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    textarea.text-input.tall {
-      min-height: 100px;
+    .example-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+    }
+
+    .example-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .btn-example-copy {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      background: rgba(232, 107, 216, 0.12);
+      border: 1px solid rgba(232, 107, 216, 0.35);
+      border-radius: 8px;
+      color: var(--text-output-accent);
+      font-family: var(--font-zh);
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-example-copy:hover {
+      background: rgba(232, 107, 216, 0.24);
+      border-color: rgba(232, 107, 216, 0.6);
+    }
+
+    .btn-example-copy.added {
+      background: rgba(139, 91, 214, 0.3);
+      border-color: rgba(139, 91, 214, 0.6);
+      color: var(--text-output-accent);
+    }
+
+    /* ===== Step Nav Buttons ===== */
+    .step-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .btn-step {
+      padding: 12px 26px;
+      border-radius: var(--radius-input);
+      font-family: var(--font-zh);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: all var(--transition-normal);
+    }
+
+    .btn-step-prev {
+      background: transparent;
+      border: 1px solid var(--border-input);
+      color: var(--text-secondary);
+    }
+
+    .btn-step-prev:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+    }
+
+    .btn-step-prev:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .btn-step-next {
+      background: linear-gradient(135deg, var(--accent-vermilion), var(--accent-indigo));
+      border: none;
+      color: var(--text-on-selected);
+      box-shadow: 0 0 20px -6px rgba(232, 107, 216, 0.6);
+    }
+
+    .btn-step-next:hover {
+      box-shadow: 0 0 26px -4px rgba(232, 107, 216, 0.8);
+      transform: translateY(-1px);
     }
 
     /* ===== Output Panel ===== */
@@ -402,11 +563,7 @@
       flex-shrink: 0;
     }
 
-    .output-header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .output-header-left { display: flex; align-items: center; gap: 10px; }
 
     .output-status-dot {
       width: 8px;
@@ -446,23 +603,41 @@
       padding-right: 8px;
     }
 
-    .output-content::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .output-content::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .output-content::-webkit-scrollbar-thumb {
-      background: rgba(200, 195, 189, 0.25);
-      border-radius: 4px;
-    }
+    .output-content::-webkit-scrollbar { width: 4px; }
+    .output-content::-webkit-scrollbar-track { background: transparent; }
+    .output-content::-webkit-scrollbar-thumb { background: rgba(200, 195, 189, 0.25); border-radius: 4px; }
 
     .output-empty {
       color: var(--text-output-body);
       font-style: italic;
       font-size: 14px;
+    }
+
+    /* ===== Next Steps Tip ===== */
+    .next-steps-tip {
+      flex-shrink: 0;
+      margin-top: 20px;
+      padding: 16px 18px;
+      background: rgba(139, 91, 214, 0.12);
+      border: 1px solid rgba(139, 91, 214, 0.35);
+      border-radius: var(--radius-card);
+      display: none;
+    }
+
+    .next-steps-tip.visible { display: block; }
+
+    .next-steps-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-output-accent);
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+    }
+
+    .next-steps-body {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.8;
     }
 
     .output-footer {
@@ -472,13 +647,9 @@
       border-top: 1px solid rgba(245, 240, 250, 0.1);
     }
 
-    .output-footer-actions {
-      display: flex;
-      gap: 10px;
-    }
+    .output-footer-actions { display: flex; gap: 10px; }
 
-    .btn-copy,
-    .btn-download {
+    .btn-copy, .btn-download {
       flex: 1 1 0;
       padding: 12px 16px;
       background: linear-gradient(135deg, rgba(232, 107, 216, 0.16), rgba(139, 91, 214, 0.16));
@@ -503,9 +674,7 @@
       box-shadow: 0 0 20px -4px rgba(232, 107, 216, 0.5);
     }
 
-    .btn-copy:active {
-      transform: scale(0.98);
-    }
+    .btn-copy:active { transform: scale(0.98); }
 
     .btn-copy.copied {
       background: rgba(139, 91, 214, 0.25);
@@ -524,9 +693,7 @@
       box-shadow: 0 0 20px -4px rgba(139, 91, 214, 0.5);
     }
 
-    .btn-download:active {
-      transform: scale(0.98);
-    }
+    .btn-download:active { transform: scale(0.98); }
 
     .btn-download.downloaded {
       background: rgba(139, 91, 214, 0.25);
@@ -546,11 +713,7 @@
       box-shadow: none;
     }
 
-    .btn-copy svg,
-    .btn-download svg {
-      width: 16px;
-      height: 16px;
-    }
+    .btn-copy svg, .btn-download svg { width: 16px; height: 16px; }
 
     /* ===== Stats Dashboard Bar ===== */
     .stats-bar {
@@ -601,12 +764,7 @@
       white-space: nowrap;
     }
 
-    .stat-note {
-      font-size: 10px;
-      color: var(--text-muted);
-      opacity: 0.75;
-      margin-left: 2px;
-    }
+    .stat-note { font-size: 10px; color: var(--text-muted); opacity: 0.75; margin-left: 2px; }
 
     .stat-value {
       font-size: 13px;
@@ -619,40 +777,21 @@
     }
 
     @media (max-width: 640px) {
-      .stats-bar {
-        padding: 12px 20px;
-        gap: 8px;
-      }
-      .stat-item {
-        flex: 1 1 calc(50% - 8px);
-        padding: 10px 12px;
-        gap: 6px;
-      }
-      .stat-label {
-        font-size: 10.5px;
-      }
-      .stat-value {
-        font-size: 12px;
-      }
-      .stat-note {
-        display: none;
-      }
+      .stats-bar { padding: 12px 20px; gap: 8px; }
+      .stat-item { flex: 1 1 calc(50% - 8px); padding: 10px 12px; gap: 6px; }
+      .stat-label { font-size: 10.5px; }
+      .stat-value { font-size: 12px; }
+      .stat-note { display: none; }
     }
 
     /* ===== Responsive ===== */
     @media (max-width: 1200px) {
-      .app-container {
-        grid-template-columns: 1fr 360px;
-      }
-      .form-panel {
-        padding: 32px 36px 60px;
-      }
+      .app-container { grid-template-columns: 1fr 360px; }
+      .form-panel { padding: 32px 36px 60px; }
     }
 
     @media (max-width: 1023px) {
-      .app-container {
-        grid-template-columns: 1fr;
-      }
+      .app-container { grid-template-columns: 1fr; }
 
       .output-panel {
         position: relative;
@@ -666,149 +805,47 @@
           inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
       }
 
-      .form-panel {
-        padding: 32px 32px 40px;
-      }
+      .form-panel { padding: 32px 32px 40px; }
     }
 
     @media (max-width: 640px) {
-      .app-header {
-        padding: 16px 20px;
-      }
+      .app-header { padding: 16px 20px; }
+      .app-logo { font-size: 18px; }
+      .app-subtitle { display: none; }
+      .app-version { display: none; }
+      .app-desc { font-size: 11px; }
+      .form-panel { padding: 24px 20px 40px; }
 
-      .app-logo {
-        font-size: 18px;
-      }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-left: 0; }
+      .cards-grid--two { grid-template-columns: repeat(2, 1fr); }
+      .text-input-wrapper { margin-left: 0; }
+      .section-hint { margin-left: 0; }
+      .section-title { font-size: 16px; }
+      .sub-scenario-wrapper { margin-left: 0; }
+      .example-list { margin-left: 0; }
 
-      .app-subtitle {
-        display: none;
-      }
+      .step-indicator-label { display: none; }
 
-      .app-version {
-        display: none;
-      }
-
-      .app-desc {
-        font-size: 11px;
-      }
-
-      .form-panel {
-        padding: 24px 20px 40px;
-      }
-
-      .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-left: 0;
-      }
-
-      .cards-grid--two {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .text-input-wrapper {
-        margin-left: 0;
-      }
-
-      .section-hint {
-        margin-left: 0;
-      }
-
-      .section-title {
-        font-size: 16px;
-      }
-
-      .output-panel {
-        padding: 24px 20px;
-        min-height: 300px;
-      }
-
-      .form-section {
-        margin-bottom: 32px;
-      }
+      .output-panel { padding: 24px 20px; min-height: 300px; }
+      .form-section { margin-bottom: 32px; }
     }
 
     /* ===== Scrollbar (Form) ===== */
-    .form-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .form-panel::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .form-panel::-webkit-scrollbar-thumb {
-      background: var(--border-light);
-      border-radius: 6px;
-    }
-
-    /* ===== Conditional AI Key Input ===== */
-    .ai-key-wrapper {
-      margin-top: 12px;
-      margin-left: 42px;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.3s ease;
-    }
-
-    .ai-key-wrapper.visible {
-      max-height: 120px;
-      opacity: 1;
-      margin-top: 12px;
-    }
-
-    .ai-key-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    .ai-key-input {
-      width: 100%;
-      padding: 12px 14px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--text-primary);
-      background: var(--bg-input);
-      border: 1.5px solid var(--border-input);
-      border-radius: var(--radius-input);
-      outline: none;
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    }
-
-    .ai-key-input:focus {
-      border-color: var(--bg-selected);
-      box-shadow: 0 0 0 3px rgba(232, 107, 216, 0.18);
-    }
+    .form-panel::-webkit-scrollbar { width: 6px; }
+    .form-panel::-webkit-scrollbar-track { background: transparent; }
+    .form-panel::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 6px; }
 
     /* Simplify background canvas on mobile for performance */
     @media (max-width: 640px) {
-      #glowThreadsCanvas {
-        display: none;
-      }
+      #glowThreadsCanvas { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
-      #glowThreadsCanvas {
-        display: none;
-      }
-    }
-
-    .ai-key-input::placeholder {
-      color: var(--text-muted);
-      font-family: var(--font-en);
-    }
-
-    @media (max-width: 640px) {
-      .ai-key-wrapper {
-        margin-left: 0;
-      }
+      #glowThreadsCanvas { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Glow Threads background layer (DESIGN.md 第3節: absolute/fixed, z-index 0, pointer-events none) -->
   <canvas id="glowThreadsCanvas" aria-hidden="true"></canvas>
 
   <!-- Header -->
@@ -817,10 +854,10 @@
       <div class="app-header-titlerow">
         <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
         <!-- 版本號：每次重大更新請手動遞增此處文字 -->
-        <span class="app-version">v2.0.0</span>
+        <span class="app-version">v3.0.0</span>
         <span class="app-subtitle">AI Development Prompt Generator</span>
       </div>
-      <p class="app-desc">視覺化建構 AI 開發用的 Prompt：填寫左側表單各項目，右側即時產生結構化指令，完成後一鍵複製使用或下載.md檔交給AI開發。</p>
+      <p class="app-desc">三步驟建構 AI 開發用的 Prompt：基本資訊 → 功能需求 → 設計與語言，完成後一鍵複製或下載 .md 檔交給 AI 開發。</p>
     </div>
   </header>
 
@@ -833,7 +870,7 @@
     </div>
     <div class="stat-item">
       <span class="stat-label">已填寫</span>
-      <span class="stat-value" id="filledCount">0 / 9 項</span>
+      <span class="stat-value" id="filledCount">0 / 6 項</span>
     </div>
     <div class="stat-item">
       <span class="stat-label">本次字數</span>
@@ -849,204 +886,182 @@
     <!-- ===== Left: Form Panel ===== -->
     <div class="form-panel" id="formPanel">
 
-      <!-- 01 專案名稱 -->
-      <section class="form-section" data-field="projectName">
-        <div class="section-header">
-          <span class="section-number">01</span>
-          <h2 class="section-title">專案名稱</h2>
+      <!-- Step Indicator -->
+      <div class="step-indicator" id="stepIndicator">
+        <div class="step-indicator-item active" data-step="1">
+          <span class="step-indicator-circle">1</span>
+          <span class="step-indicator-label">基本資訊</span>
         </div>
-        <p class="section-hint">給專案一個短名字，方便後續對話引用</p>
-        <div class="text-input-wrapper">
-          <input type="text" class="text-input" id="inputProjectName" placeholder="例如：全球ETF年化報酬試算" maxlength="60" autocomplete="off">
+        <div class="step-indicator-line"></div>
+        <div class="step-indicator-item" data-step="2">
+          <span class="step-indicator-circle">2</span>
+          <span class="step-indicator-label">功能需求</span>
         </div>
-      </section>
+        <div class="step-indicator-line"></div>
+        <div class="step-indicator-item" data-step="3">
+          <span class="step-indicator-circle">3</span>
+          <span class="step-indicator-label">設計與語言</span>
+        </div>
+      </div>
 
-      <!-- 02 專案類型 -->
-      <section class="form-section" data-field="projectType">
-        <div class="section-header">
-          <span class="section-number">02</span>
-          <h2 class="section-title">專案類型</h2>
-        </div>
-        <p class="section-hint">選一個最接近的，會影響 AI 對複雜度的判斷</p>
-        <div class="cards-grid" data-select="single" data-group="projectType">
-          <div class="card" data-value="單頁網站">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">單頁網站</div>
-            <div class="card-sublabel">Landing page</div>
-          </div>
-          <div class="card" data-value="多頁網站">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">多頁網站</div>
-            <div class="card-sublabel">Multi-page site</div>
-          </div>
-          <div class="card" data-value="互動工具">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">互動工具</div>
-            <div class="card-sublabel">Interactive tool</div>
-          </div>
-          <div class="card" data-value="教學系統">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">教學系統</div>
-            <div class="card-sublabel">Learning system</div>
-          </div>
-          <div class="card" data-value="資料儀表板">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">資料儀表板</div>
-            <div class="card-sublabel">Dashboard</div>
-          </div>
-          <div class="card" data-value="內容平台">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">內容平台</div>
-            <div class="card-sublabel">Content platform</div>
-          </div>
-        </div>
-        <div class="text-input-wrapper" style="margin-top: 12px;">
-          <input type="text" class="text-input" id="inputProjectTypeCustom" placeholder="或輸入自訂類型…" maxlength="60" autocomplete="off">
-        </div>
-      </section>
+      <!-- ===== Step 1: 基本資訊 ===== -->
+      <div class="step-panel active" data-step-panel="1">
 
-      <!-- 03 目標使用者與描述 -->
-      <section class="form-section" data-field="targetUser">
-        <div class="section-header">
-          <span class="section-number">03</span>
-          <h2 class="section-title">目標使用者與描述</h2>
-        </div>
-        <p class="section-hint">誰會用？他們用這個能解決什麼問題？</p>
-        <div class="text-input-wrapper">
-          <textarea class="text-input" id="inputTargetUser" placeholder="例如：讓投資者可以評估值得投資哪一隻ETF" rows="3"></textarea>
-        </div>
-      </section>
+        <section class="form-section" data-field="projectName">
+          <div class="section-header">
+            <span class="section-number">01</span>
+            <h2 class="section-title">專案名稱</h2>
+          </div>
+          <p class="section-hint">給專案一個短名字，方便後續對話引用</p>
+          <div class="text-input-wrapper">
+            <input type="text" class="text-input" id="inputProjectName" placeholder="例如：全球ETF年化報酬試算" maxlength="60" autocomplete="off">
+          </div>
+        </section>
 
-      <!-- 04 核心功能（MVP） -->
-      <section class="form-section" data-field="coreMvp">
-        <div class="section-header">
-          <span class="section-number">04</span>
-          <h2 class="section-title">最小可行性產品（MVP）</h2>
-        </div>
-        <p class="section-hint">列出最重要的1-3個功能，避免一開始就求大求全。</p>
-        <div class="text-input-wrapper">
-          <textarea class="text-input tall" id="inputCoreMvp" placeholder="1.&#10;2.&#10;3." rows="4"></textarea>
-        </div>
-      </section>
+        <section class="form-section" data-field="scenario">
+          <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">應用場景</h2>
+          </div>
+          <p class="section-hint">選擇最接近的業界類型，會提供更貼切的功能建議</p>
+          <div class="text-input-wrapper">
+            <select class="text-input" id="selectScenarioCategory">
+              <option value="">請選擇應用場景…</option>
+              <option value="餐飲業">餐飲業</option>
+              <option value="觀光業">觀光業</option>
+              <option value="教育學習">教育學習</option>
+              <option value="自訂">自訂</option>
+            </select>
+          </div>
 
-      <!-- 05 視覺風格（可多選） -->
-      <section class="form-section" data-field="visualStyle">
-        <div class="section-header">
-          <span class="section-number">05</span>
-          <h2 class="section-title">視覺風格（可多選）</h2>
-        </div>
-        <p class="section-hint">會引導 AI 的設計方向，混搭也可以</p>
-        <div class="cards-grid" data-select="multi" data-group="visualStyle">
-          <div class="card" data-value="極簡編輯式">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">極簡編輯式</div>
-            <div class="card-sublabel">Minimal editorial</div>
+          <!-- Sub scenario cards for 餐飲業/觀光業/教育學習 -->
+          <div class="sub-scenario-wrapper" id="subScenarioWrapper">
+            <p class="sub-scenario-hint">選一個最常見的細項場景（可選）：</p>
+            <div class="cards-grid" data-select="single" data-group="scenarioDetail" id="subScenarioGrid"></div>
           </div>
-          <div class="card" data-value="日系溫潤">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">日系溫潤</div>
-            <div class="card-sublabel">Warm Japanese</div>
-          </div>
-          <div class="card" data-value="學術專業">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">學術專業</div>
-            <div class="card-sublabel">Academic pro</div>
-          </div>
-          <div class="card" data-value="現代科技">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">現代科技</div>
-            <div class="card-sublabel">Modern tech</div>
-          </div>
-          <div class="card" data-value="文化質感">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">文化質感</div>
-            <div class="card-sublabel">Cultural craft</div>
-          </div>
-          <div class="card" data-value="活潑友善">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">活潑友善</div>
-            <div class="card-sublabel">Bright friendly</div>
-          </div>
-        </div>
-      </section>
 
-      <!-- 06 語言 -->
-      <section class="form-section" data-field="language">
-        <div class="section-header">
-          <span class="section-number">06</span>
-          <h2 class="section-title">語言</h2>
-        </div>
-        <div class="cards-grid" data-select="single" data-group="language">
-          <div class="card" data-value="繁體中文">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">繁體中文</div>
-            <div class="card-sublabel">zh-Hant</div>
+          <!-- Custom scenario input -->
+          <div class="sub-scenario-wrapper" id="customScenarioWrapper">
+            <div class="text-input-wrapper" style="margin-left:0;">
+              <input type="text" class="text-input" id="inputScenarioCustom" placeholder="請描述你的應用場景…" maxlength="80" autocomplete="off">
+            </div>
           </div>
-          <div class="card" data-value="中英雙語">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">中英雙語</div>
-            <div class="card-sublabel">zh + en</div>
-          </div>
-          <div class="card" data-value="僅英文">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">僅英文</div>
-            <div class="card-sublabel">en</div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- 07 雲端部署與進度 -->
-      <section class="form-section" data-field="deploymentStage">
-        <div class="section-header">
-          <span class="section-number">07</span>
-          <h2 class="section-title">雲端部署進度</h2>
-        </div>
-        <p class="section-hint">部署至 Cloudflare</p>
-        <div class="cards-grid cards-grid--two" data-select="single" data-group="deploymentStage">
-          <div class="card" data-value="preview">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">Preview</div>
-            <div class="card-sublabel">開發/測試環境</div>
+        <section class="form-section" data-field="targetUser">
+          <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">目標使用者</h2>
           </div>
-          <div class="card" data-value="production">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">Production</div>
-            <div class="card-sublabel">正式上線</div>
+          <p class="section-hint">誰會用？他們用這個能解決什麼問題？</p>
+          <div class="text-input-wrapper">
+            <textarea class="text-input" id="inputTargetUser" placeholder="例如：讓投資者可以評估值得投資哪一隻ETF" rows="3"></textarea>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- 08 RWD 設計支援 -->
-      <section class="form-section" data-field="rwdSupport">
-        <div class="section-header">
-          <span class="section-number">08</span>
-          <h2 class="section-title">RWD 設計支援</h2>
+        <div class="step-nav">
+          <button class="btn-step btn-step-prev" id="btnPrev1" disabled>上一步</button>
+          <button class="btn-step btn-step-next" id="btnNext1">下一步：功能需求</button>
         </div>
-        <div class="cards-grid cards-grid--two" data-select="single" data-group="rwdSupport">
-          <div class="card" data-value="支援 RWD">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">支援 RWD</div>
-            <div class="card-sublabel">Responsive design</div>
-          </div>
-          <div class="card" data-value="不需 RWD">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">不需 RWD</div>
-            <div class="card-sublabel">Desktop only</div>
-          </div>
-        </div>
-      </section>
+      </div>
 
-      <!-- 09 不要做（可選） -->
-      <section class="form-section" data-field="dontDo">
-        <div class="section-header">
-          <span class="section-number">09</span>
-          <h2 class="section-title">不要做（可選）</h2>
+      <!-- ===== Step 2: 功能需求 ===== -->
+      <div class="step-panel" data-step-panel="2">
+
+        <section class="form-section" data-field="coreMvp">
+          <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title">最小可行性產品（MVP）</h2>
+          </div>
+          <p class="section-hint">列出最重要的1-3項功能，避免一開始就求大求全</p>
+          <div class="text-input-wrapper">
+            <textarea class="text-input tall" id="inputCoreMvp" placeholder="1.&#10;2.&#10;3." rows="4"></textarea>
+          </div>
+        </section>
+
+        <section class="form-section" data-field="dataExample" id="sectionDataExample">
+          <div class="section-header">
+            <span class="section-number">05</span>
+            <h2 class="section-title">資料舉例</h2>
+          </div>
+          <p class="section-hint" id="dataExampleHint">用非技術的方式舉例可能需要的功能，可直接複製貼入 MVP</p>
+          <div class="example-list" id="exampleList"></div>
+        </section>
+
+        <div class="step-nav">
+          <button class="btn-step btn-step-prev" id="btnPrev2">上一步</button>
+          <button class="btn-step btn-step-next" id="btnNext2">下一步：設計與語言</button>
         </div>
-        <p class="section-hint">說「不要什麼」往往比說「要什麼」更有效</p>
-        <div class="text-input-wrapper">
-          <textarea class="text-input" id="inputDontDo" placeholder="例如：不要登入系統、不要使用 emoji、不要彈跳視窗" rows="3"></textarea>
+      </div>
+
+      <!-- ===== Step 3: 設計與語言 ===== -->
+      <div class="step-panel" data-step-panel="3">
+
+        <section class="form-section" data-field="visualStyle">
+          <div class="section-header">
+            <span class="section-number">06</span>
+            <h2 class="section-title">視覺風格</h2>
+          </div>
+          <p class="section-hint">會引導 AI 的設計方向，預設為「現代簡潔」</p>
+          <div class="cards-grid" data-select="single" data-group="visualStyle">
+            <div class="card" data-value="現代簡潔">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">現代簡潔</div>
+              <div class="card-sublabel">Modern minimal</div>
+            </div>
+            <div class="card" data-value="日系溫潤">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">日系溫潤</div>
+              <div class="card-sublabel">Warm Japanese</div>
+            </div>
+            <div class="card" data-value="學術專業">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">學術專業</div>
+              <div class="card-sublabel">Academic pro</div>
+            </div>
+            <div class="card" data-value="文化質感">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">文化質感</div>
+              <div class="card-sublabel">Cultural craft</div>
+            </div>
+            <div class="card" data-value="活潑友善">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">活潑友善</div>
+              <div class="card-sublabel">Bright friendly</div>
+            </div>
+            <div class="card" data-value="科技未來">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">科技未來</div>
+              <div class="card-sublabel">Futuristic tech</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section" data-field="language">
+          <div class="section-header">
+            <span class="section-number">07</span>
+            <h2 class="section-title">語言</h2>
+          </div>
+          <p class="section-hint">兩種選擇皆包含響應式設計（RWD），適應各種裝置螢幕</p>
+          <div class="cards-grid cards-grid--two" data-select="single" data-group="language">
+            <div class="card" data-value="繁體中文">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">繁體中文</div>
+              <div class="card-sublabel">zh-Hant</div>
+            </div>
+            <div class="card" data-value="中英雙語">
+              <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+              <div class="card-label">中英雙語</div>
+              <div class="card-sublabel">zh + en</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="step-nav">
+          <button class="btn-step btn-step-prev" id="btnPrev3">上一步</button>
+          <button class="btn-step btn-step-next" id="btnFinish">完成</button>
         </div>
-      </section>
+      </div>
 
     </div>
 
@@ -1062,6 +1077,17 @@
       <div class="output-content" id="outputContent">
         <span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>
       </div>
+
+      <div class="next-steps-tip" id="nextStepsTip">
+        <div class="next-steps-title">✓ 完成了！下一步怎麼辦？</div>
+        <div class="next-steps-body">
+          1. 點擊下方「複製到剪貼簿」或「下載 .md」<br>
+          2. 貼到 Claude Code / ChatGPT / Cursor 等 AI 開發工具<br>
+          3. 讓 AI 依此 Prompt 開始規劃與產生程式碼<br>
+          4. 若需要調整需求，可隨時回上一步修改
+        </div>
+      </div>
+
       <div class="output-footer">
         <div class="output-footer-actions">
           <button class="btn-copy" id="btnCopy" title="複製到剪貼簿">
@@ -1081,16 +1107,33 @@
     // ===== State =====
     const state = {
       projectName: '',
-      projectType: '',
-      projectTypeCustom: '',
+      scenarioCategory: '',
+      scenarioDetail: '',
+      scenarioCustom: '',
       targetUser: '',
       coreMvp: '',
-      visualStyle: [],
-      language: '',
-      deploymentStage: 'preview',
-      rwdSupport: '支援 RWD',
-      dontDo: ''
+      visualStyle: '現代簡潔',
+      language: ''
     };
+
+    let currentStep = 1;
+    const TOTAL_STEPS = 3;
+
+    // ===== Preset scenario details (10 items per industry) =====
+    const SCENARIO_DETAILS = {
+      '餐飲業': ['餐廳/咖啡廳點餐系統', '線上訂位系統', '外送菜單展示', '會員點數與優惠', '食譜與菜色介紹', '顧客評價與心得', '食材/庫存管理', '排隊叫號系統', '活動與優惠券', '多分店資訊查詢'],
+      '觀光業': ['景點導覽地圖', '行程規劃工具', '住宿比價與預訂', '在地美食推薦', '旅遊天氣查詢', '交通接駁資訊', '套裝行程展示', '旅遊心得分享', '多語言導覽', '票券與門票購買'],
+      '教育學習': ['線上課程平台', '測驗與練習題庫', '學習進度追蹤', '師生互動問答', '課程時間表', '教材下載中心', '線上作業繳交', '學習成效分析', '單字/詞彙卡工具', '證書與成就系統']
+    };
+
+    // ===== Example MVP features shown in Step 2 =====
+    const INDUSTRY_EXAMPLES = {
+      '餐飲業': ['讓顧客可以線上瀏覽菜單並下單', '讓顧客可以預約訂位並收到確認通知', '讓店家可以在後台管理菜色與庫存'],
+      '觀光業': ['讓使用者可以搜尋景點並查看地圖位置', '讓使用者可以規劃多日行程並儲存', '讓使用者可以查看即時天氣與交通資訊'],
+      '教育學習': ['讓學生可以線上觀看課程並記錄進度', '讓學生可以完成測驗並即時看到成績', '讓老師可以在後台上傳教材與批改作業']
+    };
+
+    const CUSTOM_EXAMPLES = ['讓使用者可以瀏覽/搜尋資料列表', '讓使用者可以送出表單並取得回覆', '讓管理者可以在後台新增/編輯/刪除資料'];
 
     // ===== DOM References =====
     const outputContent = document.getElementById('outputContent');
@@ -1102,10 +1145,11 @@
     const filledCountEl = document.getElementById('filledCount');
     const statCharCountEl = document.getElementById('statCharCount');
     const usageCountEl = document.getElementById('usageCount');
+    const nextStepsTip = document.getElementById('nextStepsTip');
 
     // ===== Stats: 已填寫項目數 =====
-    const TRACKED_FIELDS = ['projectName', 'projectType', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
-    const touchedFields = new Set();
+    const TRACKED_FIELDS = ['projectName', 'scenarioCategory', 'targetUser', 'coreMvp', 'visualStyle', 'language'];
+    const touchedFields = new Set(['visualStyle']); // 現代簡潔 is default-selected
 
     function markTouched(field) {
       if (TRACKED_FIELDS.includes(field)) touchedFields.add(field);
@@ -1137,9 +1181,7 @@
         if (!res.ok) return;
         const data = await res.json();
         renderServiceCount(data.count);
-      } catch (err) {
-        // 靜默失敗：網路問題不應影響頁面其餘功能
-      }
+      } catch (err) {}
     }
 
     async function incrementServiceCount() {
@@ -1148,55 +1190,168 @@
         if (!res.ok) return;
         const data = await res.json();
         renderServiceCount(data.count);
-      } catch (err) {
-        // 靜默失敗：計數失敗不影響複製/下載主要功能
-      }
+      } catch (err) {}
     }
 
-    // ===== Mapping for output display =====
-    const deploymentMap = {
-      'preview': 'Preview（開發/測試環境）',
-      'production': 'Production（正式上線）'
-    };
+    // ===== Step Navigation =====
+    function goToStep(step) {
+      if (step < 1 || step > TOTAL_STEPS) return;
+      currentStep = step;
 
-    const rwdMap = {
-      '支援 RWD': '支援 RWD（Responsive）',
-      '不需 RWD': '桌面版本（Desktop only）'
-    };
+      document.querySelectorAll('.step-panel').forEach(p => {
+        p.classList.toggle('active', Number(p.dataset.stepPanel) === step);
+      });
 
-    // ===== Card Selection Logic =====
-    document.querySelectorAll('.cards-grid').forEach(grid => {
-      const selectMode = grid.dataset.select; // 'single' or 'multi'
+      document.querySelectorAll('.step-indicator-item').forEach(item => {
+        const n = Number(item.dataset.step);
+        item.classList.toggle('active', n === step);
+        item.classList.toggle('done', n < step);
+      });
+
+      nextStepsTip.classList.remove('visible');
+      document.getElementById('formPanel').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('btnNext1').addEventListener('click', () => goToStep(2));
+    document.getElementById('btnPrev2').addEventListener('click', () => goToStep(1));
+    document.getElementById('btnNext2').addEventListener('click', () => goToStep(3));
+    document.getElementById('btnPrev3').addEventListener('click', () => goToStep(2));
+
+    document.querySelectorAll('.step-indicator-item').forEach(item => {
+      item.addEventListener('click', () => goToStep(Number(item.dataset.step)));
+    });
+
+    document.getElementById('btnFinish').addEventListener('click', () => {
+      nextStepsTip.classList.add('visible');
+    });
+
+    // ===== Scenario Category Select =====
+    const selectScenarioCategory = document.getElementById('selectScenarioCategory');
+    const subScenarioWrapper = document.getElementById('subScenarioWrapper');
+    const subScenarioGrid = document.getElementById('subScenarioGrid');
+    const customScenarioWrapper = document.getElementById('customScenarioWrapper');
+    const inputScenarioCustom = document.getElementById('inputScenarioCustom');
+
+    function renderSubScenarioCards(category) {
+      subScenarioGrid.innerHTML = '';
+      const items = SCENARIO_DETAILS[category] || [];
+      items.forEach(label => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.value = label;
+        card.innerHTML = `
+          <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+          <div class="card-label">${label}</div>
+        `;
+        card.addEventListener('click', () => {
+          const already = card.classList.contains('selected');
+          subScenarioGrid.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+          if (!already) {
+            card.classList.add('selected');
+            state.scenarioDetail = label;
+          } else {
+            state.scenarioDetail = '';
+          }
+          renderOutput();
+        });
+        subScenarioGrid.appendChild(card);
+      });
+    }
+
+    selectScenarioCategory.addEventListener('change', () => {
+      const val = selectScenarioCategory.value;
+      state.scenarioCategory = val;
+      state.scenarioDetail = '';
+      state.scenarioCustom = '';
+      inputScenarioCustom.value = '';
+
+      if (val && val !== '自訂') {
+        renderSubScenarioCards(val);
+        subScenarioWrapper.classList.add('visible');
+        customScenarioWrapper.classList.remove('visible');
+      } else if (val === '自訂') {
+        subScenarioWrapper.classList.remove('visible');
+        customScenarioWrapper.classList.add('visible');
+      } else {
+        subScenarioWrapper.classList.remove('visible');
+        customScenarioWrapper.classList.remove('visible');
+      }
+
+      if (val) markTouched('scenarioCategory'); else unmarkTouched('scenarioCategory');
+      updateSectionStatus('scenario');
+      renderExampleList();
+      renderOutput();
+    });
+
+    inputScenarioCustom.addEventListener('input', () => {
+      state.scenarioCustom = inputScenarioCustom.value.trim();
+      renderExampleList();
+      renderOutput();
+    });
+
+    // ===== Example List (Step 2) =====
+    const exampleList = document.getElementById('exampleList');
+    const dataExampleHint = document.getElementById('dataExampleHint');
+    const inputCoreMvp = document.getElementById('inputCoreMvp');
+
+    function renderExampleList() {
+      exampleList.innerHTML = '';
+      let examples = [];
+
+      if (state.scenarioCategory === '自訂') {
+        dataExampleHint.textContent = '尚未指定產業別，先舉例三個最可能需要的功能，可直接複製貼入 MVP';
+        examples = CUSTOM_EXAMPLES;
+      } else if (state.scenarioCategory && INDUSTRY_EXAMPLES[state.scenarioCategory]) {
+        dataExampleHint.textContent = `根據「${state.scenarioCategory}」舉例三個常見功能，可直接複製貼入 MVP`;
+        examples = INDUSTRY_EXAMPLES[state.scenarioCategory];
+      } else {
+        dataExampleHint.textContent = '請先在第一步選擇應用場景，這裡會顯示對應的功能舉例';
+        examples = [];
+      }
+
+      examples.forEach(text => {
+        const item = document.createElement('div');
+        item.className = 'example-item';
+        item.innerHTML = `
+          <span class="example-text">${text}</span>
+          <button type="button" class="btn-example-copy">加入 MVP</button>
+        `;
+        const btn = item.querySelector('.btn-example-copy');
+        btn.addEventListener('click', () => {
+          const current = inputCoreMvp.value.trim();
+          const lines = current ? current.split('\n').filter(Boolean) : [];
+          lines.push(`${lines.length + 1}. ${text}`);
+          inputCoreMvp.value = lines.join('\n');
+          state.coreMvp = inputCoreMvp.value.trim();
+          markTouched('coreMvp');
+          updateSectionStatus('coreMvp');
+          renderOutput();
+
+          btn.textContent = '已加入';
+          btn.classList.add('added');
+          setTimeout(() => {
+            btn.textContent = '加入 MVP';
+            btn.classList.remove('added');
+          }, 1500);
+        });
+        exampleList.appendChild(item);
+      });
+    }
+
+    // ===== Card Selection Logic (single-select groups: visualStyle, language) =====
+    document.querySelectorAll('.cards-grid[data-group="visualStyle"], .cards-grid[data-group="language"]').forEach(grid => {
       const groupName = grid.dataset.group;
-
       grid.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', () => {
           const value = card.dataset.value;
-
-          if (selectMode === 'single') {
-            // Toggle: if already selected, deselect
-            if (card.classList.contains('selected')) {
-              card.classList.remove('selected');
-              state[groupName] = '';
-            } else {
-              // Deselect siblings
-              grid.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
-              card.classList.add('selected');
-              state[groupName] = value;
-            }
+          if (card.classList.contains('selected')) {
+            card.classList.remove('selected');
+            state[groupName] = '';
           } else {
-            // Multi-select toggle
-            card.classList.toggle('selected');
-            if (card.classList.contains('selected')) {
-              if (!state[groupName].includes(value)) {
-                state[groupName].push(value);
-              }
-            } else {
-              state[groupName] = state[groupName].filter(v => v !== value);
-            }
+            grid.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            state[groupName] = value;
           }
-
-          // 使用者主動點擊 = 已互動，無論結果值是否為空
           markTouched(groupName);
           updateSectionStatus(groupName);
           renderOutput();
@@ -1207,10 +1362,8 @@
     // ===== Text Input Logic =====
     const inputMappings = [
       { id: 'inputProjectName', field: 'projectName', section: 'projectName' },
-      { id: 'inputProjectTypeCustom', field: 'projectTypeCustom', section: 'projectType' },
       { id: 'inputTargetUser', field: 'targetUser', section: 'targetUser' },
-      { id: 'inputCoreMvp', field: 'coreMvp', section: 'coreMvp' },
-      { id: 'inputDontDo', field: 'dontDo', section: 'dontDo' }
+      { id: 'inputCoreMvp', field: 'coreMvp', section: 'coreMvp' }
     ];
 
     inputMappings.forEach(({ id, field, section }) => {
@@ -1234,18 +1387,14 @@
       if (!section) return;
 
       let hasValue = false;
-      const val = state[fieldName];
-      if (Array.isArray(val)) {
-        hasValue = val.length > 0;
+      if (fieldName === 'scenario') {
+        hasValue = !!(state.scenarioCategory);
       } else {
-        hasValue = !!val;
+        const val = state[fieldName];
+        hasValue = Array.isArray(val) ? val.length > 0 : !!val;
       }
 
-      if (hasValue) {
-        section.classList.add('has-value');
-      } else {
-        section.classList.remove('has-value');
-      }
+      section.classList.toggle('has-value', hasValue);
     }
 
     // ===== Render Prompt Output =====
@@ -1253,17 +1402,18 @@
       const parts = [];
       let hasAny = false;
 
+      const scenarioDisplay = state.scenarioCategory === '自訂'
+        ? state.scenarioCustom
+        : (state.scenarioDetail || state.scenarioCategory);
+
       // Section: 專案定位
-      const projectTypeDisplay = state.projectTypeCustom ? state.projectTypeCustom : state.projectType;
-      const hasPositioning = state.projectName || projectTypeDisplay || state.targetUser;
+      const hasPositioning = state.projectName || scenarioDisplay || state.targetUser;
       if (hasPositioning) {
         hasAny = true;
         let block = '▍專案定位';
         if (state.projectName) block += `\n・名稱：${state.projectName}`;
-        if (projectTypeDisplay) block += `\n・類型：${projectTypeDisplay}`;
-        if (state.targetUser) {
-          block += `\n・目標使用者與一句話描述：\n  ${state.targetUser}`;
-        }
+        if (scenarioDisplay) block += `\n・應用場景：${scenarioDisplay}`;
+        if (state.targetUser) block += `\n・目標使用者：\n  ${state.targetUser}`;
         parts.push(block);
       }
 
@@ -1274,38 +1424,18 @@
       }
 
       // Section: 視覺與語言
-      const hasVisLang = state.visualStyle.length > 0 || state.language;
+      const hasVisLang = state.visualStyle || state.language;
       if (hasVisLang) {
         hasAny = true;
         let block = '▍視覺與語言';
-        if (state.visualStyle.length > 0) {
-          block += `\n・風格：${state.visualStyle.join('、')}`;
-        }
-        if (state.language) {
-          block += `\n・語言：${state.language}`;
-        }
+        if (state.visualStyle) block += `\n・風格：${state.visualStyle}`;
+        if (state.language) block += `\n・語言：${state.language}`;
         parts.push(block);
       }
 
-      // Section: 技術規格
-      const hasTech = state.deploymentStage || state.rwdSupport;
-      if (hasTech) {
-        hasAny = true;
-        let block = '▍技術規格';
-        if (state.deploymentStage) {
-          block += `\n・雲端部署：${deploymentMap[state.deploymentStage] || state.deploymentStage}`;
-        }
-        if (state.rwdSupport) {
-          block += `\n・RWD 設計：${rwdMap[state.rwdSupport] || state.rwdSupport}`;
-        }
-        parts.push(block);
-      }
-
-      // Section: 不要做
-      if (state.dontDo) {
-        hasAny = true;
-        parts.push(`▍不要做（可選）\n${state.dontDo}`);
-      }
+      // Section: 技術規格（隱藏欄位，自動帶入）
+      hasAny = true;
+      parts.push('▍技術規格\n・RWD 設計：支援 RWD（Responsive，適應各種裝置）');
 
       if (!hasAny) {
         outputContent.innerHTML = '<span class="output-empty">填寫左側表單，Prompt 會即時產生於此…</span>';
@@ -1326,24 +1456,14 @@
 
     // ===== Initialize Default Values =====
     function initializeDefaults() {
-      // Set deployment stage default to preview
-      const previewCard = document.querySelector('[data-group="deploymentStage"][data-value="preview"]');
-      if (previewCard) {
-        previewCard.classList.add('selected');
-      }
+      const defaultStyleCard = document.querySelector('[data-group="visualStyle"][data-value="現代簡潔"]');
+      if (defaultStyleCard) defaultStyleCard.classList.add('selected');
 
-      // Set RWD support default to 支援 RWD
-      const rwdCard = document.querySelector('[data-group="rwdSupport"][data-value="支援 RWD"]');
-      if (rwdCard) {
-        rwdCard.classList.add('selected');
-      }
-
-      updateSectionStatus('deploymentStage');
-      updateSectionStatus('rwdSupport');
+      updateSectionStatus('visualStyle');
+      renderExampleList();
       renderOutput();
     }
 
-    // Initialize on page load
     initializeDefaults();
     loadServiceCount();
 
@@ -1362,7 +1482,6 @@
           btnCopy.classList.remove('copied');
         }, 2000);
       } catch (err) {
-        // Fallback for older browsers
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.style.position = 'fixed';
@@ -1408,15 +1527,10 @@
     }
 
     // ===== Glow Threads Background (vanilla JS + Canvas 2D) =====
-    // DESIGN.md 規範：Cyber Pink / Violet Accent 預設色盤，speed=1，count=9。
-    // 選用 Canvas 2D 而非 React/WebGL：PBuilder 是純靜態單一 HTML 檔案，
-    // 沒有 build pipeline，Canvas 2D 漸層曲線已足以呈現「柔和螢光線束飄動」視覺效果，
-    // 且完全不依賴任何框架或外部函式庫，符合 First Principles（能刪除的模組就刪除）。
     (function initGlowThreads() {
       const canvas = document.getElementById('glowThreadsCanvas');
       if (!canvas) return;
 
-      // 手機版關閉背景動畫，避免效能問題（對應 CSS media query 的 display:none 保險機制）
       if (window.innerWidth <= 640 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return;
       }
@@ -1424,7 +1538,7 @@
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      const COLORS = ['#e86bd8', '#f5f0fa', '#8b5bd6']; // Thread Stop 1/2/3
+      const COLORS = ['#e86bd8', '#f5f0fa', '#8b5bd6'];
       const SPEED = 1;
       const COUNT = 9;
 
@@ -1506,12 +1620,10 @@
         rafId = requestAnimationFrame(render);
       }
 
-      // 節流 resize，避免過度重繪
       let resizeTimer = null;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
-          // 若使用者把視窗縮到手機寬度，直接停止動畫節省效能
           if (window.innerWidth <= 640) {
             running = false;
             if (rafId) cancelAnimationFrame(rafId);
@@ -1523,7 +1635,6 @@
         }, 200);
       });
 
-      // 分頁不可見時暫停動畫，節省效能
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           running = false;
