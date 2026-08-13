@@ -27,11 +27,11 @@ This design specification document defines the visual layout, interaction princi
 
 ### 2.2 Color Palettes Examples
 
-#### Cyber Pink / Violet Accent (Default Preset)
-* **Background:** `#0f1013`
-* **Thread Stop 1:** `#e86bd8` (Magenta / Pink)
-* **Thread Stop 2:** `#f5f0fa` (Soft Off-White Highlight)
-* **Thread Stop 3:** `#8b5bd6` (Deep Violet)
+#### 現代科技 Electric Blue / Cyan Accent (Default Preset)
+* **Background:** `#0a0e17`
+* **Thread Stop 1:** `#38bdf8` (Sky Blue / Cyan)
+* **Thread Stop 2:** `#eef4ff` (Soft Off-White Highlight)
+* **Thread Stop 3:** `#2563eb` (Electric Blue)
 
 #### Monochromatic Dark Metallic
 * **Background:** `#0a0b0d`
