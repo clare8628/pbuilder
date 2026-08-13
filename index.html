@@ -382,6 +382,33 @@
       border-radius: var(--radius-input);
       padding: 10px 14px;
       line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-add-mvp {
+      flex-shrink: 0;
+      font-family: var(--font-zh);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-vermilion);
+      background: transparent;
+      border: 1px solid var(--accent-vermilion);
+      border-radius: 999px;
+      padding: 4px 12px;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-add-mvp:hover {
+      background: var(--accent-vermilion);
+      color: var(--text-on-selected);
+    }
+
+    .btn-add-mvp:active {
+      transform: scale(0.97);
     }
 
     .text-input {
@@ -1357,8 +1384,31 @@
       }
 
       wrapper.hidden = false;
-      list.innerHTML = examples.map(ex => `<li>${ex}</li>`).join('');
+      list.innerHTML = examples.map(ex => `<li><button type="button" class="btn-add-mvp" data-example="${escapeHtml(ex)}">加入 MVP</button><span>${escapeHtml(ex)}</span></li>`).join('');
     }
+
+    function addExampleToMvp(exampleText) {
+      const textarea = document.getElementById('inputCoreMvp');
+      if (!textarea || !exampleText) return;
+
+      const lines = textarea.value.split('\n').map(l => l.trim()).filter(Boolean);
+      const plainLines = lines.map(l => l.replace(/^\d+\.\s*/, ''));
+      if (plainLines.includes(exampleText)) return;
+
+      lines.push(`${lines.length + 1}. ${exampleText}`);
+      textarea.value = lines.join('\n');
+      state.coreMvp = textarea.value.trim();
+
+      markTouched('coreMvp');
+      updateSectionStatus('coreMvp');
+      renderOutput();
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-add-mvp');
+      if (!btn) return;
+      addExampleToMvp(btn.dataset.example);
+    });
 
     // ===== Card Selection Logic =====
     document.querySelectorAll('.cards-grid').forEach(grid => {
