@@ -217,6 +217,7 @@
     .form-section:nth-child(7) { animation-delay: 0.35s; }
     .form-section:nth-child(8) { animation-delay: 0.4s; }
     .form-section:nth-child(9) { animation-delay: 0.45s; }
+    .form-section:nth-child(10) { animation-delay: 0.5s; }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(12px); }
@@ -358,6 +359,29 @@
     /* ===== Text Input ===== */
     .text-input-wrapper {
       margin-left: 42px;
+    }
+
+    /* ===== Feature Examples ===== */
+    .feature-examples {
+      margin-left: 42px;
+    }
+
+    .feature-examples-list {
+      list-style: none;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feature-examples-list li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-input);
+      padding: 10px 14px;
+      line-height: 1.6;
     }
 
     .text-input {
@@ -905,10 +929,89 @@
         </div>
       </section>
 
-      <!-- 03 目標使用者與描述 -->
-      <section class="form-section" data-field="targetUser">
+      <!-- 03 應用場景 -->
+      <section class="form-section" data-field="scenario">
         <div class="section-header">
           <span class="section-number">03</span>
+          <h2 class="section-title">應用場景</h2>
+        </div>
+        <p class="section-hint">選一個最接近的場景，會影響下方「功能舉例」的建議內容</p>
+        <div class="cards-grid" data-select="single" data-group="scenario">
+          <div class="card" data-value="個人作品集">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">個人作品集</div>
+            <div class="card-sublabel">Portfolio</div>
+          </div>
+          <div class="card" data-value="電商購物">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">電商購物</div>
+            <div class="card-sublabel">E-commerce</div>
+          </div>
+          <div class="card" data-value="部落格內容">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">部落格內容</div>
+            <div class="card-sublabel">Blog / Content</div>
+          </div>
+          <div class="card" data-value="SaaS後台系統">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">SaaS 後台系統</div>
+            <div class="card-sublabel">SaaS dashboard</div>
+          </div>
+          <div class="card" data-value="活動報名頁">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">活動報名頁</div>
+            <div class="card-sublabel">Event registration</div>
+          </div>
+          <div class="card" data-value="問卷表單收集">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">問卷表單收集</div>
+            <div class="card-sublabel">Survey / Form</div>
+          </div>
+          <div class="card" data-value="客戶管理系統">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">客戶管理系統</div>
+            <div class="card-sublabel">CRM</div>
+          </div>
+          <div class="card" data-value="知識庫文件站">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">知識庫文件站</div>
+            <div class="card-sublabel">Knowledge base</div>
+          </div>
+          <div class="card" data-value="社群討論區">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">社群討論區</div>
+            <div class="card-sublabel">Forum / Community</div>
+          </div>
+          <div class="card" data-value="線上課程平台">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">線上課程平台</div>
+            <div class="card-sublabel">Online course</div>
+          </div>
+          <div class="card" data-value="訂閱會員制網站">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">訂閱會員制網站</div>
+            <div class="card-sublabel">Membership</div>
+          </div>
+          <div class="card" data-value="內部管理工具">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">內部管理工具</div>
+            <div class="card-sublabel">Internal tool</div>
+          </div>
+          <div class="card" data-value="自訂">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">自訂</div>
+            <div class="card-sublabel">Custom</div>
+          </div>
+        </div>
+        <div class="text-input-wrapper" id="scenarioCustomWrapper" style="margin-top: 12px; display: none;">
+          <input type="text" class="text-input" id="inputScenarioCustom" placeholder="請描述自訂應用場景…" maxlength="60" autocomplete="off">
+        </div>
+      </section>
+
+      <!-- 04 目標使用者與描述 -->
+      <section class="form-section" data-field="targetUser">
+        <div class="section-header">
+          <span class="section-number">04</span>
           <h2 class="section-title">目標使用者與描述</h2>
         </div>
         <p class="section-hint">誰會用？他們用這個能解決什麼問題？</p>
@@ -917,22 +1020,26 @@
         </div>
       </section>
 
-      <!-- 04 核心功能（MVP） -->
+      <!-- 05 核心功能（MVP） -->
       <section class="form-section" data-field="coreMvp">
         <div class="section-header">
-          <span class="section-number">04</span>
+          <span class="section-number">05</span>
           <h2 class="section-title">最小可行性產品（MVP）</h2>
         </div>
         <p class="section-hint">列出最重要的1-3個功能，避免一開始就求大求全。</p>
         <div class="text-input-wrapper">
           <textarea class="text-input tall" id="inputCoreMvp" placeholder="1.&#10;2.&#10;3." rows="4"></textarea>
         </div>
+        <div class="feature-examples" id="featureExamples" hidden>
+          <p class="section-hint" style="margin-top: 16px;">功能舉例</p>
+          <ul class="feature-examples-list" id="featureExamplesList"></ul>
+        </div>
       </section>
 
-      <!-- 05 視覺風格（可多選） -->
+      <!-- 06 視覺風格（可多選） -->
       <section class="form-section" data-field="visualStyle">
         <div class="section-header">
-          <span class="section-number">05</span>
+          <span class="section-number">06</span>
           <h2 class="section-title">視覺風格（可多選）</h2>
         </div>
         <p class="section-hint">會引導 AI 的設計方向，混搭也可以</p>
@@ -970,10 +1077,10 @@
         </div>
       </section>
 
-      <!-- 06 語言 -->
+      <!-- 07 語言 -->
       <section class="form-section" data-field="language">
         <div class="section-header">
-          <span class="section-number">06</span>
+          <span class="section-number">07</span>
           <h2 class="section-title">語言</h2>
         </div>
         <div class="cards-grid" data-select="single" data-group="language">
@@ -995,10 +1102,10 @@
         </div>
       </section>
 
-      <!-- 07 雲端部署與進度 -->
+      <!-- 08 雲端部署與進度 -->
       <section class="form-section" data-field="deploymentStage">
         <div class="section-header">
-          <span class="section-number">07</span>
+          <span class="section-number">08</span>
           <h2 class="section-title">雲端部署進度</h2>
         </div>
         <p class="section-hint">部署至 Cloudflare</p>
@@ -1016,10 +1123,10 @@
         </div>
       </section>
 
-      <!-- 08 RWD 設計支援 -->
+      <!-- 09 RWD 設計支援 -->
       <section class="form-section" data-field="rwdSupport">
         <div class="section-header">
-          <span class="section-number">08</span>
+          <span class="section-number">09</span>
           <h2 class="section-title">RWD 設計支援</h2>
         </div>
         <div class="cards-grid cards-grid--two" data-select="single" data-group="rwdSupport">
@@ -1036,10 +1143,10 @@
         </div>
       </section>
 
-      <!-- 09 不要做（可選） -->
+      <!-- 10 不要做（可選） -->
       <section class="form-section" data-field="dontDo">
         <div class="section-header">
-          <span class="section-number">09</span>
+          <span class="section-number">10</span>
           <h2 class="section-title">不要做（可選）</h2>
         </div>
         <p class="section-hint">說「不要什麼」往往比說「要什麼」更有效</p>
@@ -1083,6 +1190,8 @@
       projectName: '',
       projectType: '',
       projectTypeCustom: '',
+      scenario: '',
+      scenarioCustom: '',
       targetUser: '',
       coreMvp: '',
       visualStyle: [],
@@ -1104,7 +1213,7 @@
     const usageCountEl = document.getElementById('usageCount');
 
     // ===== Stats: 已填寫項目數 =====
-    const TRACKED_FIELDS = ['projectName', 'projectType', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
+    const TRACKED_FIELDS = ['projectName', 'projectType', 'scenario', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
     const touchedFields = new Set();
 
     function markTouched(field) {
@@ -1164,6 +1273,61 @@
       '不需 RWD': '桌面版本（Desktop only）'
     };
 
+    // ===== Scenario → 功能舉例 Mapping =====
+    const scenarioExamplesMap = {
+      '個人作品集': ['作品集網格瀏覽', '個人簡介與技能列表', '聯絡表單', '社群連結整合', '下載履歷/CV'],
+      '電商購物': ['商品瀏覽與篩選', '購物車與結帳流程', '訂單查詢', '金流串接', '會員收藏清單'],
+      '部落格內容': ['文章列表與分類', '標籤搜尋', '留言互動', 'RSS 訂閱', '相關文章推薦'],
+      'SaaS後台系統': ['使用者登入與權限管理', '資料視覺化儀表板', '帳單/訂閱管理', 'API 金鑰設定', '通知中心'],
+      '活動報名頁': ['活動資訊展示', '線上報名表單', '票種與人數選擇', 'Email 確認信通知', '活動倒數計時'],
+      '問卷表單收集': ['多題型問卷編輯器', '進度條顯示', '必填驗證', '送出結果統計圖表', 'CSV 匯出'],
+      '客戶管理系統': ['客戶資料建檔', '聯絡紀錄追蹤', '業務進度看板', '標籤分類篩選', '提醒排程'],
+      '知識庫文件站': ['文件分類目錄', '全文搜尋', '版本歷史', '目錄導覽側欄', 'Markdown 編輯支援'],
+      '社群討論區': ['發文與留言', '按讚/收藏', '分類看板', '使用者個人頁', '檢舉與審核機制'],
+      '線上課程平台': ['課程列表與分類', '影片播放進度追蹤', '測驗與作業繳交', '學習證書產出', '討論區問答'],
+      '訂閱會員制網站': ['會員方案比較', '付費訂閱流程', '會員專屬內容鎖定', '續訂/取消管理', '會員等級權益'],
+      '內部管理工具': ['資料清單 CRUD', '權限角色設定', '操作紀錄稽核', '批次匯入匯出', '自訂欄位篩選']
+    };
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function getCustomScenarioExamples(customText) {
+      const label = escapeHtml(customText || '此場景');
+      return [
+        `${label}的核心資料瀏覽與搜尋功能`,
+        `${label}相關項目的新增／編輯／刪除（CRUD）`,
+        `因應${label}使用情境的帳號與權限管理`,
+        `${label}相關的通知或提醒機制`,
+        `${label}使用數據的統計與匯出功能`
+      ];
+    }
+
+    function renderFeatureExamples() {
+      const wrapper = document.getElementById('featureExamples');
+      const list = document.getElementById('featureExamplesList');
+      if (!wrapper || !list) return;
+
+      let examples = [];
+      if (state.scenario === '自訂') {
+        examples = getCustomScenarioExamples(state.scenarioCustom);
+      } else if (state.scenario && scenarioExamplesMap[state.scenario]) {
+        examples = scenarioExamplesMap[state.scenario];
+      }
+
+      if (examples.length === 0) {
+        wrapper.hidden = true;
+        list.innerHTML = '';
+        return;
+      }
+
+      wrapper.hidden = false;
+      list.innerHTML = examples.map(ex => `<li>${ex}</li>`).join('');
+    }
+
     // ===== Card Selection Logic =====
     document.querySelectorAll('.cards-grid').forEach(grid => {
       const selectMode = grid.dataset.select; // 'single' or 'multi'
@@ -1199,6 +1363,20 @@
           // 使用者主動點擊 = 已互動，無論結果值是否為空
           markTouched(groupName);
           updateSectionStatus(groupName);
+
+          if (groupName === 'scenario') {
+            const customWrapper = document.getElementById('scenarioCustomWrapper');
+            if (customWrapper) {
+              customWrapper.style.display = state.scenario === '自訂' ? 'block' : 'none';
+            }
+            if (state.scenario !== '自訂') {
+              state.scenarioCustom = '';
+              const customInput = document.getElementById('inputScenarioCustom');
+              if (customInput) customInput.value = '';
+            }
+            renderFeatureExamples();
+          }
+
           renderOutput();
         });
       });
@@ -1208,6 +1386,7 @@
     const inputMappings = [
       { id: 'inputProjectName', field: 'projectName', section: 'projectName' },
       { id: 'inputProjectTypeCustom', field: 'projectTypeCustom', section: 'projectType' },
+      { id: 'inputScenarioCustom', field: 'scenarioCustom', section: 'scenario' },
       { id: 'inputTargetUser', field: 'targetUser', section: 'targetUser' },
       { id: 'inputCoreMvp', field: 'coreMvp', section: 'coreMvp' },
       { id: 'inputDontDo', field: 'dontDo', section: 'dontDo' }
@@ -1224,6 +1403,7 @@
           unmarkTouched(field);
         }
         if (section) updateSectionStatus(section);
+        if (field === 'scenarioCustom') renderFeatureExamples();
         renderOutput();
       });
     });
@@ -1255,12 +1435,14 @@
 
       // Section: 專案定位
       const projectTypeDisplay = state.projectTypeCustom ? state.projectTypeCustom : state.projectType;
-      const hasPositioning = state.projectName || projectTypeDisplay || state.targetUser;
+      const scenarioDisplay = state.scenario === '自訂' ? state.scenarioCustom : state.scenario;
+      const hasPositioning = state.projectName || projectTypeDisplay || scenarioDisplay || state.targetUser;
       if (hasPositioning) {
         hasAny = true;
         let block = '▍專案定位';
         if (state.projectName) block += `\n・名稱：${state.projectName}`;
         if (projectTypeDisplay) block += `\n・類型：${projectTypeDisplay}`;
+        if (scenarioDisplay) block += `\n・應用場景：${scenarioDisplay}`;
         if (state.targetUser) {
           block += `\n・目標使用者與一句話描述：\n  ${state.targetUser}`;
         }
