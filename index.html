@@ -413,6 +413,22 @@
       min-height: 80px;
     }
 
+    select.text-input {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23a6a3b0' stroke-width='1.8'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    select.text-input option {
+      background: var(--bg-input);
+      color: var(--text-primary);
+    }
+
     textarea.text-input.tall {
       min-height: 100px;
     }
@@ -930,72 +946,27 @@
       </section>
 
       <!-- 03 應用場景 -->
-      <section class="form-section" data-field="scenario">
+      <section class="form-section" data-field="scenarioCategory">
         <div class="section-header">
           <span class="section-number">03</span>
           <h2 class="section-title">應用場景</h2>
         </div>
-        <p class="section-hint">選一個最接近的場景，會影響下方「功能舉例」的建議內容</p>
-        <div class="cards-grid" data-select="single" data-group="scenario">
-          <div class="card" data-value="個人作品集">
+        <p class="section-hint">先選一個產業，再從常用場景下拉選單挑選，會影響下方「功能舉例」的建議內容</p>
+        <div class="cards-grid cards-grid--two" data-select="single" data-group="scenarioCategory">
+          <div class="card" data-value="餐飲業">
             <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">個人作品集</div>
-            <div class="card-sublabel">Portfolio</div>
+            <div class="card-label">餐飲業</div>
+            <div class="card-sublabel">Food & Beverage</div>
           </div>
-          <div class="card" data-value="電商購物">
+          <div class="card" data-value="觀光業">
             <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">電商購物</div>
-            <div class="card-sublabel">E-commerce</div>
+            <div class="card-label">觀光業</div>
+            <div class="card-sublabel">Tourism</div>
           </div>
-          <div class="card" data-value="部落格內容">
+          <div class="card" data-value="教育學習">
             <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">部落格內容</div>
-            <div class="card-sublabel">Blog / Content</div>
-          </div>
-          <div class="card" data-value="SaaS後台系統">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">SaaS 後台系統</div>
-            <div class="card-sublabel">SaaS dashboard</div>
-          </div>
-          <div class="card" data-value="活動報名頁">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">活動報名頁</div>
-            <div class="card-sublabel">Event registration</div>
-          </div>
-          <div class="card" data-value="問卷表單收集">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">問卷表單收集</div>
-            <div class="card-sublabel">Survey / Form</div>
-          </div>
-          <div class="card" data-value="客戶管理系統">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">客戶管理系統</div>
-            <div class="card-sublabel">CRM</div>
-          </div>
-          <div class="card" data-value="知識庫文件站">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">知識庫文件站</div>
-            <div class="card-sublabel">Knowledge base</div>
-          </div>
-          <div class="card" data-value="社群討論區">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">社群討論區</div>
-            <div class="card-sublabel">Forum / Community</div>
-          </div>
-          <div class="card" data-value="線上課程平台">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">線上課程平台</div>
-            <div class="card-sublabel">Online course</div>
-          </div>
-          <div class="card" data-value="訂閱會員制網站">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">訂閱會員制網站</div>
-            <div class="card-sublabel">Membership</div>
-          </div>
-          <div class="card" data-value="內部管理工具">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">內部管理工具</div>
-            <div class="card-sublabel">Internal tool</div>
+            <div class="card-label">教育學習</div>
+            <div class="card-sublabel">Education</div>
           </div>
           <div class="card" data-value="自訂">
             <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
@@ -1003,6 +974,13 @@
             <div class="card-sublabel">Custom</div>
           </div>
         </div>
+
+        <div class="text-input-wrapper" id="scenarioSubWrapper" style="margin-top: 14px; display: none;">
+          <select class="text-input" id="selectScenarioSub">
+            <option value="" disabled selected>請選擇常用場景…</option>
+          </select>
+        </div>
+
         <div class="text-input-wrapper" id="scenarioCustomWrapper" style="margin-top: 12px; display: none;">
           <input type="text" class="text-input" id="inputScenarioCustom" placeholder="請描述自訂應用場景…" maxlength="60" autocomplete="off">
         </div>
@@ -1190,7 +1168,8 @@
       projectName: '',
       projectType: '',
       projectTypeCustom: '',
-      scenario: '',
+      scenarioCategory: '',
+      scenarioSub: '',
       scenarioCustom: '',
       targetUser: '',
       coreMvp: '',
@@ -1213,7 +1192,7 @@
     const usageCountEl = document.getElementById('usageCount');
 
     // ===== Stats: 已填寫項目數 =====
-    const TRACKED_FIELDS = ['projectName', 'projectType', 'scenario', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
+    const TRACKED_FIELDS = ['projectName', 'projectType', 'scenarioCategory', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
     const touchedFields = new Set();
 
     function markTouched(field) {
@@ -1273,20 +1252,65 @@
       '不需 RWD': '桌面版本（Desktop only）'
     };
 
-    // ===== Scenario → 功能舉例 Mapping =====
+    // ===== Scenario Category → 常用場景下拉選項 Mapping（每個產業 12 個）=====
+    const scenarioSubOptionsMap = {
+      '餐飲業': [
+        '餐廳官網', '線上訂位系統', '外送/線上點餐系統', '菜單展示頁',
+        '會員集點系統', '多分店查詢', '食譜/料理教學平台', '餐飲加盟招商網站',
+        '咖啡廳/甜點店形象網站', '宴會/外燴預約系統', '食材供應商採購平台', '美食評論/推薦平台'
+      ],
+      '觀光業': [
+        '旅遊行程規劃網站', '飯店/民宿訂房系統', '景點導覽介紹頁', '旅行社形象網站',
+        '機票/交通票券預訂', '在地體驗/活動報名', '旅遊部落格/遊記分享', '觀光局/政府旅遊資訊站',
+        '租車服務預約系統', '導遊/在地嚮導媒合平台', '旅遊保險諮詢頁', '多國語言旅遊資訊站'
+      ],
+      '教育學習': [
+        '線上課程平台', '學校/補習班形象網站', '家教媒合平台', '線上測驗/題庫系統',
+        '學生學習歷程紀錄', '課程報名與繳費系統', '教材/講義下載中心', '直播教學互動平台',
+        '學生成績查詢系統', '校友會/社群平台', '證照考試準備平台', '親子共學資源網站'
+      ]
+    };
+
+    // ===== 常用場景 → 功能舉例 Mapping（每個場景 5 個）=====
     const scenarioExamplesMap = {
-      '個人作品集': ['作品集網格瀏覽', '個人簡介與技能列表', '聯絡表單', '社群連結整合', '下載履歷/CV'],
-      '電商購物': ['商品瀏覽與篩選', '購物車與結帳流程', '訂單查詢', '金流串接', '會員收藏清單'],
-      '部落格內容': ['文章列表與分類', '標籤搜尋', '留言互動', 'RSS 訂閱', '相關文章推薦'],
-      'SaaS後台系統': ['使用者登入與權限管理', '資料視覺化儀表板', '帳單/訂閱管理', 'API 金鑰設定', '通知中心'],
-      '活動報名頁': ['活動資訊展示', '線上報名表單', '票種與人數選擇', 'Email 確認信通知', '活動倒數計時'],
-      '問卷表單收集': ['多題型問卷編輯器', '進度條顯示', '必填驗證', '送出結果統計圖表', 'CSV 匯出'],
-      '客戶管理系統': ['客戶資料建檔', '聯絡紀錄追蹤', '業務進度看板', '標籤分類篩選', '提醒排程'],
-      '知識庫文件站': ['文件分類目錄', '全文搜尋', '版本歷史', '目錄導覽側欄', 'Markdown 編輯支援'],
-      '社群討論區': ['發文與留言', '按讚/收藏', '分類看板', '使用者個人頁', '檢舉與審核機制'],
+      '餐廳官網': ['店家介紹與環境照片', '菜單展示', '營業時間與地圖導航', '線上訂位入口', '最新優惠公告'],
+      '線上訂位系統': ['即時桌位可訂時段查詢', '訂位表單與人數選擇', 'Email/簡訊訂位確認', '訂位取消/改期', '候位排隊通知'],
+      '外送/線上點餐系統': ['菜單瀏覽與品項客製化', '購物車與結帳流程', '外送地址與時間選擇', '訂單狀態追蹤', '常用訂單快速重複下單'],
+      '菜單展示頁': ['分類菜單瀏覽', '品項照片與價格', '過敏原/素食標示', '多語言菜單切換', 'QR code 掃碼點餐入口'],
+      '會員集點系統': ['會員註冊與登入', '消費集點紀錄', '點數兌換禮品/優惠', '會員等級與專屬優惠', '生日禮/推播通知'],
+      '多分店查詢': ['分店地圖與地址列表', '各分店營業時間', '分店庫存/座位狀態', '最近分店推薦', '分店專屬活動優惠'],
+      '食譜/料理教學平台': ['食譜列表與分類搜尋', '步驟圖文/影片教學', '食材清單與份量換算', '收藏與我的食譜本', '課程/教學影片訂閱'],
+      '餐飲加盟招商網站': ['加盟品牌介紹', '加盟條件與費用說明', '成功案例展示', '加盟諮詢表單', '常見問題 FAQ'],
+      '咖啡廳/甜點店形象網站': ['品牌故事與空間介紹', '菜單與招牌商品', '線上預購/訂購', 'Instagram 動態串接', '店家位置與交通資訊'],
+      '宴會/外燴預約系統': ['場地/方案介紹', '人數與菜單客製化報價', '線上詢價表單', '訂金/合約流程說明', '過往案例作品集'],
+      '食材供應商採購平台': ['商品目錄與規格搜尋', 'B2B 批發報價與下單', '訂單/出貨追蹤', '常訂清單快速採購', '發票與對帳單下載'],
+      '美食評論/推薦平台': ['餐廳搜尋與篩選', '評分與評論撰寫', '美食地圖瀏覽', '收藏口袋名單', '達人專欄與排行榜'],
+
+      '旅遊行程規劃網站': ['行程主題搜尋與篩選', '每日行程排程編輯', '景點/餐廳/住宿加入行程', '行程分享與匯出', '預算試算工具'],
+      '飯店/民宿訂房系統': ['房型與空房查詢', '線上訂房與付款', '訂單確認與電子憑證', '取消/改期政策說明', '住客評價與評分'],
+      '景點導覽介紹頁': ['景點介紹與照片', '開放時間與門票資訊', '地圖與交通指引', '周邊景點推薦', '語音導覽/多語言介紹'],
+      '旅行社形象網站': ['熱門行程主打展示', '團體/自由行分類瀏覽', '線上諮詢/報名表單', '出團公告與名額查詢', '客戶好評與旅遊回饋'],
+      '機票/交通票券預訂': ['航班/車票搜尋與比價', '線上選位與訂購', '電子票券/QR code', '訂單管理與退改簽', '常用航線/路線收藏'],
+      '在地體驗/活動報名': ['體驗活動列表與分類', '活動詳情與時段選擇', '線上報名與付款', '參加人數與名額管理', '活動評價回饋'],
+      '旅遊部落格/遊記分享': ['遊記文章列表與分類', '圖文/影音遊記編輯', '標籤與地區搜尋', '留言互動與收藏', '作者專欄訂閱'],
+      '觀光局/政府旅遊資訊站': ['觀光景點資料庫', '活動與節慶行事曆', '旅遊補助/優惠專案', '多語言版本切換', '意見回饋與客服窗口'],
+      '租車服務預約系統': ['車輛搜尋與比較', '租借時段與地點選擇', '線上預約與付款', '保險方案選擇', '租還車紀錄查詢'],
+      '導遊/在地嚮導媒合平台': ['導遊/嚮導搜尋與篩選', '評價與專長標籤', '線上預約與詢價', '即時訊息溝通', '行程結束後評分回饋'],
+      '旅遊保險諮詢頁': ['保險方案比較', '線上投保流程', '保費試算工具', '理賠申請說明', '常見問題 FAQ'],
+      '多國語言旅遊資訊站': ['多語言介面切換', '在地生活資訊整理', '交通/住宿/景點總覽', '緊急聯絡資訊', '常用會話/翻譯小工具'],
+
       '線上課程平台': ['課程列表與分類', '影片播放進度追蹤', '測驗與作業繳交', '學習證書產出', '討論區問答'],
-      '訂閱會員制網站': ['會員方案比較', '付費訂閱流程', '會員專屬內容鎖定', '續訂/取消管理', '會員等級權益'],
-      '內部管理工具': ['資料清單 CRUD', '權限角色設定', '操作紀錄稽核', '批次匯入匯出', '自訂欄位篩選']
+      '學校/補習班形象網站': ['師資與課程介紹', '招生資訊與報名表單', '校園環境/教學特色展示', '最新公告與活動', '家長/學生聯絡窗口'],
+      '家教媒合平台': ['家教/學生條件篩選搜尋', '師資評價與經歷展示', '線上預約諮詢/試教', '課程時數與費用管理', '上課紀錄與進度追蹤'],
+      '線上測驗/題庫系統': ['題庫分類與題型設計', '線上作答與計時', '自動批改與成績統計', '錯題本與弱點分析', '測驗結果分享/匯出'],
+      '學生學習歷程紀錄': ['個人學習檔案建立', '課程/活動參與紀錄', '成果作品上傳與展示', '教師評語與回饋', '歷程報告匯出'],
+      '課程報名與繳費系統': ['課程列表與時段查詢', '線上報名表單', '金流串接繳費', '報名確認通知', '退費/改課申請'],
+      '教材/講義下載中心': ['教材分類目錄', '關鍵字搜尋', '會員/課程權限控管', '檔案下載紀錄', '版本更新通知'],
+      '直播教學互動平台': ['直播課程排程', '即時聊天室互動', '螢幕分享與白板', '課後回放影片', '出席率統計'],
+      '學生成績查詢系統': ['成績單線上查詢', '各科成績趨勢圖表', '排名/等第顯示', '家長帳號查詢權限', '成績單匯出/列印'],
+      '校友會/社群平台': ['校友會員資料庫', '活動公告與報名', '校友動態/留言牆', '捐款/募款專區', '校友分類搜尋'],
+      '證照考試準備平台': ['考科分類與題庫練習', '模擬考試與計時', '學習進度追蹤', '考照資訊與報名連結', '討論區交流心得'],
+      '親子共學資源網站': ['共學活動列表', '親子課程報名', '學習資源/教材下載', '家長社群交流區', '孩子學習紀錄追蹤']
     };
 
     function escapeHtml(str) {
@@ -1306,16 +1330,24 @@
       ];
     }
 
+    function populateScenarioSubOptions(category) {
+      const select = document.getElementById('selectScenarioSub');
+      if (!select) return;
+      const options = scenarioSubOptionsMap[category] || [];
+      select.innerHTML = '<option value="" disabled selected>請選擇常用場景…</option>' +
+        options.map(opt => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`).join('');
+    }
+
     function renderFeatureExamples() {
       const wrapper = document.getElementById('featureExamples');
       const list = document.getElementById('featureExamplesList');
       if (!wrapper || !list) return;
 
       let examples = [];
-      if (state.scenario === '自訂') {
+      if (state.scenarioCategory === '自訂') {
         examples = getCustomScenarioExamples(state.scenarioCustom);
-      } else if (state.scenario && scenarioExamplesMap[state.scenario]) {
-        examples = scenarioExamplesMap[state.scenario];
+      } else if (state.scenarioSub && scenarioExamplesMap[state.scenarioSub]) {
+        examples = scenarioExamplesMap[state.scenarioSub];
       }
 
       if (examples.length === 0) {
@@ -1364,16 +1396,27 @@
           markTouched(groupName);
           updateSectionStatus(groupName);
 
-          if (groupName === 'scenario') {
+          if (groupName === 'scenarioCategory') {
+            const subWrapper = document.getElementById('scenarioSubWrapper');
             const customWrapper = document.getElementById('scenarioCustomWrapper');
-            if (customWrapper) {
-              customWrapper.style.display = state.scenario === '自訂' ? 'block' : 'none';
-            }
-            if (state.scenario !== '自訂') {
+            const isCustom = state.scenarioCategory === '自訂';
+            const hasSubOptions = !isCustom && !!scenarioSubOptionsMap[state.scenarioCategory];
+
+            if (customWrapper) customWrapper.style.display = isCustom ? 'block' : 'none';
+            if (subWrapper) subWrapper.style.display = hasSubOptions ? 'block' : 'none';
+
+            if (!isCustom) {
               state.scenarioCustom = '';
               const customInput = document.getElementById('inputScenarioCustom');
               if (customInput) customInput.value = '';
             }
+            if (hasSubOptions) {
+              populateScenarioSubOptions(state.scenarioCategory);
+              state.scenarioSub = '';
+            } else {
+              state.scenarioSub = '';
+            }
+
             renderFeatureExamples();
           }
 
@@ -1386,7 +1429,7 @@
     const inputMappings = [
       { id: 'inputProjectName', field: 'projectName', section: 'projectName' },
       { id: 'inputProjectTypeCustom', field: 'projectTypeCustom', section: 'projectType' },
-      { id: 'inputScenarioCustom', field: 'scenarioCustom', section: 'scenario' },
+      { id: 'inputScenarioCustom', field: 'scenarioCustom', section: 'scenarioCategory' },
       { id: 'inputTargetUser', field: 'targetUser', section: 'targetUser' },
       { id: 'inputCoreMvp', field: 'coreMvp', section: 'coreMvp' },
       { id: 'inputDontDo', field: 'dontDo', section: 'dontDo' }
@@ -1407,6 +1450,17 @@
         renderOutput();
       });
     });
+
+    // ===== Scenario Sub-option Dropdown Logic =====
+    const selectScenarioSub = document.getElementById('selectScenarioSub');
+    if (selectScenarioSub) {
+      selectScenarioSub.addEventListener('change', () => {
+        state.scenarioSub = selectScenarioSub.value;
+        markTouched('scenarioCategory');
+        renderFeatureExamples();
+        renderOutput();
+      });
+    }
 
     // ===== Section Status (number highlight) =====
     function updateSectionStatus(fieldName) {
@@ -1435,7 +1489,9 @@
 
       // Section: 專案定位
       const projectTypeDisplay = state.projectTypeCustom ? state.projectTypeCustom : state.projectType;
-      const scenarioDisplay = state.scenario === '自訂' ? state.scenarioCustom : state.scenario;
+      const scenarioDisplay = state.scenarioCategory === '自訂'
+        ? state.scenarioCustom
+        : (state.scenarioCategory && state.scenarioSub ? `${state.scenarioCategory}－${state.scenarioSub}` : state.scenarioCategory);
       const hasPositioning = state.projectName || projectTypeDisplay || scenarioDisplay || state.targetUser;
       if (hasPositioning) {
         hasAny = true;
