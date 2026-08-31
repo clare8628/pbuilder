@@ -639,6 +639,250 @@
       }
     }
 
+    /* ===== Usage Analytics ===== */
+    .stat-toggle {
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      color: inherit;
+      flex: 0 1 190px;
+    }
+
+    .stat-toggle .stat-value {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-vermilion);
+    }
+
+    .stat-toggle svg {
+      width: 11px;
+      height: 11px;
+      transition: transform var(--transition-fast);
+    }
+
+    .stat-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+    .analytics {
+      /* Chart tokens — 皆已對 #17181d 深色底驗證（亮度帶 / 色度 / 色盲分離 / 對比 ≥3:1） */
+      --viz-surface: #17181d;
+      --viz-bar: #d055be;
+      --viz-grid: #2a2c34;
+      --viz-c1: #3987e5;
+      --viz-c2: #d95926;
+      --viz-c3: #199e70;
+      --viz-c4: #c98500;
+      --viz-c5: #d55181;
+      --viz-c6: #008300;
+
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .analytics[hidden] { display: none; }
+
+    .chart-card {
+      min-width: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+      padding: 18px 20px 14px;
+      box-shadow: 0 0 16px -10px rgba(232, 107, 216, 0.35);
+    }
+
+    .chart-card.full { grid-column: 1 / -1; padding: 0; background: transparent; border: none; box-shadow: none; }
+
+    .chart-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .chart-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .chart-sub {
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .chart-tabs { display: flex; gap: 4px; flex-shrink: 0; }
+
+    .chart-tab {
+      font: inherit;
+      font-size: 11.5px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-input);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .chart-tab:hover { border-color: var(--accent-vermilion); color: var(--text-primary); }
+
+    .chart-tab.active {
+      background: var(--accent-vermilion);
+      border-color: transparent;
+      color: var(--text-on-selected);
+      font-weight: 500;
+    }
+
+    /* --- Hourly column chart --- */
+    .bars { position: relative; }
+
+    .bars-plot {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px; /* surface gap between adjacent columns */
+      height: 150px;
+      border-bottom: 1px solid var(--viz-grid);
+      border-top: 1px solid var(--viz-grid); /* y-max hairline */
+    }
+
+    .bar-col {
+      flex: 1 1 0;
+      min-width: 0;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      border-radius: 3px 3px 0 0;
+      transition: background var(--transition-fast);
+    }
+
+    .bar-col:hover, .bar-col.hovered { background: rgba(245, 240, 250, 0.05); }
+
+    .bar-fill {
+      width: 100%;
+      max-width: 22px;
+      background: var(--viz-bar);
+      border-radius: 4px 4px 0 0; /* rounded data-end, square at baseline */
+      transition: height var(--transition-normal);
+    }
+
+    .bars-ymax {
+      position: absolute;
+      top: -16px;
+      left: 0;
+      font-size: 10px;
+      font-family: var(--font-en);
+      color: var(--text-muted);
+    }
+
+    .bars-axis {
+      display: flex;
+      gap: 2px;
+      margin-top: 6px;
+    }
+
+    .bars-axis span {
+      flex: 1 1 0;
+      min-width: 0;
+      text-align: center;
+      font-size: 10px;
+      font-family: var(--font-en);
+      color: var(--text-muted);
+    }
+
+    .bars-axis span:not(:nth-child(3n+1)) { visibility: hidden; }
+
+    .bars-note { margin-top: 8px; font-size: 10.5px; color: var(--text-muted); }
+
+    .viz-tip {
+      position: absolute;
+      z-index: 30;
+      transform: translate(-50%, -100%);
+      padding: 6px 10px;
+      background: #0a0b0e;
+      border: 1px solid var(--border-input);
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.9);
+    }
+
+    .viz-tip[hidden] { display: none; }
+    .viz-tip b { font-family: var(--font-en); font-weight: 600; }
+
+    /* --- Country donut --- */
+    .donut-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .donut-figure { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+    .donut-figure svg { width: 100%; height: 100%; display: block; }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .donut-total { font-family: var(--font-en); font-size: 22px; font-weight: 600; color: var(--text-primary); line-height: 1.1; }
+    .donut-total-label { font-size: 10px; color: var(--text-muted); letter-spacing: 0.05em; }
+
+    .donut-slice { transition: opacity var(--transition-fast); cursor: default; }
+    .donut-wrap.dim .donut-slice:not(.active) { opacity: 0.35; }
+
+    .donut-legend { list-style: none; flex: 1 1 150px; min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+
+    .donut-legend li { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 1.4; }
+    .donut-legend .lg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .donut-legend .lg-name { color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .donut-legend .lg-val { margin-left: auto; font-family: var(--font-en); font-size: 11.5px; color: var(--text-primary); white-space: nowrap; }
+    .donut-legend .lg-pct { font-family: var(--font-en); font-size: 11px; color: var(--text-muted); width: 38px; text-align: right; }
+
+    .viz-empty { font-size: 12px; color: var(--text-muted); padding: 24px 0; text-align: center; }
+
+    /* --- Table view --- */
+    .viz-table { border: 1px solid var(--border-light); border-radius: var(--radius-card); background: var(--bg-card); }
+    .viz-table > summary { cursor: pointer; font-size: 12px; color: var(--text-secondary); padding: 10px 18px; list-style: none; }
+    .viz-table > summary::-webkit-details-marker { display: none; }
+    .viz-table > summary::before { content: '▸ '; color: var(--text-muted); }
+    .viz-table[open] > summary::before { content: '▾ '; }
+    .viz-table > summary:hover { color: var(--text-primary); }
+    .viz-table-body { display: flex; flex-wrap: wrap; gap: 28px; padding: 4px 18px 18px; }
+    .viz-table table { border-collapse: collapse; font-size: 11.5px; font-family: var(--font-en); }
+    .viz-table caption { text-align: left; font-size: 11px; color: var(--text-muted); padding-bottom: 6px; font-family: var(--font-zh); }
+    .viz-table th, .viz-table td { padding: 3px 14px 3px 0; text-align: left; color: var(--text-secondary); white-space: nowrap; }
+    .viz-table th { color: var(--text-muted); font-weight: 500; border-bottom: 1px solid var(--border-light); }
+    .viz-table td:last-child, .viz-table th:last-child { text-align: right; padding-right: 0; }
+
+    @media (max-width: 1023px) {
+      .analytics { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .analytics { padding: 0 20px 14px; gap: 10px; }
+      .stat-toggle { flex: 1 1 100%; }
+      .bars-plot { height: 120px; gap: 1px; }
+      .bars-axis { gap: 1px; }
+      .bars-axis span:not(:nth-child(6n+1)) { visibility: hidden; }
+      .chart-head { flex-direction: column; }
+    }
+
     /* ===== Responsive ===== */
     @media (max-width: 1200px) {
       .app-container {
@@ -817,7 +1061,7 @@
       <div class="app-header-titlerow">
         <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
         <!-- 版本號：每次重大更新請手動遞增此處文字 -->
-        <span class="app-version">v2.0.0</span>
+        <span class="app-version">v2.1.0</span>
         <span class="app-subtitle">AI Development Prompt Generator</span>
       </div>
       <p class="app-desc">視覺化建構 AI 開發用的 Prompt：填寫左側表單各項目，右側即時產生結構化指令，完成後一鍵複製使用或下載.md檔交給AI開發。</p>
@@ -843,7 +1087,78 @@
       <span class="stat-label">本平台服務人次</span>
       <span class="stat-value" id="usageCount">0 次</span>
     </div>
+    <button class="stat-item stat-toggle" id="btnToggleAnalytics" type="button" aria-expanded="false" aria-controls="analyticsPanel">
+      <span class="stat-label">使用分析</span>
+      <span class="stat-value" id="analyticsToggleText">展開<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+    </button>
   </div>
+
+  <!-- Usage Analytics -->
+  <section class="analytics" id="analyticsPanel" aria-label="使用分析" hidden>
+
+    <!-- 時段長條圖 -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <h3 class="chart-title">訪客使用時段分佈</h3>
+          <p class="chart-sub" id="hourlySub">依台北時間（UTC+8）每小時區段計量</p>
+        </div>
+        <div class="chart-tabs" role="group" aria-label="時段統計範圍">
+          <button class="chart-tab active" type="button" data-range="today">今日</button>
+          <button class="chart-tab" type="button" data-range="all">累計</button>
+        </div>
+      </div>
+      <div class="bars" id="hourlyChart">
+        <span class="bars-ymax" id="hourlyYMax">1</span>
+        <div class="bars-plot" id="hourlyPlot" role="img" aria-label="每小時使用人次長條圖"></div>
+        <div class="bars-axis" id="hourlyAxis"></div>
+        <p class="bars-note">每根長條代表該小時區段（例如 13 表示 13:00–13:59）的使用人次。</p>
+        <div class="viz-tip" id="hourlyTip" hidden></div>
+      </div>
+    </div>
+
+    <!-- 國別圓餅圖 -->
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <h3 class="chart-title">訪客國別分佈</h3>
+          <p class="chart-sub" id="countrySub">由 Cloudflare 邊緣節點判定來源國家</p>
+        </div>
+      </div>
+      <div class="donut-wrap" id="countryWrap">
+        <div class="donut-figure">
+          <svg viewBox="0 0 160 160" id="countryDonut" role="img" aria-label="訪客國別分佈圓餅圖"></svg>
+          <div class="donut-center">
+            <span class="donut-total" id="countryTotal">0</span>
+            <span class="donut-total-label">總人次</span>
+          </div>
+        </div>
+        <ul class="donut-legend" id="countryLegend"></ul>
+        <div class="viz-tip" id="countryTip" hidden></div>
+      </div>
+    </div>
+
+    <!-- 數據表（無障礙備援：不依賴顏色即可讀取全部數值） -->
+    <div class="chart-card full">
+      <details class="viz-table">
+        <summary>檢視原始數據表</summary>
+        <div class="viz-table-body">
+          <table>
+            <caption>時段分佈</caption>
+            <thead><tr><th>時段</th><th>人次</th></tr></thead>
+            <tbody id="hourlyTableBody"></tbody>
+          </table>
+          <table>
+            <caption>國別分佈</caption>
+            <thead><tr><th>國家 / 地區</th><th>人次</th><th>佔比</th></tr></thead>
+            <tbody id="countryTableBody"></tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+  </section>
+
 
   <main class="app-container">
     <!-- ===== Left: Form Panel ===== -->
@@ -1131,12 +1446,14 @@
       }
     }
 
+    // /api/stats 同時回傳總人次、時段分佈與國別分佈，一次請求餵飽三個視覺區塊
     async function loadServiceCount() {
       try {
-        const res = await fetch('/api/usage-count');
+        const res = await fetch('/api/stats');
         if (!res.ok) return;
         const data = await res.json();
         renderServiceCount(data.count);
+        renderAnalytics(data);
       } catch (err) {
         // 靜默失敗：網路問題不應影響頁面其餘功能
       }
@@ -1148,6 +1465,7 @@
         if (!res.ok) return;
         const data = await res.json();
         renderServiceCount(data.count);
+        renderAnalytics(data);
       } catch (err) {
         // 靜默失敗：計數失敗不影響複製/下載主要功能
       }
@@ -1341,6 +1659,234 @@
       updateSectionStatus('deploymentStage');
       updateSectionStatus('rwdSupport');
       renderOutput();
+    }
+
+
+    // ===== Usage Analytics: 時段長條圖 + 國別圓餅圖 =====
+    // 圖表色票已對深色底 #17181d 驗證（亮度帶 / 色度 / 色盲分離 ΔE / 對比 ≥3:1）
+    const VIZ_SERIES = ['var(--viz-c1)', 'var(--viz-c2)', 'var(--viz-c3)', 'var(--viz-c4)', 'var(--viz-c5)', 'var(--viz-c6)'];
+    const MAX_SLICES = 6; // 圓餅圖上限，超過的併入「其他」
+
+    const COUNTRY_NAMES = {
+      TW: '台灣', HK: '香港', MO: '澳門', CN: '中國', JP: '日本', KR: '南韓',
+      SG: '新加坡', MY: '馬來西亞', TH: '泰國', VN: '越南', PH: '菲律賓',
+      ID: '印尼', IN: '印度', US: '美國', CA: '加拿大', MX: '墨西哥',
+      BR: '巴西', GB: '英國', IE: '愛爾蘭', DE: '德國', FR: '法國',
+      NL: '荷蘭', ES: '西班牙', IT: '義大利', SE: '瑞典', CH: '瑞士',
+      AU: '澳洲', NZ: '紐西蘭', AE: '阿聯', IL: '以色列', ZA: '南非',
+      RU: '俄羅斯', TR: '土耳其', XX: '未知'
+    };
+
+    function countryName(code) {
+      return COUNTRY_NAMES[code] || code;
+    }
+
+    function countryFlag(code) {
+      if (!/^[A-Z]{2}$/.test(code) || code === 'XX' || code === 'T1') return '🌐';
+      return String.fromCodePoint(...[...code].map(ch => 127397 + ch.charCodeAt(0)));
+    }
+
+    // y 軸上限取整到 1 / 2 / 5 的整數倍，避免出現 3.7 這種刻度
+    function niceMax(max) {
+      if (max <= 0) return 1;
+      if (max <= 5) return max;
+      const mag = Math.pow(10, Math.floor(Math.log10(max)));
+      for (const step of [1, 2, 2.5, 5, 10]) {
+        const candidate = step * mag;
+        if (max <= candidate) return candidate;
+      }
+      return 10 * mag;
+    }
+
+    const analyticsPanel = document.getElementById('analyticsPanel');
+    const btnToggleAnalytics = document.getElementById('btnToggleAnalytics');
+    const analyticsToggleText = document.getElementById('analyticsToggleText');
+    const hourlyPlot = document.getElementById('hourlyPlot');
+    const hourlyAxis = document.getElementById('hourlyAxis');
+    const hourlyYMaxEl = document.getElementById('hourlyYMax');
+    const hourlySub = document.getElementById('hourlySub');
+    const hourlyTip = document.getElementById('hourlyTip');
+    const hourlyChart = document.getElementById('hourlyChart');
+    const countryDonut = document.getElementById('countryDonut');
+    const countryLegend = document.getElementById('countryLegend');
+    const countryTotalEl = document.getElementById('countryTotal');
+    const countrySub = document.getElementById('countrySub');
+    const countryWrap = document.getElementById('countryWrap');
+    const countryTip = document.getElementById('countryTip');
+    const hourlyTableBody = document.getElementById('hourlyTableBody');
+    const countryTableBody = document.getElementById('countryTableBody');
+
+    let statsData = null;
+    let hourlyRange = 'today';
+
+    function hourRangeLabel(h) {
+      return `${String(h).padStart(2, '0')}:00–${String(h).padStart(2, '0')}:59`;
+    }
+
+    // --- 時段長條圖 ---
+    function renderHourly() {
+      if (!hourlyPlot || !statsData) return;
+      const series = hourlyRange === 'all' ? statsData.hoursAll : statsData.hours;
+      const total = series.reduce((a, b) => a + b, 0);
+      const yMax = niceMax(Math.max(...series));
+
+      hourlyYMaxEl.textContent = String(yMax);
+      const scope = hourlyRange === 'all' ? '歷史累計' : `今日 ${statsData.date || ''}`;
+      hourlySub.textContent = `${scope}（台北時間 UTC+8）· 共 ${total} 次`;
+
+      hourlyPlot.innerHTML = series.map((v, h) => {
+        const pct = v > 0 ? Math.max((v / yMax) * 100, 3) : 0;
+        return `<div class="bar-col" data-hour="${h}" data-value="${v}">` +
+               (v > 0 ? `<div class="bar-fill" style="height:${pct}%"></div>` : '') +
+               `</div>`;
+      }).join('');
+      hourlyPlot.setAttribute('aria-label',
+        `${scope}每小時使用人次長條圖，共 ${total} 次，單一小時最高 ${Math.max(...series)} 次`);
+
+      if (!hourlyAxis.childElementCount) {
+        hourlyAxis.innerHTML = series.map((_, h) => `<span>${h}</span>`).join('');
+      }
+
+      hourlyTableBody.innerHTML = total === 0
+        ? '<tr><td colspan="2">尚無資料</td></tr>'
+        : series.map((v, h) => v > 0 ? `<tr><td>${hourRangeLabel(h)}</td><td>${v}</td></tr>` : '').join('');
+    }
+
+    function showHourlyTip(col) {
+      const h = Number(col.dataset.hour);
+      const v = Number(col.dataset.value);
+      hourlyTip.innerHTML = `${hourRangeLabel(h)} · <b>${v}</b> 次`;
+      hourlyTip.hidden = false;
+      const chartRect = hourlyChart.getBoundingClientRect();
+      const colRect = col.getBoundingClientRect();
+      const x = colRect.left - chartRect.left + colRect.width / 2;
+      hourlyTip.style.left = `${Math.min(Math.max(x, 40), chartRect.width - 40)}px`;
+      hourlyTip.style.top = `${colRect.top - chartRect.top - 6}px`;
+    }
+
+    if (hourlyPlot) {
+      hourlyPlot.addEventListener('pointerover', e => {
+        const col = e.target.closest('.bar-col');
+        if (col) showHourlyTip(col);
+      });
+      hourlyPlot.addEventListener('pointerleave', () => { hourlyTip.hidden = true; });
+    }
+
+    document.querySelectorAll('.chart-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        hourlyRange = tab.dataset.range;
+        document.querySelectorAll('.chart-tab').forEach(t => t.classList.toggle('active', t === tab));
+        hourlyTip.hidden = true;
+        renderHourly();
+      });
+    });
+
+    // --- 國別圓餅圖（環圈，≤6 區段，段間留 surface gap） ---
+    function renderCountries() {
+      if (!countryDonut || !statsData) return;
+
+      const entries = Object.entries(statsData.countries)
+        .filter(([, n]) => n > 0)
+        .sort((a, b) => b[1] - a[1]);
+      const total = entries.reduce((sum, [, n]) => sum + n, 0);
+
+      countryTotalEl.textContent = String(total);
+
+      if (total === 0) {
+        countryDonut.innerHTML = '<circle cx="80" cy="80" r="58" fill="none" stroke="var(--viz-grid)" stroke-width="20" />';
+        countryLegend.innerHTML = '<li class="viz-empty">尚無資料，完成一次複製或下載後即會出現。</li>';
+        countrySub.textContent = '由 Cloudflare 邊緣節點判定來源國家';
+        countryTableBody.innerHTML = '<tr><td colspan="3">尚無資料</td></tr>';
+        return;
+      }
+
+      const slices = entries.slice(0, MAX_SLICES - (entries.length > MAX_SLICES ? 1 : 0));
+      const restCount = entries.slice(slices.length).reduce((sum, [, n]) => sum + n, 0);
+      if (restCount > 0) slices.push(['__other__', restCount]);
+
+      const label = code => code === '__other__'
+        ? '其他'
+        : `${countryFlag(code)} ${countryName(code)}`;
+
+      const R = 58, C = 2 * Math.PI * R;
+      const GAP = slices.length > 1 ? 3 : 0; // 以背景色留白分隔相鄰區段，不加描邊
+      let offset = 0;
+      const arcs = slices.map(([code, n], i) => {
+        const frac = n / total;
+        const len = Math.max(frac * C - GAP, 1);
+        const arc = `<circle class="donut-slice" data-idx="${i}" cx="80" cy="80" r="${R}" fill="none"` +
+          ` stroke="${VIZ_SERIES[i % VIZ_SERIES.length]}" stroke-width="20"` +
+          ` stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}"` +
+          ` stroke-dashoffset="${(-offset).toFixed(2)}" />`;
+        offset += frac * C;
+        return arc;
+      }).join('');
+
+      countryDonut.innerHTML = `<g transform="rotate(-90 80 80)">${arcs}</g>`;
+      countryDonut.setAttribute('aria-label',
+        '訪客國別分佈：' + slices.map(([c, n]) =>
+          `${c === '__other__' ? '其他' : countryName(c)} ${Math.round(n / total * 100)}%`).join('、'));
+
+      countryLegend.innerHTML = slices.map(([code, n], i) => `
+        <li data-idx="${i}">
+          <span class="lg-dot" style="background:${VIZ_SERIES[i % VIZ_SERIES.length]}"></span>
+          <span class="lg-name">${label(code)}</span>
+          <span class="lg-val">${n} 次</span>
+          <span class="lg-pct">${(n / total * 100).toFixed(0)}%</span>
+        </li>`).join('');
+
+      countrySub.textContent = `由 Cloudflare 邊緣節點判定 · ${entries.length} 個國家 / 地區`;
+
+      countryTableBody.innerHTML = entries.map(([code, n]) =>
+        `<tr><td>${countryName(code)}（${code}）</td><td>${n}</td><td>${(n / total * 100).toFixed(1)}%</td></tr>`).join('');
+    }
+
+    // 圖例 ↔ 區段互相 highlight
+    function bindDonutHover(container) {
+      if (!container) return;
+      container.addEventListener('pointerover', e => {
+        const el = e.target.closest('[data-idx]');
+        if (!el) return;
+        const idx = el.dataset.idx;
+        countryWrap.classList.add('dim');
+        countryWrap.querySelectorAll('[data-idx]').forEach(n => n.classList.toggle('active', n.dataset.idx === idx));
+        const li = countryLegend.querySelector(`li[data-idx="${idx}"]`);
+        if (li) {
+          countryTip.innerHTML = `${li.querySelector('.lg-name').textContent.trim()} · <b>${li.querySelector('.lg-val').textContent}</b>（${li.querySelector('.lg-pct').textContent}）`;
+          countryTip.hidden = false;
+          const wrapRect = countryWrap.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          countryTip.style.left = `${elRect.left - wrapRect.left + elRect.width / 2}px`;
+          countryTip.style.top = `${elRect.top - wrapRect.top - 6}px`;
+        }
+      });
+      container.addEventListener('pointerleave', () => {
+        countryWrap.classList.remove('dim');
+        countryWrap.querySelectorAll('[data-idx]').forEach(n => n.classList.remove('active'));
+        countryTip.hidden = true;
+      });
+    }
+    bindDonutHover(countryDonut);
+    bindDonutHover(countryLegend);
+
+    function renderAnalytics(data) {
+      statsData = {
+        date: data.date || '',
+        hours: Array.isArray(data.hours) ? data.hours : new Array(24).fill(0),
+        hoursAll: Array.isArray(data.hoursAll) ? data.hoursAll : new Array(24).fill(0),
+        countries: data.countries && typeof data.countries === 'object' ? data.countries : {}
+      };
+      renderHourly();
+      renderCountries();
+    }
+
+    if (btnToggleAnalytics) {
+      btnToggleAnalytics.addEventListener('click', () => {
+        const open = analyticsPanel.hasAttribute('hidden');
+        analyticsPanel.toggleAttribute('hidden', !open);
+        btnToggleAnalytics.setAttribute('aria-expanded', String(open));
+        analyticsToggleText.childNodes[0].nodeValue = open ? '收合' : '展開';
+      });
     }
 
     // Initialize on page load

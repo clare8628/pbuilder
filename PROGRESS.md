@@ -102,3 +102,18 @@
 - index.html：移除 localStorage 計數邏輯，新增 loadServiceCount()/incrementServiceCount()，於複製/下載成功時呼叫；文案改為「本平台服務人次」
 - node --check 通過（_worker.js、抽取 script），CSS 括號配對通過
 - 限制：沙盒無 Cloudflare 認證，KV 實際讀寫未實測，待 Clare 正式部署後驗證
+
+## 2026-08-31 使用分析：時段長條圖 + 國別圓餅圖 (Tom)
+- _worker.js：統計集中於單一 KV key `stats_v1`（total / date / hours[24] / hoursAll[24] / countries），POST 僅 1 get + 1 put；首次讀取自動沿用舊 total_count
+- 時段以 Asia/Taipei (UTC+8) 分桶，13:20 與 13:35 同落 hour=13；跨日 hours 歸零、hoursAll 續累計
+- 國別取 request.cf.country，缺值記為 XX（未知）
+- 新增 GET /api/stats 一次回傳全部統計；/api/usage-count GET/POST 維持相容
+- index.html（單頁表單版，非三步驟精靈）：stats-bar 新增「使用分析」摺疊鈕，展開後為 24 小時長條圖（今日/累計切換、hover tooltip）+ 國別環圈圖（≤6 區段、圖例↔區段連動）+ 原始數據表
+- 圖表色票經 dataviz validator 對深色底 #17181d 驗證：亮度帶 / 色度 / 色盲 ΔE / 對比 ≥3:1 全數 PASS
+- 已於 wrangler pages dev 實測 API 與前端渲染（桌機 + 390px），無 console error
+
+## 2026-08-31 還原單頁表單版本 (Tom)
+- 誤將 feature/three-step-wizard（三步驟精靈）部署到正式站，Clare 回報後還原
+- 改以 master（9 項全在同一頁的單頁表單）為基底，另開 feature/usage-analytics，將 _worker.js 統計 API 與前端圖表移植過去
+- 三步驟精靈版本保留在 feature/three-step-wizard 分支，未刪除，未部署
+- 版本號 v2.0.0 → v2.1.0（三步驟版的 v3.x 不進正式站）
