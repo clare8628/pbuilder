@@ -117,3 +117,11 @@
 - 改以 master（9 項全在同一頁的單頁表單）為基底，另開 feature/usage-analytics，將 _worker.js 統計 API 與前端圖表移植過去
 - 三步驟精靈版本保留在 feature/three-step-wizard 分支，未刪除，未部署
 - 版本號 v2.0.0 → v2.1.0（三步驟版的 v3.x 不進正式站）
+
+## 2026-08-31 合併 origin/main：應用場景選單 + Electric Blue 配色 (Tom)
+- origin/main（= origin/claude/setup-flow-scenarios-adjust-v5ga4o）自 1526977 分岔後 6 個 commit 從未進 master，Clare 指名合併
+- 帶入：應用場景三大產業（餐飲業/觀光業/教育學習）+ 自訂，各 12 個常用場景下拉；每個場景 5 個功能舉例，附「加入 MVP」一鍵帶入
+- 帶入：整站配色改為 Electric Blue / Cyan（bg #0a0e17、card #121826、accent #38bdf8）、簡化表單選項、標題改「目標使用者與解決問題」
+- index.html 由 git 自動合併，無衝突（兩側改動區段不重疊）；圖表色票重新對新卡片底 #121826 驗證，長條圖單色改 #2f8bff（= --bg-selected），6 色類別色票沿用且全數 PASS
+- 版本號 v2.1.0 → v3.0.0
+- 本機實測：場景下拉 13 項、功能舉例 5 筆 + 5 顆加入 MVP 鈕、時段/國別圖表正常、無 console error、無水平溢出

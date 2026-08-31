@@ -17,34 +17,34 @@
     }
 
     :root {
-      /* Cyber Pink / Violet Accent — dark tech theme (DESIGN.md Glow Threads) */
-      --bg-main: #0f1013;
-      --bg-card: #17181d;
-      --bg-card-hover: #1f2128;
-      --bg-selected: #e86bd8;
-      --bg-output: #0a0b0e;
-      --bg-input: #14151a;
+      /* 現代科技 Electric Blue / Cyan Accent — dark tech theme (DESIGN.md Glow Threads) */
+      --bg-main: #0a0e17;
+      --bg-card: #121826;
+      --bg-card-hover: #1a2233;
+      --bg-selected: #2f8bff;
+      --bg-output: #070a11;
+      --bg-input: #101623;
 
-      --text-primary: #f5f0fa;
-      --text-secondary: #a6a3b0;
-      --text-muted: #6f6d7a;
-      --text-on-dark: #f5f0fa;
-      --text-on-selected: #0f1013;
-      --text-output-heading: #f5f0fa;
-      --text-output-body: #a6a3b0;
-      --text-output-accent: #e86bd8;
+      --text-primary: #eef4ff;
+      --text-secondary: #9aa8c2;
+      --text-muted: #64708a;
+      --text-on-dark: #eef4ff;
+      --text-on-selected: #071019;
+      --text-output-heading: #eef4ff;
+      --text-output-body: #9aa8c2;
+      --text-output-accent: #38bdf8;
 
-      --border-light: #2a2c34;
-      --border-input: #34363f;
+      --border-light: #212a3c;
+      --border-input: #2a3549;
 
-      /* 點綴色：洋紅、柔白高光、深紫（Cyber Pink / Violet Accent） */
-      --accent-matcha: #8b5bd6;
-      --accent-vermilion: #e86bd8;
-      --accent-indigo: #8b5bd6;
+      /* 點綴色：電光藍、天青、柔白高光（現代科技 Electric Blue / Cyan Accent） */
+      --accent-matcha: #2563eb;
+      --accent-vermilion: #38bdf8;
+      --accent-indigo: #2563eb;
 
-      --glow-1: #e86bd8;
-      --glow-2: #f5f0fa;
-      --glow-3: #8b5bd6;
+      --glow-1: #38bdf8;
+      --glow-2: #eef4ff;
+      --glow-3: #2563eb;
 
       --radius-card: 12px;
       --radius-input: 10px;
@@ -198,7 +198,7 @@
       overflow-y: auto;
       border-left: 1px solid var(--border-light);
       box-shadow:
-        inset 6px 0 24px -18px rgba(232, 107, 216, 0.25),
+        inset 6px 0 24px -18px rgba(56, 189, 248, 0.25),
         inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
     }
 
@@ -217,6 +217,7 @@
     .form-section:nth-child(7) { animation-delay: 0.35s; }
     .form-section:nth-child(8) { animation-delay: 0.4s; }
     .form-section:nth-child(9) { animation-delay: 0.45s; }
+    .form-section:nth-child(10) { animation-delay: 0.5s; }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(12px); }
@@ -253,7 +254,7 @@
       background: var(--bg-selected);
       color: var(--text-on-selected);
       border-color: var(--bg-selected);
-      box-shadow: 0 0 16px 0 rgba(232, 107, 216, 0.5);
+      box-shadow: 0 0 16px 0 rgba(56, 189, 248, 0.5);
       transform: none;
     }
 
@@ -298,7 +299,7 @@
     .card:hover {
       background: var(--bg-card-hover);
       border-color: var(--accent-vermilion);
-      box-shadow: 0 0 20px -6px rgba(232, 107, 216, 0.45);
+      box-shadow: 0 0 20px -6px rgba(56, 189, 248, 0.45);
       transform: translateY(-1px);
     }
 
@@ -310,7 +311,7 @@
       background: var(--bg-selected);
       color: var(--text-on-selected);
       border-color: var(--bg-selected);
-      box-shadow: 0 0 24px -4px rgba(232, 107, 216, 0.55);
+      box-shadow: 0 0 24px -4px rgba(56, 189, 248, 0.55);
     }
 
     .card-label {
@@ -360,6 +361,56 @@
       margin-left: 42px;
     }
 
+    /* ===== Feature Examples ===== */
+    .feature-examples {
+      margin-left: 42px;
+    }
+
+    .feature-examples-list {
+      list-style: none;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feature-examples-list li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-input);
+      padding: 10px 14px;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-add-mvp {
+      flex-shrink: 0;
+      font-family: var(--font-zh);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-vermilion);
+      background: transparent;
+      border: 1px solid var(--accent-vermilion);
+      border-radius: 999px;
+      padding: 4px 12px;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-add-mvp:hover {
+      background: var(--accent-vermilion);
+      color: var(--text-on-selected);
+    }
+
+    .btn-add-mvp:active {
+      transform: scale(0.97);
+    }
+
     .text-input {
       width: 100%;
       padding: 14px 16px;
@@ -377,7 +428,7 @@
 
     .text-input:focus {
       border-color: var(--accent-vermilion);
-      box-shadow: 0 0 0 3px rgba(232, 107, 216, 0.18);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
     }
 
     .text-input::placeholder {
@@ -387,6 +438,22 @@
     textarea.text-input {
       resize: vertical;
       min-height: 80px;
+    }
+
+    select.text-input {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23a6a3b0' stroke-width='1.8'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    select.text-input option {
+      background: var(--bg-input);
+      color: var(--text-primary);
     }
 
     textarea.text-input.tall {
@@ -414,7 +481,7 @@
       background: var(--text-output-accent);
       border-radius: 50%;
       flex-shrink: 0;
-      box-shadow: 0 0 8px 1px rgba(232, 107, 216, 0.7);
+      box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.7);
     }
 
     .output-title {
@@ -481,9 +548,9 @@
     .btn-download {
       flex: 1 1 0;
       padding: 12px 16px;
-      background: linear-gradient(135deg, rgba(232, 107, 216, 0.16), rgba(139, 91, 214, 0.16));
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(37, 99, 235, 0.16));
       color: var(--text-output-heading);
-      border: 1px solid rgba(232, 107, 216, 0.3);
+      border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: var(--radius-input);
       font-family: var(--font-zh);
       font-size: 14px;
@@ -498,9 +565,9 @@
     }
 
     .btn-copy:hover {
-      background: linear-gradient(135deg, rgba(232, 107, 216, 0.28), rgba(139, 91, 214, 0.28));
-      border-color: rgba(232, 107, 216, 0.55);
-      box-shadow: 0 0 20px -4px rgba(232, 107, 216, 0.5);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.28), rgba(37, 99, 235, 0.28));
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 0 20px -4px rgba(56, 189, 248, 0.5);
     }
 
     .btn-copy:active {
@@ -508,20 +575,20 @@
     }
 
     .btn-copy.copied {
-      background: rgba(139, 91, 214, 0.25);
-      border-color: rgba(139, 91, 214, 0.5);
+      background: rgba(37, 99, 235, 0.25);
+      border-color: rgba(37, 99, 235, 0.5);
       color: var(--text-output-accent);
     }
 
     .btn-download {
       background: rgba(245, 240, 250, 0.04);
-      border: 1px solid rgba(139, 91, 214, 0.3);
+      border: 1px solid rgba(37, 99, 235, 0.3);
     }
 
     .btn-download:hover {
-      background: linear-gradient(135deg, rgba(139, 91, 214, 0.22), rgba(232, 107, 216, 0.12));
-      border-color: rgba(139, 91, 214, 0.55);
-      box-shadow: 0 0 20px -4px rgba(139, 91, 214, 0.5);
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(56, 189, 248, 0.12));
+      border-color: rgba(37, 99, 235, 0.55);
+      box-shadow: 0 0 20px -4px rgba(37, 99, 235, 0.5);
     }
 
     .btn-download:active {
@@ -529,8 +596,8 @@
     }
 
     .btn-download.downloaded {
-      background: rgba(139, 91, 214, 0.25);
-      border-color: rgba(139, 91, 214, 0.5);
+      background: rgba(37, 99, 235, 0.25);
+      border-color: rgba(37, 99, 235, 0.5);
       color: var(--text-output-accent);
     }
 
@@ -542,7 +609,7 @@
 
     .btn-download:disabled:hover {
       background: rgba(245, 240, 250, 0.04);
-      border-color: rgba(139, 91, 214, 0.3);
+      border-color: rgba(37, 99, 235, 0.3);
       box-shadow: none;
     }
 
@@ -574,13 +641,13 @@
       background: var(--bg-card);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-card);
-      box-shadow: 0 0 16px -10px rgba(232, 107, 216, 0.35);
+      box-shadow: 0 0 16px -10px rgba(56, 189, 248, 0.35);
       transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
     }
 
     .stat-item:hover {
       border-color: var(--accent-vermilion);
-      box-shadow: 0 0 20px -6px rgba(232, 107, 216, 0.45);
+      box-shadow: 0 0 20px -6px rgba(56, 189, 248, 0.45);
     }
 
     .stat-dot {
@@ -664,10 +731,10 @@
     .stat-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 
     .analytics {
-      /* Chart tokens — 皆已對 #17181d 深色底驗證（亮度帶 / 色度 / 色盲分離 / 對比 ≥3:1） */
-      --viz-surface: #17181d;
-      --viz-bar: #d055be;
-      --viz-grid: #2a2c34;
+      /* Chart tokens — 皆已對卡片底 #121826 驗證（亮度帶 / 色度 / 色盲分離 / 對比 ≥3:1） */
+      --viz-surface: #121826;
+      --viz-bar: #2f8bff;
+      --viz-grid: #212a3c;
       --viz-c1: #3987e5;
       --viz-c2: #d95926;
       --viz-c3: #199e70;
@@ -906,7 +973,7 @@
         border-left: none;
         border-top: 1px solid var(--border-light);
         box-shadow:
-          inset 0 6px 24px -18px rgba(232, 107, 216, 0.25),
+          inset 0 6px 24px -18px rgba(56, 189, 248, 0.25),
           inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
       }
 
@@ -1023,7 +1090,7 @@
 
     .ai-key-input:focus {
       border-color: var(--bg-selected);
-      box-shadow: 0 0 0 3px rgba(232, 107, 216, 0.18);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
     }
 
     /* Simplify background canvas on mobile for performance */
@@ -1061,7 +1128,7 @@
       <div class="app-header-titlerow">
         <span class="app-logo">PromptBuilder<span class="app-logo-dot"></span></span>
         <!-- 版本號：每次重大更新請手動遞增此處文字 -->
-        <span class="app-version">v2.1.0</span>
+        <span class="app-version">v3.0.0</span>
         <span class="app-subtitle">AI Development Prompt Generator</span>
       </div>
       <p class="app-desc">視覺化建構 AI 開發用的 Prompt：填寫左側表單各項目，右側即時產生結構化指令，完成後一鍵複製使用或下載.md檔交給AI開發。</p>
@@ -1220,11 +1287,52 @@
         </div>
       </section>
 
-      <!-- 03 目標使用者與描述 -->
-      <section class="form-section" data-field="targetUser">
+      <!-- 03 應用場景 -->
+      <section class="form-section" data-field="scenarioCategory">
         <div class="section-header">
           <span class="section-number">03</span>
-          <h2 class="section-title">目標使用者與描述</h2>
+          <h2 class="section-title">應用場景</h2>
+        </div>
+        <p class="section-hint">先選一個產業，再從常用場景下拉選單挑選，會影響下方「功能舉例」的建議內容</p>
+        <div class="cards-grid cards-grid--two" data-select="single" data-group="scenarioCategory">
+          <div class="card" data-value="餐飲業">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">餐飲業</div>
+            <div class="card-sublabel">Food & Beverage</div>
+          </div>
+          <div class="card" data-value="觀光業">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">觀光業</div>
+            <div class="card-sublabel">Tourism</div>
+          </div>
+          <div class="card" data-value="教育學習">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">教育學習</div>
+            <div class="card-sublabel">Education</div>
+          </div>
+          <div class="card" data-value="自訂">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">自訂</div>
+            <div class="card-sublabel">Custom</div>
+          </div>
+        </div>
+
+        <div class="text-input-wrapper" id="scenarioSubWrapper" style="margin-top: 14px; display: none;">
+          <select class="text-input" id="selectScenarioSub">
+            <option value="" disabled selected>請選擇常用場景…</option>
+          </select>
+        </div>
+
+        <div class="text-input-wrapper" id="scenarioCustomWrapper" style="margin-top: 12px; display: none;">
+          <input type="text" class="text-input" id="inputScenarioCustom" placeholder="請描述自訂應用場景…" maxlength="60" autocomplete="off">
+        </div>
+      </section>
+
+      <!-- 04 目標使用者與解決問題 -->
+      <section class="form-section" data-field="targetUser">
+        <div class="section-header">
+          <span class="section-number">04</span>
+          <h2 class="section-title">目標使用者與解決問題</h2>
         </div>
         <p class="section-hint">誰會用？他們用這個能解決什麼問題？</p>
         <div class="text-input-wrapper">
@@ -1232,22 +1340,26 @@
         </div>
       </section>
 
-      <!-- 04 核心功能（MVP） -->
+      <!-- 05 核心功能（MVP） -->
       <section class="form-section" data-field="coreMvp">
         <div class="section-header">
-          <span class="section-number">04</span>
+          <span class="section-number">05</span>
           <h2 class="section-title">最小可行性產品（MVP）</h2>
         </div>
         <p class="section-hint">列出最重要的1-3個功能，避免一開始就求大求全。</p>
         <div class="text-input-wrapper">
           <textarea class="text-input tall" id="inputCoreMvp" placeholder="1.&#10;2.&#10;3." rows="4"></textarea>
         </div>
+        <div class="feature-examples" id="featureExamples" hidden>
+          <p class="section-hint" style="margin-top: 16px;">功能舉例</p>
+          <ul class="feature-examples-list" id="featureExamplesList"></ul>
+        </div>
       </section>
 
-      <!-- 05 視覺風格（可多選） -->
+      <!-- 06 視覺風格（可多選） -->
       <section class="form-section" data-field="visualStyle">
         <div class="section-header">
-          <span class="section-number">05</span>
+          <span class="section-number">06</span>
           <h2 class="section-title">視覺風格（可多選）</h2>
         </div>
         <p class="section-hint">會引導 AI 的設計方向，混搭也可以</p>
@@ -1282,13 +1394,28 @@
             <div class="card-label">活潑友善</div>
             <div class="card-sublabel">Bright friendly</div>
           </div>
+          <div class="card" data-value="復古懷舊">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">復古懷舊</div>
+            <div class="card-sublabel">Vintage retro</div>
+          </div>
+          <div class="card" data-value="奢華質感">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">奢華質感</div>
+            <div class="card-sublabel">Luxury elegant</div>
+          </div>
+          <div class="card" data-value="自然有機">
+            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+            <div class="card-label">自然有機</div>
+            <div class="card-sublabel">Organic natural</div>
+          </div>
         </div>
       </section>
 
-      <!-- 06 語言 -->
+      <!-- 07 語言 -->
       <section class="form-section" data-field="language">
         <div class="section-header">
-          <span class="section-number">06</span>
+          <span class="section-number">07</span>
           <h2 class="section-title">語言</h2>
         </div>
         <div class="cards-grid" data-select="single" data-group="language">
@@ -1302,59 +1429,13 @@
             <div class="card-label">中英雙語</div>
             <div class="card-sublabel">zh + en</div>
           </div>
-          <div class="card" data-value="僅英文">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">僅英文</div>
-            <div class="card-sublabel">en</div>
-          </div>
         </div>
       </section>
 
-      <!-- 07 雲端部署與進度 -->
-      <section class="form-section" data-field="deploymentStage">
-        <div class="section-header">
-          <span class="section-number">07</span>
-          <h2 class="section-title">雲端部署進度</h2>
-        </div>
-        <p class="section-hint">部署至 Cloudflare</p>
-        <div class="cards-grid cards-grid--two" data-select="single" data-group="deploymentStage">
-          <div class="card" data-value="preview">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">Preview</div>
-            <div class="card-sublabel">開發/測試環境</div>
-          </div>
-          <div class="card" data-value="production">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">Production</div>
-            <div class="card-sublabel">正式上線</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 08 RWD 設計支援 -->
-      <section class="form-section" data-field="rwdSupport">
-        <div class="section-header">
-          <span class="section-number">08</span>
-          <h2 class="section-title">RWD 設計支援</h2>
-        </div>
-        <div class="cards-grid cards-grid--two" data-select="single" data-group="rwdSupport">
-          <div class="card" data-value="支援 RWD">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">支援 RWD</div>
-            <div class="card-sublabel">Responsive design</div>
-          </div>
-          <div class="card" data-value="不需 RWD">
-            <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
-            <div class="card-label">不需 RWD</div>
-            <div class="card-sublabel">Desktop only</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 09 不要做（可選） -->
+      <!-- 08 不要做（可選） -->
       <section class="form-section" data-field="dontDo">
         <div class="section-header">
-          <span class="section-number">09</span>
+          <span class="section-number">08</span>
           <h2 class="section-title">不要做（可選）</h2>
         </div>
         <p class="section-hint">說「不要什麼」往往比說「要什麼」更有效</p>
@@ -1398,11 +1479,13 @@
       projectName: '',
       projectType: '',
       projectTypeCustom: '',
+      scenarioCategory: '',
+      scenarioSub: '',
+      scenarioCustom: '',
       targetUser: '',
       coreMvp: '',
       visualStyle: [],
       language: '',
-      deploymentStage: 'preview',
       rwdSupport: '支援 RWD',
       dontDo: ''
     };
@@ -1419,7 +1502,7 @@
     const usageCountEl = document.getElementById('usageCount');
 
     // ===== Stats: 已填寫項目數 =====
-    const TRACKED_FIELDS = ['projectName', 'projectType', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'deploymentStage', 'rwdSupport', 'dontDo'];
+    const TRACKED_FIELDS = ['projectName', 'projectType', 'scenarioCategory', 'targetUser', 'coreMvp', 'visualStyle', 'language', 'dontDo'];
     const touchedFields = new Set();
 
     function markTouched(field) {
@@ -1472,15 +1555,141 @@
     }
 
     // ===== Mapping for output display =====
-    const deploymentMap = {
-      'preview': 'Preview（開發/測試環境）',
-      'production': 'Production（正式上線）'
-    };
-
     const rwdMap = {
       '支援 RWD': '支援 RWD（Responsive）',
       '不需 RWD': '桌面版本（Desktop only）'
     };
+
+    // ===== Scenario Category → 常用場景下拉選項 Mapping（每個產業 12 個）=====
+    const scenarioSubOptionsMap = {
+      '餐飲業': [
+        '餐廳官網', '線上訂位系統', '外送/線上點餐系統', '菜單展示頁',
+        '會員集點系統', '多分店查詢', '食譜/料理教學平台', '餐飲加盟招商網站',
+        '咖啡廳/甜點店形象網站', '宴會/外燴預約系統', '食材供應商採購平台', '美食評論/推薦平台'
+      ],
+      '觀光業': [
+        '旅遊行程規劃網站', '飯店/民宿訂房系統', '景點導覽介紹頁', '旅行社形象網站',
+        '機票/交通票券預訂', '在地體驗/活動報名', '旅遊部落格/遊記分享', '觀光局/政府旅遊資訊站',
+        '租車服務預約系統', '導遊/在地嚮導媒合平台', '旅遊保險諮詢頁', '多國語言旅遊資訊站'
+      ],
+      '教育學習': [
+        '線上課程平台', '學校/補習班形象網站', '家教媒合平台', '線上測驗/題庫系統',
+        '學生學習歷程紀錄', '課程報名與繳費系統', '教材/講義下載中心', '直播教學互動平台',
+        '學生成績查詢系統', '校友會/社群平台', '證照考試準備平台', '親子共學資源網站'
+      ]
+    };
+
+    // ===== 常用場景 → 功能舉例 Mapping（每個場景 5 個）=====
+    const scenarioExamplesMap = {
+      '餐廳官網': ['店家介紹與環境照片', '菜單展示', '營業時間與地圖導航', '線上訂位入口', '最新優惠公告'],
+      '線上訂位系統': ['即時桌位可訂時段查詢', '訂位表單與人數選擇', 'Email/簡訊訂位確認', '訂位取消/改期', '候位排隊通知'],
+      '外送/線上點餐系統': ['菜單瀏覽與品項客製化', '購物車與結帳流程', '外送地址與時間選擇', '訂單狀態追蹤', '常用訂單快速重複下單'],
+      '菜單展示頁': ['分類菜單瀏覽', '品項照片與價格', '過敏原/素食標示', '多語言菜單切換', 'QR code 掃碼點餐入口'],
+      '會員集點系統': ['會員註冊與登入', '消費集點紀錄', '點數兌換禮品/優惠', '會員等級與專屬優惠', '生日禮/推播通知'],
+      '多分店查詢': ['分店地圖與地址列表', '各分店營業時間', '分店庫存/座位狀態', '最近分店推薦', '分店專屬活動優惠'],
+      '食譜/料理教學平台': ['食譜列表與分類搜尋', '步驟圖文/影片教學', '食材清單與份量換算', '收藏與我的食譜本', '課程/教學影片訂閱'],
+      '餐飲加盟招商網站': ['加盟品牌介紹', '加盟條件與費用說明', '成功案例展示', '加盟諮詢表單', '常見問題 FAQ'],
+      '咖啡廳/甜點店形象網站': ['品牌故事與空間介紹', '菜單與招牌商品', '線上預購/訂購', 'Instagram 動態串接', '店家位置與交通資訊'],
+      '宴會/外燴預約系統': ['場地/方案介紹', '人數與菜單客製化報價', '線上詢價表單', '訂金/合約流程說明', '過往案例作品集'],
+      '食材供應商採購平台': ['商品目錄與規格搜尋', 'B2B 批發報價與下單', '訂單/出貨追蹤', '常訂清單快速採購', '發票與對帳單下載'],
+      '美食評論/推薦平台': ['餐廳搜尋與篩選', '評分與評論撰寫', '美食地圖瀏覽', '收藏口袋名單', '達人專欄與排行榜'],
+
+      '旅遊行程規劃網站': ['行程主題搜尋與篩選', '每日行程排程編輯', '景點/餐廳/住宿加入行程', '行程分享與匯出', '預算試算工具'],
+      '飯店/民宿訂房系統': ['房型與空房查詢', '線上訂房與付款', '訂單確認與電子憑證', '取消/改期政策說明', '住客評價與評分'],
+      '景點導覽介紹頁': ['景點介紹與照片', '開放時間與門票資訊', '地圖與交通指引', '周邊景點推薦', '語音導覽/多語言介紹'],
+      '旅行社形象網站': ['熱門行程主打展示', '團體/自由行分類瀏覽', '線上諮詢/報名表單', '出團公告與名額查詢', '客戶好評與旅遊回饋'],
+      '機票/交通票券預訂': ['航班/車票搜尋與比價', '線上選位與訂購', '電子票券/QR code', '訂單管理與退改簽', '常用航線/路線收藏'],
+      '在地體驗/活動報名': ['體驗活動列表與分類', '活動詳情與時段選擇', '線上報名與付款', '參加人數與名額管理', '活動評價回饋'],
+      '旅遊部落格/遊記分享': ['遊記文章列表與分類', '圖文/影音遊記編輯', '標籤與地區搜尋', '留言互動與收藏', '作者專欄訂閱'],
+      '觀光局/政府旅遊資訊站': ['觀光景點資料庫', '活動與節慶行事曆', '旅遊補助/優惠專案', '多語言版本切換', '意見回饋與客服窗口'],
+      '租車服務預約系統': ['車輛搜尋與比較', '租借時段與地點選擇', '線上預約與付款', '保險方案選擇', '租還車紀錄查詢'],
+      '導遊/在地嚮導媒合平台': ['導遊/嚮導搜尋與篩選', '評價與專長標籤', '線上預約與詢價', '即時訊息溝通', '行程結束後評分回饋'],
+      '旅遊保險諮詢頁': ['保險方案比較', '線上投保流程', '保費試算工具', '理賠申請說明', '常見問題 FAQ'],
+      '多國語言旅遊資訊站': ['多語言介面切換', '在地生活資訊整理', '交通/住宿/景點總覽', '緊急聯絡資訊', '常用會話/翻譯小工具'],
+
+      '線上課程平台': ['課程列表與分類', '影片播放進度追蹤', '測驗與作業繳交', '學習證書產出', '討論區問答'],
+      '學校/補習班形象網站': ['師資與課程介紹', '招生資訊與報名表單', '校園環境/教學特色展示', '最新公告與活動', '家長/學生聯絡窗口'],
+      '家教媒合平台': ['家教/學生條件篩選搜尋', '師資評價與經歷展示', '線上預約諮詢/試教', '課程時數與費用管理', '上課紀錄與進度追蹤'],
+      '線上測驗/題庫系統': ['題庫分類與題型設計', '線上作答與計時', '自動批改與成績統計', '錯題本與弱點分析', '測驗結果分享/匯出'],
+      '學生學習歷程紀錄': ['個人學習檔案建立', '課程/活動參與紀錄', '成果作品上傳與展示', '教師評語與回饋', '歷程報告匯出'],
+      '課程報名與繳費系統': ['課程列表與時段查詢', '線上報名表單', '金流串接繳費', '報名確認通知', '退費/改課申請'],
+      '教材/講義下載中心': ['教材分類目錄', '關鍵字搜尋', '會員/課程權限控管', '檔案下載紀錄', '版本更新通知'],
+      '直播教學互動平台': ['直播課程排程', '即時聊天室互動', '螢幕分享與白板', '課後回放影片', '出席率統計'],
+      '學生成績查詢系統': ['成績單線上查詢', '各科成績趨勢圖表', '排名/等第顯示', '家長帳號查詢權限', '成績單匯出/列印'],
+      '校友會/社群平台': ['校友會員資料庫', '活動公告與報名', '校友動態/留言牆', '捐款/募款專區', '校友分類搜尋'],
+      '證照考試準備平台': ['考科分類與題庫練習', '模擬考試與計時', '學習進度追蹤', '考照資訊與報名連結', '討論區交流心得'],
+      '親子共學資源網站': ['共學活動列表', '親子課程報名', '學習資源/教材下載', '家長社群交流區', '孩子學習紀錄追蹤']
+    };
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function getCustomScenarioExamples(customText) {
+      const label = escapeHtml(customText || '此場景');
+      return [
+        `${label}的核心資料瀏覽與搜尋功能`,
+        `${label}相關項目的新增／編輯／刪除（CRUD）`,
+        `因應${label}使用情境的帳號與權限管理`,
+        `${label}相關的通知或提醒機制`,
+        `${label}使用數據的統計與匯出功能`
+      ];
+    }
+
+    function populateScenarioSubOptions(category) {
+      const select = document.getElementById('selectScenarioSub');
+      if (!select) return;
+      const options = scenarioSubOptionsMap[category] || [];
+      select.innerHTML = '<option value="" disabled selected>請選擇常用場景…</option>' +
+        options.map(opt => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`).join('');
+    }
+
+    function renderFeatureExamples() {
+      const wrapper = document.getElementById('featureExamples');
+      const list = document.getElementById('featureExamplesList');
+      if (!wrapper || !list) return;
+
+      let examples = [];
+      if (state.scenarioCategory === '自訂') {
+        examples = getCustomScenarioExamples(state.scenarioCustom);
+      } else if (state.scenarioSub && scenarioExamplesMap[state.scenarioSub]) {
+        examples = scenarioExamplesMap[state.scenarioSub];
+      }
+
+      if (examples.length === 0) {
+        wrapper.hidden = true;
+        list.innerHTML = '';
+        return;
+      }
+
+      wrapper.hidden = false;
+      list.innerHTML = examples.map(ex => `<li><button type="button" class="btn-add-mvp" data-example="${escapeHtml(ex)}">加入 MVP</button><span>${escapeHtml(ex)}</span></li>`).join('');
+    }
+
+    function addExampleToMvp(exampleText) {
+      const textarea = document.getElementById('inputCoreMvp');
+      if (!textarea || !exampleText) return;
+
+      const lines = textarea.value.split('\n').map(l => l.trim()).filter(Boolean);
+      const plainLines = lines.map(l => l.replace(/^\d+\.\s*/, ''));
+      if (plainLines.includes(exampleText)) return;
+
+      lines.push(`${lines.length + 1}. ${exampleText}`);
+      textarea.value = lines.join('\n');
+      state.coreMvp = textarea.value.trim();
+
+      markTouched('coreMvp');
+      updateSectionStatus('coreMvp');
+      renderOutput();
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-add-mvp');
+      if (!btn) return;
+      addExampleToMvp(btn.dataset.example);
+    });
 
     // ===== Card Selection Logic =====
     document.querySelectorAll('.cards-grid').forEach(grid => {
@@ -1517,6 +1726,31 @@
           // 使用者主動點擊 = 已互動，無論結果值是否為空
           markTouched(groupName);
           updateSectionStatus(groupName);
+
+          if (groupName === 'scenarioCategory') {
+            const subWrapper = document.getElementById('scenarioSubWrapper');
+            const customWrapper = document.getElementById('scenarioCustomWrapper');
+            const isCustom = state.scenarioCategory === '自訂';
+            const hasSubOptions = !isCustom && !!scenarioSubOptionsMap[state.scenarioCategory];
+
+            if (customWrapper) customWrapper.style.display = isCustom ? 'block' : 'none';
+            if (subWrapper) subWrapper.style.display = hasSubOptions ? 'block' : 'none';
+
+            if (!isCustom) {
+              state.scenarioCustom = '';
+              const customInput = document.getElementById('inputScenarioCustom');
+              if (customInput) customInput.value = '';
+            }
+            if (hasSubOptions) {
+              populateScenarioSubOptions(state.scenarioCategory);
+              state.scenarioSub = '';
+            } else {
+              state.scenarioSub = '';
+            }
+
+            renderFeatureExamples();
+          }
+
           renderOutput();
         });
       });
@@ -1526,6 +1760,7 @@
     const inputMappings = [
       { id: 'inputProjectName', field: 'projectName', section: 'projectName' },
       { id: 'inputProjectTypeCustom', field: 'projectTypeCustom', section: 'projectType' },
+      { id: 'inputScenarioCustom', field: 'scenarioCustom', section: 'scenarioCategory' },
       { id: 'inputTargetUser', field: 'targetUser', section: 'targetUser' },
       { id: 'inputCoreMvp', field: 'coreMvp', section: 'coreMvp' },
       { id: 'inputDontDo', field: 'dontDo', section: 'dontDo' }
@@ -1542,9 +1777,21 @@
           unmarkTouched(field);
         }
         if (section) updateSectionStatus(section);
+        if (field === 'scenarioCustom') renderFeatureExamples();
         renderOutput();
       });
     });
+
+    // ===== Scenario Sub-option Dropdown Logic =====
+    const selectScenarioSub = document.getElementById('selectScenarioSub');
+    if (selectScenarioSub) {
+      selectScenarioSub.addEventListener('change', () => {
+        state.scenarioSub = selectScenarioSub.value;
+        markTouched('scenarioCategory');
+        renderFeatureExamples();
+        renderOutput();
+      });
+    }
 
     // ===== Section Status (number highlight) =====
     function updateSectionStatus(fieldName) {
@@ -1573,12 +1820,16 @@
 
       // Section: 專案定位
       const projectTypeDisplay = state.projectTypeCustom ? state.projectTypeCustom : state.projectType;
-      const hasPositioning = state.projectName || projectTypeDisplay || state.targetUser;
+      const scenarioDisplay = state.scenarioCategory === '自訂'
+        ? state.scenarioCustom
+        : (state.scenarioCategory && state.scenarioSub ? `${state.scenarioCategory}－${state.scenarioSub}` : state.scenarioCategory);
+      const hasPositioning = state.projectName || projectTypeDisplay || scenarioDisplay || state.targetUser;
       if (hasPositioning) {
         hasAny = true;
         let block = '▍專案定位';
         if (state.projectName) block += `\n・名稱：${state.projectName}`;
         if (projectTypeDisplay) block += `\n・類型：${projectTypeDisplay}`;
+        if (scenarioDisplay) block += `\n・應用場景：${scenarioDisplay}`;
         if (state.targetUser) {
           block += `\n・目標使用者與一句話描述：\n  ${state.targetUser}`;
         }
@@ -1606,17 +1857,9 @@
       }
 
       // Section: 技術規格
-      const hasTech = state.deploymentStage || state.rwdSupport;
-      if (hasTech) {
+      if (state.rwdSupport) {
         hasAny = true;
-        let block = '▍技術規格';
-        if (state.deploymentStage) {
-          block += `\n・雲端部署：${deploymentMap[state.deploymentStage] || state.deploymentStage}`;
-        }
-        if (state.rwdSupport) {
-          block += `\n・RWD 設計：${rwdMap[state.rwdSupport] || state.rwdSupport}`;
-        }
-        parts.push(block);
+        parts.push(`▍技術規格\n・RWD 設計：${rwdMap[state.rwdSupport] || state.rwdSupport}`);
       }
 
       // Section: 不要做
@@ -1644,26 +1887,13 @@
 
     // ===== Initialize Default Values =====
     function initializeDefaults() {
-      // Set deployment stage default to preview
-      const previewCard = document.querySelector('[data-group="deploymentStage"][data-value="preview"]');
-      if (previewCard) {
-        previewCard.classList.add('selected');
-      }
-
-      // Set RWD support default to 支援 RWD
-      const rwdCard = document.querySelector('[data-group="rwdSupport"][data-value="支援 RWD"]');
-      if (rwdCard) {
-        rwdCard.classList.add('selected');
-      }
-
-      updateSectionStatus('deploymentStage');
-      updateSectionStatus('rwdSupport');
+      // RWD 固定為支援，不在左側表單顯示，直接列在 Prompt Output 中
       renderOutput();
     }
 
 
     // ===== Usage Analytics: 時段長條圖 + 國別圓餅圖 =====
-    // 圖表色票已對深色底 #17181d 驗證（亮度帶 / 色度 / 色盲分離 ΔE / 對比 ≥3:1）
+    // 圖表色票已對卡片底 #121826 驗證（亮度帶 / 色度 / 色盲分離 ΔE / 對比 ≥3:1）
     const VIZ_SERIES = ['var(--viz-c1)', 'var(--viz-c2)', 'var(--viz-c3)', 'var(--viz-c4)', 'var(--viz-c5)', 'var(--viz-c6)'];
     const MAX_SLICES = 6; // 圓餅圖上限，超過的併入「其他」
 
@@ -1970,7 +2200,7 @@
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      const COLORS = ['#e86bd8', '#f5f0fa', '#8b5bd6']; // Thread Stop 1/2/3
+      const COLORS = ['#38bdf8', '#eef4ff', '#2563eb']; // Thread Stop 1/2/3（現代科技 Electric Blue / Cyan）
       const SPEED = 1;
       const COUNT = 9;
 
