@@ -17,34 +17,34 @@
     }
 
     :root {
-      /* 現代科技 Electric Blue / Cyan Accent — dark tech theme (DESIGN.md Glow Threads) */
-      --bg-main: #0a0e17;
-      --bg-card: #121826;
-      --bg-card-hover: #1a2233;
-      --bg-selected: #2f8bff;
-      --bg-output: #070a11;
-      --bg-input: #101623;
+      /* 淡藍日式風格 Light Blue Japanese Theme */
+      --bg-main: #eaf2fb;
+      --bg-card: #ffffff;
+      --bg-card-hover: #eaf2f8;
+      --bg-selected: #a0d8ef; /* 空色 Sora-iro */
+      --bg-output: #f7fbfe;
+      --bg-input: #ffffff;
 
-      --text-primary: #eef4ff;
-      --text-secondary: #9aa8c2;
-      --text-muted: #64708a;
-      --text-on-dark: #eef4ff;
-      --text-on-selected: #071019;
-      --text-output-heading: #eef4ff;
-      --text-output-body: #9aa8c2;
-      --text-output-accent: #38bdf8;
+      --text-primary: #2c3e50;
+      --text-secondary: #5c6b73;
+      --text-muted: #8a9ba8;
+      --text-on-dark: #ffffff;
+      --text-on-selected: #2c3e50;
+      --text-output-heading: #2c3e50;
+      --text-output-body: #5c6b73;
+      --text-output-accent: #3e62ad;
 
-      --border-light: #212a3c;
-      --border-input: #2a3549;
+      --border-light: #d9e2ec;
+      --border-input: #c2d1df;
 
-      /* 點綴色：電光藍、天青、柔白高光（現代科技 Electric Blue / Cyan Accent） */
-      --accent-matcha: #2563eb;
-      --accent-vermilion: #38bdf8;
-      --accent-indigo: #2563eb;
+      /* 點綴色：日式傳統色 */
+      --accent-matcha: #88cb7f; /* 抹茶色 */
+      --accent-vermilion: #f17c67; /* 珊瑚色 */
+      --accent-indigo: #3e62ad; /* 琉璃色 */
 
-      --glow-1: #38bdf8;
-      --glow-2: #eef4ff;
-      --glow-3: #2563eb;
+      --glow-1: #a0d8ef;
+      --glow-2: #ffffff;
+      --glow-3: #89c3eb;
 
       --radius-card: 12px;
       --radius-input: 10px;
@@ -99,7 +99,7 @@
       align-items: center;
       gap: 14px;
       border-bottom: 1px solid var(--border-light);
-      background: rgba(15, 16, 19, 0.72);
+      background: rgba(234, 242, 251, 0.72);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       position: sticky;
@@ -731,16 +731,16 @@
     .stat-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
 
     .analytics {
-      /* Chart tokens — 皆已對卡片底 #121826 驗證（亮度帶 / 色度 / 色盲分離 / 對比 ≥3:1） */
-      --viz-surface: #121826;
-      --viz-bar: #2f8bff;
-      --viz-grid: #212a3c;
-      --viz-c1: #3987e5;
-      --viz-c2: #d95926;
-      --viz-c3: #199e70;
-      --viz-c4: #c98500;
-      --viz-c5: #d55181;
-      --viz-c6: #008300;
+      /* Chart tokens — 日式淡雅色系 */
+      --viz-surface: #ffffff;
+      --viz-bar: #89c3eb;
+      --viz-grid: #d9e2ec;
+      --viz-c1: #a0d8ef;
+      --viz-c2: #f17c67;
+      --viz-c3: #88cb7f;
+      --viz-c4: #f3c759;
+      --viz-c5: #d198c5;
+      --viz-c6: #7db9e8;
 
       position: relative;
       z-index: 10;
@@ -2200,7 +2200,7 @@
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      const COLORS = ['#38bdf8', '#eef4ff', '#2563eb']; // Thread Stop 1/2/3（現代科技 Electric Blue / Cyan）
+      const COLORS = ['#89c3eb', '#ffffff', '#a0d8ef']; // Thread Stop 1/2/3（日式空色/白色）
       const SPEED = 1;
       const COUNT = 9;
 

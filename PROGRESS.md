@@ -1,5 +1,11 @@
 # PBuilder 進度報告
 
+**日期**: 2026-09-09
+## [style] 淡藍背景版本
+- --bg-main 改為 #eaf2fb（淡藍日式風格），sticky header rgba 同步
+- 部署 CF Pages Production：https://pbuilder.pages.dev（bg-main 已驗證 #eaf2fb）
+- 未提交（working tree），需要時再 commit
+
 **日期**: 2026-08-10
 ## [fix] 已填寫項目統計邏輯修正
 - 問題：deploymentStage/rwdSupport 有預設值，導致載入即顯示 2/9
