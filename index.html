@@ -1293,7 +1293,7 @@
           <span class="section-number">03</span>
           <h2 class="section-title">應用場景</h2>
         </div>
-        <p class="section-hint">先選一個產業，再從常用場景下拉選單挑選，會影響下方「功能舉例」的建議內容</p>
+        <p class="section-hint">先選一個產業，再從常用場景卡片挑選，會影響下方「功能舉例」的建議內容</p>
         <div class="cards-grid cards-grid--two" data-select="single" data-group="scenarioCategory">
           <div class="card" data-value="餐飲業">
             <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
@@ -1317,10 +1317,9 @@
           </div>
         </div>
 
-        <div class="text-input-wrapper" id="scenarioSubWrapper" style="margin-top: 14px; display: none;">
-          <select class="text-input" id="selectScenarioSub">
-            <option value="" disabled selected>請選擇常用場景…</option>
-          </select>
+        <div id="scenarioSubWrapper" style="margin-top: 14px; display: none;">
+          <p class="section-hint" style="margin-left: 0; margin-bottom: 10px; font-size: 12.5px;">請選擇常用場景：</p>
+          <div class="cards-grid" data-select="single" data-group="scenarioSub" id="subScenarioGrid"></div>
         </div>
 
         <div class="text-input-wrapper" id="scenarioCustomWrapper" style="margin-top: 12px; display: none;">
@@ -1351,8 +1350,8 @@
           <textarea class="text-input tall" id="inputCoreMvp" placeholder="1.&#10;2.&#10;3." rows="4"></textarea>
         </div>
         <div class="feature-examples" id="featureExamples" hidden>
-          <p class="section-hint" style="margin-top: 16px;">功能舉例</p>
-          <ul class="feature-examples-list" id="featureExamplesList"></ul>
+          <p class="section-hint" style="margin-top: 16px; margin-bottom: 10px; font-size: 12.5px;">常用功能推薦（可點選卡片直接挑選加入 MVP）：</p>
+          <div class="cards-grid" data-select="multi" data-group="coreMvpExamples" id="featureExamplesGrid"></div>
         </div>
       </section>
 
@@ -1579,46 +1578,190 @@
       ]
     };
 
-    // ===== 常用場景 → 功能舉例 Mapping（每個場景 5 個）=====
+    // ===== 常用場景 → 功能舉例 Mapping（每個場景 9 個）=====
     const scenarioExamplesMap = {
-      '餐廳官網': ['店家介紹與環境照片', '菜單展示', '營業時間與地圖導航', '線上訂位入口', '最新優惠公告'],
-      '線上訂位系統': ['即時桌位可訂時段查詢', '訂位表單與人數選擇', 'Email/簡訊訂位確認', '訂位取消/改期', '候位排隊通知'],
-      '外送/線上點餐系統': ['菜單瀏覽與品項客製化', '購物車與結帳流程', '外送地址與時間選擇', '訂單狀態追蹤', '常用訂單快速重複下單'],
-      '菜單展示頁': ['分類菜單瀏覽', '品項照片與價格', '過敏原/素食標示', '多語言菜單切換', 'QR code 掃碼點餐入口'],
-      '會員集點系統': ['會員註冊與登入', '消費集點紀錄', '點數兌換禮品/優惠', '會員等級與專屬優惠', '生日禮/推播通知'],
-      '多分店查詢': ['分店地圖與地址列表', '各分店營業時間', '分店庫存/座位狀態', '最近分店推薦', '分店專屬活動優惠'],
-      '食譜/料理教學平台': ['食譜列表與分類搜尋', '步驟圖文/影片教學', '食材清單與份量換算', '收藏與我的食譜本', '課程/教學影片訂閱'],
-      '餐飲加盟招商網站': ['加盟品牌介紹', '加盟條件與費用說明', '成功案例展示', '加盟諮詢表單', '常見問題 FAQ'],
-      '咖啡廳/甜點店形象網站': ['品牌故事與空間介紹', '菜單與招牌商品', '線上預購/訂購', 'Instagram 動態串接', '店家位置與交通資訊'],
-      '宴會/外燴預約系統': ['場地/方案介紹', '人數與菜單客製化報價', '線上詢價表單', '訂金/合約流程說明', '過往案例作品集'],
-      '食材供應商採購平台': ['商品目錄與規格搜尋', 'B2B 批發報價與下單', '訂單/出貨追蹤', '常訂清單快速採購', '發票與對帳單下載'],
-      '美食評論/推薦平台': ['餐廳搜尋與篩選', '評分與評論撰寫', '美食地圖瀏覽', '收藏口袋名單', '達人專欄與排行榜'],
+      '餐廳官網': [
+        '店家介紹與環境照片', '菜單展示與價格', '營業時間與地圖導航',
+        '線上訂位入口', '最新優惠與活動公告', '主廚推薦與招牌菜色',
+        '顧客好評與社群分享', '交通指引與停車資訊', '聯絡電話與即時諮詢'
+      ],
+      '線上訂位系統': [
+        '即時桌位可訂時段查詢', '訂位表單與用餐人數選擇', 'Email/簡訊訂位確認通知',
+        '訂位取消與改期功能', '候位排隊與叫號推播', '用餐特殊需求備註（如兒童椅、過敏）',
+        '訂金線上支付與退款管理', '訂位歷史紀錄查詢', '店家後台桌況即時圖表'
+      ],
+      '外送/線上點餐系統': [
+        '菜單瀏覽與品項客製化（冷熱、甜度、加料）', '購物車與即時結帳流程', '外送地址與期望送達時間選擇',
+        '訂單狀態即時追蹤（製作中/已送出）', '常用訂單快速重複下單', '線上金流多元支付（Line Pay、信用卡）',
+        '外帶自取取餐號碼單', '滿額免運與折價券套用', '餐點評價與照片回饋'
+      ],
+      '菜單展示頁': [
+        '分類菜單瀏覽（前菜、主餐、飲品）', '品項高清照片與詳細描述', '過敏原與素食清楚標示',
+        '多語言菜單切換（中、英、日）', 'QR code 掃碼快速點餐入口', '本日限量與售罄狀態即時標籤',
+        '卡路里與營養成分標示', '餐點熱門排行標記', '單品推薦搭配組合建議'
+      ],
+      '會員集點系統': [
+        '會員手機快速註冊與登入', '消費自動累點與紀錄查詢', '點數兌換精美禮品與折價券',
+        '會員等級制度與專屬尊爵權益', '生日禮自動派發與推播提醒', '好友推薦碼互贈點數',
+        '數位會員卡與條碼掃描', '點數即將到期提醒通知', '跨店消費點數共通累積'
+      ],
+      '多分店查詢': [
+        '分店地圖與地址清單總覽', '各分店當日營業時間與公休日', '分店座位空況即時狀態',
+        'GPS 定位推薦最近分店', '分店專屬活動與獨賣菜單', '各分店一鍵電話撥打與路線導航',
+        '各分店獨立線上訂位連結', '外送合作平台跳轉入口', '分店主管/店長留言板'
+      ],
+      '食譜/料理教學平台': [
+        '食譜分類搜尋（食材、料理手法、時間）', '逐步圖文與影片教學拆解', '食材清單與用餐人數份量自動換算',
+        '個人收藏庫與我的食譜本', '專業廚師教學專題與付費訂閱', '料理計時器輔助小工具',
+        '學員實作照片成果分享牆', '烹飪常見問題 Q&A 與留言互動', '食材一鍵加入外購採買清單'
+      ],
+      '餐飲加盟招商網站': [
+        '加盟品牌願景與競爭優勢介紹', '加盟條件、門檻與各項費用試算說明', '成功店面案例分享與經營者訪談',
+        '線上加盟諮詢與預約說明會表單', '加盟常見問題 FAQ 整理', '總部教育訓練與營運輔導體系說明',
+        '店面選址評估標準與支援方案', '原料供應鏈與物流配送體系說明', '合約流程與開店籌備時間軸'
+      ],
+      '咖啡廳/甜點店形象網站': [
+        '品牌故事與人文空間氛圍介紹', '精品豆單、烘焙風味與招牌甜點展示', '當日手作限定甜點線上預訂/保留',
+        'Instagram 官方動態與打卡美照牆串接', '店家詳細位置、大眾交通與周邊指引', '店內 Wi-Fi、插座與是否客滿即時資訊',
+        '咖啡豆與濾掛包線上商城購買', '手沖咖啡體驗工作坊線上報名', '電子禮物卡購買與送禮功能'
+      ],
+      '宴會/外燴預約系統': [
+        '多功能場地介紹與容納人數規格', '人數規模與預算菜單客製化線上試算', '專人外燴線上詢價與預約表單',
+        '訂金支付、簽約與取消規範說明', '過往盛大宴會案例與作品照片集', '現場影音/投影設備借用清單',
+        '派對主持與場地佈置加值服務勾選', '活動流程時間表企劃協作', '客戶評價與企業滿意度回饋'
+      ],
+      '食材供應商採購平台': [
+        '生鮮原物料目錄與規格型錄搜尋', 'B2B 批發級距階梯報價與採購合約', '大宗訂單排程配送與物流實時追蹤',
+        '常用訂單週期性自動重複採購', '電子發票、銷貨單與月結對帳單下載', '食材產銷履歷、產地檢驗證明下載',
+        '庫存緊縮與批發到貨降價通知', '即期良品批發優惠特賣區', '業務專員即時線上客服'
+      ],
+      '美食評論/推薦平台': [
+        '多條件餐廳搜尋（地區、菜系、預算）', '真實顧客評分、圖文評論撰寫與審查', '互動式美食地圖定位瀏覽周邊好店',
+        '自訂私房口袋名單收藏與分類', '美食達人專欄與每日熱門排行榜', '餐廳優惠券直接領取與核銷',
+        '最新踩點動態消息流', '素食/友善餐廳特殊標籤篩選', '評論社群互動（按讚、回覆、檢舉）'
+      ],
 
-      '旅遊行程規劃網站': ['行程主題搜尋與篩選', '每日行程排程編輯', '景點/餐廳/住宿加入行程', '行程分享與匯出', '預算試算工具'],
-      '飯店/民宿訂房系統': ['房型與空房查詢', '線上訂房與付款', '訂單確認與電子憑證', '取消/改期政策說明', '住客評價與評分'],
-      '景點導覽介紹頁': ['景點介紹與照片', '開放時間與門票資訊', '地圖與交通指引', '周邊景點推薦', '語音導覽/多語言介紹'],
-      '旅行社形象網站': ['熱門行程主打展示', '團體/自由行分類瀏覽', '線上諮詢/報名表單', '出團公告與名額查詢', '客戶好評與旅遊回饋'],
-      '機票/交通票券預訂': ['航班/車票搜尋與比價', '線上選位與訂購', '電子票券/QR code', '訂單管理與退改簽', '常用航線/路線收藏'],
-      '在地體驗/活動報名': ['體驗活動列表與分類', '活動詳情與時段選擇', '線上報名與付款', '參加人數與名額管理', '活動評價回饋'],
-      '旅遊部落格/遊記分享': ['遊記文章列表與分類', '圖文/影音遊記編輯', '標籤與地區搜尋', '留言互動與收藏', '作者專欄訂閱'],
-      '觀光局/政府旅遊資訊站': ['觀光景點資料庫', '活動與節慶行事曆', '旅遊補助/優惠專案', '多語言版本切換', '意見回饋與客服窗口'],
-      '租車服務預約系統': ['車輛搜尋與比較', '租借時段與地點選擇', '線上預約與付款', '保險方案選擇', '租還車紀錄查詢'],
-      '導遊/在地嚮導媒合平台': ['導遊/嚮導搜尋與篩選', '評價與專長標籤', '線上預約與詢價', '即時訊息溝通', '行程結束後評分回饋'],
-      '旅遊保險諮詢頁': ['保險方案比較', '線上投保流程', '保費試算工具', '理賠申請說明', '常見問題 FAQ'],
-      '多國語言旅遊資訊站': ['多語言介面切換', '在地生活資訊整理', '交通/住宿/景點總覽', '緊急聯絡資訊', '常用會話/翻譯小工具'],
+      '旅遊行程規劃網站': [
+        '行程主題分類搜尋（親子、情侶、獨旅）', '每日時間軸行程自訂與拖曳排程', '熱門景點/餐廳/住宿一鍵加入行程',
+        '行程完整匯出 PDF/分享給同行夥伴', '即時旅遊總預算試算與分帳工具', 'Google Maps 每日路線最佳化建議',
+        '景點停留時間估算與交通方式建議', '行前行李打包清單檢查表', '離線地圖與行程離線瀏覽功能'
+      ],
+      '飯店/民宿訂房系統': [
+        '房型照片、設備介紹與即時空房查詢', '線上安全訂房與多元金流刷卡', '訂單確認信、入住憑證與 QR code',
+        '彈性取消與免費改期政策說明', '真實入住旅客評價、評分與心得', '加購早餐、接駁車或延後退房服務',
+        '會員早鳥或連續住宿優惠專案', '周邊生活圈與推薦順遊景點導覽', '即時線上管家/櫃台諮詢訊息'
+      ],
+      '景點導覽介紹頁': [
+        '景點歷史文化背景詳細介紹與高畫質圖集', '最新開放時間、休館日與門票定價資訊', '大眾運輸指引、自駕導航與停車場指南',
+        '周邊散步路線與鄰近推薦順遊點', '語音導覽導播機與多語言語音介紹', '無障礙設施與親子友善服務說明',
+        '景點四季特色節慶活動時間表', '線上預購門票免排隊快速通關', '遊客實拍打卡牆與心得回饋'
+      ],
+      '旅行社形象網站': [
+        '季節熱門推薦行程強打輪播展示', '團體旅遊與自由行主題分類瀏覽', '線上旅遊顧問即時諮詢與預約報名',
+        '出團行事曆、即時成團狀態與剩餘名額', '旅客實拍旅程照片與口碑滿意度見證', '海外簽證代辦、旅遊保險配套服務',
+        '行前說明會檔案下載與注意事項專區', '早鳥折扣與企業員工旅遊客製方案', '海外緊急聯絡管道與安心旅遊保障機制'
+      ],
+      '機票/交通票券預訂': [
+        '全球航班與高鐵/巴士車票即時比價搜尋', '線上劃位、選座與行李加購服務', '電子票券產生與 Apple Wallet/Google 錢包整合',
+        '訂單退票、改票與行程變更自主管理', '常用航線收藏與降價自動提醒通知', '航班延誤、取消即時推播警告',
+        '多航段/聯程機票組合搜尋', '常旅客哩程累積與兌換折抵', '接駁包車/機場接送加購預約'
+      ],
+      '在地體驗/活動報名': [
+        '手作、戶外探險等在地體驗分類列表', '活動詳細介紹、難易度、裝備需求與場次', '即時梯次名額查詢、線上報名與繳費',
+        '同行參加者保險資訊填寫與管理', '活動結束後評價、上傳照片心得回饋', '行前集合地點定位導航與行前通知簡訊',
+        '活動取消與天候不佳退改機制', '體驗帶領導師/教練資格與履歷介紹', '企業團體包場體驗客製諮詢'
+      ],
+      '旅遊部落格/遊記分享': [
+        '遊記文章列表、推薦專題與國家地區分類', '圖文影音混排專屬旅遊日誌編輯器', '景點標籤、消費花費與旅遊天數搜尋',
+        '讀者留言互動、收藏私房文章', '知名旅遊創作者專欄與訂閱電子報', '文章內附 Google Maps 景點地圖錨點',
+        '相關裝備好物推薦與外部聯盟行銷連結', '多圖輪播相簿與行程時間軸展示', '社群一鍵分享至 FB/IG/LINE'
+      ],
+      '觀光局/政府旅遊資訊站': [
+        '官方認證觀光景點與文史古蹟資料庫', '全年度地方節慶行事曆與活動盛典', '最新觀光旅遊補助與振興優惠方案專案',
+        '完整多國語言介面即時切換（英日韓等）', '民眾意見回饋、申訴與客服窗口', '旅遊安全須知、災害應變與即時路況警訊',
+        '官方授權宣傳素材與高解析照片下載專區', '在地特色產業農特產名店推廣', '公廁、醫療院所等緊急公眾設施地圖'
+      ],
+      '租車服務預約系統': [
+        '車款類型規格（轎車、休旅、電動車）比價搜尋', '租借起訖時段、取還車門市快速選擇', '線上駕照證件上傳驗證與預約付款',
+        '全險/超額責任險方案比較與加保', '里程限制、油料政策與合約條款揭露', '歷史租借訂單查詢與電子租賃契約下載',
+        '還車車況拍照上傳與押金退還狀態查詢', '加選配備（兒童汽座、導航、行車記錄器）', '24小時道路救援通報與客服電話'
+      ],
+      '導遊/在地嚮導媒合平台': [
+        '專業執照導遊與在地達人清單條件篩選', '導遊個人經歷、語言能力與專長標籤展示', '線上客製行程私訊諮詢與報價媒合',
+        '即時通訊聊天室與檔案傳輸確認行程', '行程結束後雙向匿名評價機制', '履約保證金流代管，出團確認後撥款',
+        '導遊服務即時行事曆與預約時段', '特殊語言導覽（手語、稀有外語）篩選', '緊急突發狀況平台客服介入支援'
+      ],
+      '旅遊保險諮詢頁': [
+        '各家旅遊平安險與不便險保障方案橫向比較', '線上填單三分鐘快速核保流程', '即時保費透明試算（天數、年齡、保額）',
+        '行李延誤、班機取消各項理賠申請指引', '常見問題 FAQ 與條款懶人包解讀', '海外急難救助電話與海外代墊醫療費用說明',
+        '投保證明英文版即刻線上下載（申根保險等）', '同行家人批次投保表單', '理賠進度線上即時追蹤查詢'
+      ],
+      '多國語言旅遊資訊站': [
+        '全站多語言即時介面與在地文案切換', '外國旅客在地生活常識與文化禮儀指南', '城市大眾交通系統乘車教學與票種總覽',
+        '警局、醫療救援急救緊急聯絡資訊清單', '常用旅遊會話發音與即時文字翻譯小工具', '貨幣匯率即時試算與退稅指南流程',
+        '免費公共 Wi-Fi 與 SIM/eSIM 申辦教學', '清真/無麩質等友善餐廳飲食標籤', '旅客諮詢中心（TIC）服務處據點'
+      ],
 
-      '線上課程平台': ['課程列表與分類', '影片播放進度追蹤', '測驗與作業繳交', '學習證書產出', '討論區問答'],
-      '學校/補習班形象網站': ['師資與課程介紹', '招生資訊與報名表單', '校園環境/教學特色展示', '最新公告與活動', '家長/學生聯絡窗口'],
-      '家教媒合平台': ['家教/學生條件篩選搜尋', '師資評價與經歷展示', '線上預約諮詢/試教', '課程時數與費用管理', '上課紀錄與進度追蹤'],
-      '線上測驗/題庫系統': ['題庫分類與題型設計', '線上作答與計時', '自動批改與成績統計', '錯題本與弱點分析', '測驗結果分享/匯出'],
-      '學生學習歷程紀錄': ['個人學習檔案建立', '課程/活動參與紀錄', '成果作品上傳與展示', '教師評語與回饋', '歷程報告匯出'],
-      '課程報名與繳費系統': ['課程列表與時段查詢', '線上報名表單', '金流串接繳費', '報名確認通知', '退費/改課申請'],
-      '教材/講義下載中心': ['教材分類目錄', '關鍵字搜尋', '會員/課程權限控管', '檔案下載紀錄', '版本更新通知'],
-      '直播教學互動平台': ['直播課程排程', '即時聊天室互動', '螢幕分享與白板', '課後回放影片', '出席率統計'],
-      '學生成績查詢系統': ['成績單線上查詢', '各科成績趨勢圖表', '排名/等第顯示', '家長帳號查詢權限', '成績單匯出/列印'],
-      '校友會/社群平台': ['校友會員資料庫', '活動公告與報名', '校友動態/留言牆', '捐款/募款專區', '校友分類搜尋'],
-      '證照考試準備平台': ['考科分類與題庫練習', '模擬考試與計時', '學習進度追蹤', '考照資訊與報名連結', '討論區交流心得'],
-      '親子共學資源網站': ['共學活動列表', '親子課程報名', '學習資源/教材下載', '家長社群交流區', '孩子學習紀錄追蹤']
+      '線上課程平台': [
+        '多領域課程分類目錄與關鍵字搜尋', '影片串流播放、多倍速與章節進度自動記錄', '課堂線上即時測驗與作業繳交區',
+        '完課認證數位學習證書核發', '專屬課後討論區、學員提問與老師解答', '課程講義教材 PDF 線上預覽與下載',
+        '付費章節解鎖、多元支付與分期付款', '章節筆記隨播隨記與時間點標記', '滿意度星級評價與上課心得牆'
+      ],
+      '學校/補習班形象網站': [
+        '名師團隊陣容、學經歷與專長亮點介紹', '完整開課班別、學期課表與招生簡章資訊', '優質校園環境、設備教室 360 度環景展示',
+        '最新校園公告、得獎殊榮與活動看板', '家長預約參觀、諮詢與試聽線上表單', '歷屆優秀榜單與升學成果數據統計',
+        '線上繳費與學雜費電子收據下載', '校車路線指引與行駛時間表', '線上家長親師聯絡窗口'
+      ],
+      '家教媒合平台': [
+        '學科/才藝類別、地區、預算多維度條件篩選', '家教老師學經歷、審核認證履歷與教學影片展示', '在線預約試教與時間檔期表',
+        '課程購買堂數包與費用第三方代管', '每堂課上課打卡、學習進度與課堂反饋紀錄', '家長對老師公開評價與回饋星等',
+        '家長發案需求刊登與教師主動應徵機制', '合約線上簽署與退費機制保障', '家教保證金機制與平台爭議仲裁'
+      ],
+      '線上測驗/題庫系統': [
+        '章節題庫分類與多元題型（單選、複選、問答）', '在線作答計時模考與自動交卷', '系統自動批改與即時成績分數統計',
+        '錯題自動收錄筆記本與弱點單元雷達圖', '考卷解析與詳解思路查閱', '歷史測驗成績歷程與進步趨勢圖表',
+        '測驗成果證書下載與同儕排名榜', '隨機抽題與防作弊亂序機制', '教師自訂班級專屬小考考卷'
+      ],
+      '學生學習歷程紀錄': [
+        '個人學習數位檔案建置與基本資料管理', '學期課程研習與社團活動參與詳細紀錄', '個人專案競賽成果作品集上傳與展示',
+        '指導老師評語、簽核與反饋意見', '學習歷程檔案標準格式 PDF 整合匯出', '自主學習計畫撰寫與目標達成檢核表',
+        '多元表現認證與外語證照上傳審查', '歷年成績單與班級百分比統計', '歷程進度時間軸可視化呈現'
+      ],
+      '課程報名與繳費系統': [
+        '熱門課程清單、師資梯次與開課時段查詢', '線上報名表單填寫與名額候補登記', '多元金流串接（信用卡、ATM轉帳、超商代碼）',
+        '報名成功通知 Email、SMS 與電子票券發送', '線上退費、換班與轉讓申請流程', '早鳥折扣、團報優惠券代碼折抵',
+        '公司行號統一編號三聯式發票開立', '報名學員身分驗證與資格審查', '主辦方後台名冊匯出與出勤簽到名單'
+      ],
+      '教材/講義下載中心': [
+        '系統化教材單元分類目錄與樹狀導覽', '講義關鍵字模糊搜尋與標籤過濾', '會員身分與已購課程權限精確控管',
+        '教材檔案版本更新歷史與修訂公告通知', '講義 PDF 線上浮水印保護與防盜下載', '教材包批次打包 ZIP 下載功能',
+        '檔案下載次數限制與存取紀錄稽核', '教材相關習題解答與補充音訊檔案下載', '使用者教材錯誤回報回饋功能'
+      ],
+      '直播教學互動平台': [
+        '即時直播教學課程排程行事曆與推播提醒', '低延遲課堂即時文字聊天室與問答發言', '授課老師螢幕分享、數位白板與筆記標註',
+        '課堂舉手發問、音訊連線與小組分組討論', '課堂隨堂點名、互動投票與測驗彈窗', '直播結束後高畫質回放影片雲端收看',
+        '學員上課出缺席與專注度停留時長統計', '直播教材講義即時同步派送', '課堂打賞感謝與鼓勵互動機制'
+      ],
+      '學生成績查詢系統': [
+        '定期段考與學期成績線上即時查詢', '各科目歷史成績變化趨勢折線圖', '班級/年級排名與 PR 值等第數據分析',
+        '家長專屬帳號授權聯名查詢子女成績', '標準成績單線上列印與加密 PDF 匯出', '缺曠課、獎懲紀錄與綜合表現總覽',
+        '成績複查與疑義申請表單', '導師學期總評語查閱', '補考名單通知與補考資訊查詢'
+      ],
+      '校友會/社群平台': [
+        '畢業校友會員名錄資料庫與隱私設定', '校友返校日、專案年會活動公告與在線報名', '校友最新職涯動態分享、成果牆與留言互動',
+        '母校發展基金線上捐款與募款進度儀表板', '跨屆別、科系、產業的校友分類人脈搜尋', '校友企業徵才就業機會刊登發布',
+        '校友專屬特約商店折扣優惠領取', '線上會刊電子書翻頁閱讀', '校友傑出成就專訪與榜樣專題'
+      ],
+      '證照考試準備平台': [
+        '專業證照考科分類與權威精選題庫大辭典', '全真模擬上機考試環境與嚴格倒數計時', '個人學習每日打卡進度與備考時間追蹤',
+        '最新官方考照簡章、報名日期與考場資訊連結', '考友交流討論區、備考筆記與心得分享', '各單元知識點考題出題命中率分析',
+        '考前高頻重點衝刺題卡', '錯題重練演練與記憶曲線複習模式', '考取學員經驗傳承專題講座'
+      ],
+      '親子共學資源網站': [
+        '週末親子戶外共學活動精選列表', '親子動手做工作坊與體驗課程線上報名', '分齡繪本推薦、共讀指南與互動教案下載',
+        '家長交流育兒經驗專屬討論社群', '孩子成長與自主學習點滴歷程手札', '優質親子友善景點生活地圖推薦',
+        '免費著色畫紙、益智遊戲圖紙下載列印', '兒少專家育兒專欄文章與線上講座', '二手教具與童書互助交流市集'
+      ]
     };
 
     function escapeHtml(str) {
@@ -1634,22 +1777,98 @@
         `${label}相關項目的新增／編輯／刪除（CRUD）`,
         `因應${label}使用情境的帳號與權限管理`,
         `${label}相關的通知或提醒機制`,
-        `${label}使用數據的統計與匯出功能`
+        `${label}使用數據的統計與匯出功能`,
+        `${label}的分類與進階篩選功能`,
+        `${label}的歷史操作紀錄與活動軌跡`,
+        `${label}專屬的狀態即時追蹤與進度顯示`,
+        `${label}的匯入匯出與報表產生功能`
       ];
     }
 
     function populateScenarioSubOptions(category) {
-      const select = document.getElementById('selectScenarioSub');
-      if (!select) return;
+      const container = document.getElementById('subScenarioGrid');
+      if (!container) return;
       const options = scenarioSubOptionsMap[category] || [];
-      select.innerHTML = '<option value="" disabled selected>請選擇常用場景…</option>' +
-        options.map(opt => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`).join('');
+      container.innerHTML = options.map(opt => `
+        <div class="card" data-value="${escapeHtml(opt)}">
+          <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+          <div class="card-label">${escapeHtml(opt)}</div>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const val = card.dataset.value;
+          const isSelected = card.classList.contains('selected');
+          container.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+          if (!isSelected) {
+            card.classList.add('selected');
+            state.scenarioSub = val;
+          } else {
+            state.scenarioSub = '';
+          }
+          markTouched('scenarioCategory');
+          updateSectionStatus('scenarioCategory');
+          renderFeatureExamples();
+          renderOutput();
+        });
+      });
+    }
+
+    function syncMvpCardsSelection() {
+      const container = document.getElementById('featureExamplesGrid');
+      if (!container) return;
+      const textarea = document.getElementById('inputCoreMvp');
+      const lines = textarea ? textarea.value.split('\n').map(l => l.trim().replace(/^\d+\.\s*/, '')).filter(Boolean) : [];
+      container.querySelectorAll('.card').forEach(card => {
+        const val = card.dataset.value;
+        if (lines.includes(val)) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+    }
+
+    function toggleMvpExample(exampleText) {
+      const textarea = document.getElementById('inputCoreMvp');
+      if (!textarea || !exampleText) return;
+
+      let lines = textarea.value.split('\n').map(l => l.trim()).filter(Boolean);
+      const plainLines = lines.map(l => l.replace(/^\d+\.\s*/, ''));
+
+      const existingIndex = plainLines.indexOf(exampleText);
+      if (existingIndex >= 0) {
+        // 已存在 -> 點擊移除
+        lines.splice(existingIndex, 1);
+      } else {
+        // 不存在 -> 點擊加入
+        lines.push(exampleText);
+      }
+
+      // 重新編號 1. 2. 3.
+      const renumbered = lines.map((item, idx) => {
+        const clean = item.replace(/^\d+\.\s*/, '');
+        return `${idx + 1}. ${clean}`;
+      });
+
+      textarea.value = renumbered.join('\n');
+      state.coreMvp = textarea.value.trim();
+
+      if (state.coreMvp) {
+        markTouched('coreMvp');
+      } else {
+        unmarkTouched('coreMvp');
+      }
+      updateSectionStatus('coreMvp');
+      syncMvpCardsSelection();
+      renderOutput();
     }
 
     function renderFeatureExamples() {
       const wrapper = document.getElementById('featureExamples');
-      const list = document.getElementById('featureExamplesList');
-      if (!wrapper || !list) return;
+      const container = document.getElementById('featureExamplesGrid');
+      if (!wrapper || !container) return;
 
       let examples = [];
       if (state.scenarioCategory === '自訂') {
@@ -1660,36 +1879,26 @@
 
       if (examples.length === 0) {
         wrapper.hidden = true;
-        list.innerHTML = '';
+        container.innerHTML = '';
         return;
       }
 
       wrapper.hidden = false;
-      list.innerHTML = examples.map(ex => `<li><button type="button" class="btn-add-mvp" data-example="${escapeHtml(ex)}">加入 MVP</button><span>${escapeHtml(ex)}</span></li>`).join('');
+      container.innerHTML = examples.map(ex => `
+        <div class="card" data-value="${escapeHtml(ex)}">
+          <span class="card-check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><line x1="6.5" y1="6.5" x2="13.5" y2="13.5"/><line x1="13.5" y1="6.5" x2="6.5" y2="13.5"/></svg></span>
+          <div class="card-label">${escapeHtml(ex)}</div>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          toggleMvpExample(card.dataset.value);
+        });
+      });
+
+      syncMvpCardsSelection();
     }
-
-    function addExampleToMvp(exampleText) {
-      const textarea = document.getElementById('inputCoreMvp');
-      if (!textarea || !exampleText) return;
-
-      const lines = textarea.value.split('\n').map(l => l.trim()).filter(Boolean);
-      const plainLines = lines.map(l => l.replace(/^\d+\.\s*/, ''));
-      if (plainLines.includes(exampleText)) return;
-
-      lines.push(`${lines.length + 1}. ${exampleText}`);
-      textarea.value = lines.join('\n');
-      state.coreMvp = textarea.value.trim();
-
-      markTouched('coreMvp');
-      updateSectionStatus('coreMvp');
-      renderOutput();
-    }
-
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('.btn-add-mvp');
-      if (!btn) return;
-      addExampleToMvp(btn.dataset.example);
-    });
 
     // ===== Card Selection Logic =====
     document.querySelectorAll('.cards-grid').forEach(grid => {
@@ -1777,21 +1986,13 @@
           unmarkTouched(field);
         }
         if (section) updateSectionStatus(section);
+        if (field === 'coreMvp') syncMvpCardsSelection();
         if (field === 'scenarioCustom') renderFeatureExamples();
         renderOutput();
       });
     });
 
-    // ===== Scenario Sub-option Dropdown Logic =====
-    const selectScenarioSub = document.getElementById('selectScenarioSub');
-    if (selectScenarioSub) {
-      selectScenarioSub.addEventListener('change', () => {
-        state.scenarioSub = selectScenarioSub.value;
-        markTouched('scenarioCategory');
-        renderFeatureExamples();
-        renderOutput();
-      });
-    }
+
 
     // ===== Section Status (number highlight) =====
     function updateSectionStatus(fieldName) {
